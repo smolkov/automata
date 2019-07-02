@@ -1,0 +1,39 @@
+# List of enabled features
+features = [
+    "external_pr",
+    "commands"
+]
+
+# Command settings
+[commands]
+# List of commands to enable
+enabled_commands = [
+    "retry",
+]
+[keys]
+ssh_key = ""
+
+
+# Settings for GitHub
+[github]
+webhook_secret = "secret"
+username = "smolkov"
+api_token = "token"
+hostname = "github.com"
+
+# Settings for GitLab
+[gitlab]
+webhook_secret = "secret"
+username = "ci-user"
+ssh_key = "/etc/ssh-keys/labhub-key.ecdsa"
+api_token = "token"
+hostname = "gitlab.com"
+
+# List of mappings to/from GitHub & GitLab
+[[reposityries]]
+github_repo = "smolkov/automata-dev"
+gitlab_repo = "brndnmtthws-oss/labhub"
+
+
+[[bots]]
+name="vk"

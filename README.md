@@ -1,4 +1,4 @@
-[![pipeline status](https://gitlab.com/brndnmtthws-oss/labhub/badges/master/pipeline.svg)](https://gitlab.com/brndnmtthws-oss/labhub/commits/master) [![codecov](https://codecov.io/gh/brndnmtthws/labhub/branch/master/graph/badge.svg)](https://codecov.io/gh/brndnmtthws/labhub) [![Current Crates.io Version](https://img.shields.io/crates/v/labhub.svg)](https://crates.io/crates/labhub)
+[![pipeline status](https://gitlab.com/asmolkov/automata/badges/master/pipeline.svg)](https://gitlab.com/brndnmtthws-oss/labhub/commits/master) ![Current Crates.io Version](https://img.shields.io/crates/v/automata.svg)](https://crates.io/crates/automata)
 
 # 🤖 `automata`
 
@@ -7,12 +7,11 @@ A automation freak written in Rust
 
 🚧 _Work In Progress_ 🚧
 
-![UI example][ui]
 
 [ui]: https://user-images.githubusercontent.com/383250/59148363-53188c80-8a08-11e9-9b29-9cac56809ee2.png "Automaat UI Example"
 ## Features
 
-- Listens for webhooks from GitHub
+- **TODO**
 
 ### Commands
 
@@ -22,17 +21,13 @@ Commands can be executed by commenting on a PR with your CI user's login.
 
 ## The Problem
 
-GitLab has a great CI system, however it's not suitable for open source projects 😧 (at the time of writing) because it won't build external PRs by default. There are security concerns about the risk of exposing secrets in external builds, and GitLab errs on the side of caution by not building external PRs by default.
-
-For more details on the issue, [please take a look at this GitLab discussion](https://gitlab.com/gitlab-org/gitlab-ee/issues/5667).
 
 ## ✨ The Solution
 
-If you're not concerned with leaking secrets, then LabHub may be for you! LabHub listens for webhooks from GitHub to notify for new pull requests. If the PR is from a forked repo, it will push a branch to GitLab (for the corresponding PR) to test the build.
 
 ## 🏃‍♀️ In Action
 
-**Using Wqa-bot? Open a PR to add your project here! 😀**
+**Using automata?😀**
 
 
 ## Compiling
