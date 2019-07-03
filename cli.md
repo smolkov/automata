@@ -4,7 +4,7 @@
 
 
 
-## `paw`## Installation
+## `paw` installation
 ```sh
 $ cargo add paw
 ```
@@ -35,7 +35,7 @@ $ cargo add paw
 
 
 [paw]:
-A GitHub bot written in Rust for using GitLab CI in OSS projects.
+<!-- A GitHub bot written in Rust for using GitLab CI in OSS projects. -->
 
 
 ## Features

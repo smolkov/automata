@@ -14,6 +14,12 @@ use serde::{Deserialize, Serialize};
 
 use confy;
 
+// #[derive(Debug, Serialize, Deserialize)]
+// struct Config {
+    // name: String,
+    // comfy: bool,
+    // foo: i64,
+// }
 
 #[derive(Debug, Serialize, Deserialize)]
 struct ConfyConfig {

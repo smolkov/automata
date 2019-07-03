@@ -1,9 +1,10 @@
 [![pipeline status](https://gitlab.com/asmolkov/automata/badges/master/pipeline.svg)](https://gitlab.com/brndnmtthws-oss/labhub/commits/master) ![Current Crates.io Version](https://img.shields.io/crates/v/automata.svg)](https://crates.io/crates/automata)
 
-# 🤖 `automata`
+#  `tocuv`
 
-A automation freak written in Rust
+A automation bot written in Rust
 
+  This repo is part of a project  [creating 🌊 web-server .deb binary with rust](https://gill.net.in/posts/creating-web-server-deb-binary-with-rust/)
 
 🚧 _Work In Progress_ 🚧
 
@@ -11,13 +12,13 @@ A automation freak written in Rust
 [ui]: https://user-images.githubusercontent.com/383250/59148363-53188c80-8a08-11e9-9b29-9cac56809ee2.png "Automaat UI Example"
 ## Features
 
-- **TODO**
+-  ** TODO**
 
 ### Commands
 
 Commands can be executed by commenting on a PR with your CI user's login.
 
-- **`@automata info`**: retry a pipeline that has failed
+- **`@automata info`**:  retry a pipeline that has failed
 
 ## The Problem
 
@@ -29,8 +30,9 @@ Commands can be executed by commenting on a PR with your CI user's login.
 
 **Using automata?😀**
 
+
 
-## Compiling
+##  Compiling
 
 automata requires Rust nightly. To compile using [`rustup`](https://rustup.rs/):
 
