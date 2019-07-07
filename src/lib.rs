@@ -6,11 +6,13 @@ pub mod error;
 pub mod cli;
 pub mod config;
 pub mod metrics;
+pub mod hardware;
 
 // mod templates;
-mod monitor;
+pub mod monitor;
+pub mod device;
 
-pub use monitor::*;
+pub use monitor::Repo;
 // pub use templates::*;
 // pub use staticfile::*;
 // mod graphql;
@@ -21,7 +23,7 @@ pub use monitor::*;
 
 
 // use github::*;
-// pub use self::error::*;
+pub use self::error::*;
 // pub use self::cli::*;
 // pub use self::graphql::*;
 

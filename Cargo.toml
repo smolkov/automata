@@ -1,11 +1,11 @@
 [package]
-name = "tocuv"
+name = "wqm-uv"
 version = "0.1.0"
 authors = ["smolkov <asmolkov@lar.com>"]
 edition = "2018"
 description = "Water quality analyzer backend"
-keywords = ["api", "autom", "information"]
-categories = ["asynchronous", "os"]
+keywords = ["api", "monitor", "information"]
+categories = ["", "os"]
 repository = "https://github.com/smolkov/automata"
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
@@ -44,19 +44,21 @@ slog = "2.4.1"
 sloggers = "0.3.2"
 # config
 config = "0.9.3"
-# Serializer
+confy = "0.3.1"
+# Version
 semver = "0.9.0"
+# Serializer
 serde_json = "1.0.40"
 serde = { version = "1.0.94", features = ["derive"] }
 serde_derive = "1.0.94"
 serde_yaml = "0.8.9"
+bincode = "1.1.4"
 # File system
 fs2 = "0.4.3"
 bytes = "0.4.12"
 # toml = "0.5.1"
 # wqa={path="../wqa/wqa"}
-# wqm-can ={git="https://github.com/lar-ag/wqm-can.git"}
-bincode = "1.1.4"
+wqm-can ={ git="https://github.com/lar-ag/wqm-can.git"}
 lazy_static = "1.3.0"
 
 # wqa = {path="../"}
@@ -72,7 +74,6 @@ diesel_migrations = { version = "1.4.0", default-features = false, features = ["
 matches = "0.1.8"
 dtoa = "0.4.4"
 itoa = "0.4.4"
-tera = "1.0.0-beta.10"
 reqwest = "0.9.18"
 serde_with = "1.3.1"
 http = "0.1.17"
@@ -89,8 +90,10 @@ tide = "0.2.0"
 # Metrics
 prometheus = "0.7.0"
 
+# Templates
+tera = "0.11.20"
+
 plotters = "0.2.2"
-confy = "0.3.1"
 atty = "0.2.11"
 crossbeam-channel = "0.3.8"
 os_pipe = "0.8.1"
@@ -102,6 +105,7 @@ ctrlc = "3.1.3"
 procfs = "0.5.3"
 scopeguard = "1.0.0"
 futures-util = "0.2.1"
+dbus = "0.6.4"
 
 
 

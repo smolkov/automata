@@ -7,14 +7,19 @@ use std::io;
 // use mut_guard::*;
 
 #[derive(Fail, Debug)]
-pub enum ApiError {
+pub enum WqmError {
     #[fail(display = "io error - {}",err)]
     IOError {err: io::Error },
 
 }
 
-impl From<io::Error> for ApiError {
-    fn from(kind:io::Error) -> ApiError {
-        ApiError::IOError{err: kind}
+
+
+impl From<io::Error> for WqmError {
+    fn from(kind:io::Error) -> WqmError {
+        WqmError::IOError{err: kind}
     }
 }
+
+
+//

@@ -1,6 +1,6 @@
-[![pipeline status](https://gitlab.com/asmolkov/automata/badges/master/pipeline.svg)](https://gitlab.com/brndnmtthws-oss/labhub/commits/master) ![Current Crates.io Version](https://img.shields.io/crates/v/automata.svg)](https://crates.io/crates/automata)
+[![pipeline status](https://travis-ci.org/lar-ag/wqm-uv.svg?branch=master)]
 
-#  `tocuv`
+#  :atm: `wqm-uv`
 
 A automation bot written in Rust
 

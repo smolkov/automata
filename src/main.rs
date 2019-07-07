@@ -2,9 +2,12 @@
 
 use structopt::*;
 use tide;
-use tocuv::*;
+use wqm_uv::*;
 use runtime;
-use failure::{Fallible, ResultExt};
+use failure::{Fallible};
+
+pub use tide::{error::ResultExt, response, App, Context, EndpointResult};
+use http::status::StatusCode;
 // use failure::{Fallible, ResultExt};
 
 
@@ -21,11 +24,13 @@ async fn main() {
         .build(Root::builder().appender("stdout").build(LevelFilter::Info))
         .unwrap();
     let _handle = log4rs::init_config(config).unwrap();
-    let monitor = new_uv_monitor();
-    let mut app = tide::App::new(monitor);
+    let repo = monitor::new_uv().await;
+    let mut app = tide::App::new(repo);
     app.middleware(tide::middleware::RootLogger::new());
-    app.at("/").get(async move |_| "QuickTOCuv!");
-    app.at("/info").get(monitor_system_info);
+    app.at("/api").nest(|api| {
+      api.at("/model").get(async move |_| "QuickTOCuv");
+      api.at("/info").get(device::get_info);
+    });
     app.serve("127.0.0.1:8000").unwrap();
 }
 
