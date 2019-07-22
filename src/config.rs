@@ -1,10 +1,10 @@
-
 use log::info;
-use std::collections::HashMap;
+// use std::collections::HashMap;
 use std::env;
 use std::fs::File;
 use std::io::prelude::*;
-use std::sync::Mutex;
+// use std::sync::{Mutex,RwLock};
+use super::emoji;
 use toml;
 use yansi::Paint;
 use lazy_static::lazy_static;
@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 // use std::os::;
 
 
-use confy;
+// use confy;
 
 // #[derive(Debug, Serialize, Deserialize)]
 // struct Config {
@@ -22,18 +22,16 @@ use confy;
 // }
 
 #[derive(Debug, Serialize, Deserialize)]
-struct ConfyConfig {
-    name: String,
-    comfy: bool,
-    foo: i64,
+pub struct ServerConfig {
+    pub address: String,
+    pub port: u32,
 }
 
-impl Default for ConfyConfig {
+impl Default for ServerConfig {
     fn default() -> Self {
-        ConfyConfig {
-            name: "Unknown".to_string(),
-            comfy: true,
-            foo: 42,
+        ServerConfig {
+            address: "localhost".to_string(),
+            port: 8000,
         }
     }
 }
@@ -46,20 +44,7 @@ pub enum Feature {
 }
 
 #[derive(Debug, Deserialize)]
-pub struct Config {
-    pub github: Site,
-    pub gitlab: Site,
-    pub mappings: Vec<Mapping>,
-    pub features: Vec<Feature>,
-}
-
-pub fn feature_enabled(feature: &Feature) -> bool {
-    CONFIG.features.contains(&feature)
-}
-
-
-#[derive(Debug, Deserialize)]
-pub struct Site {
+pub struct GitConfig {
     pub webhook_secret: String,
     pub username: String,
     pub ssh_key: String,
@@ -67,34 +52,65 @@ pub struct Site {
     pub hostname: Option<String>,
 }
 
+// impl Default for GitConfig {
+//     fn default() -> GitConfig {
+//         GitConfig {
+//             webhook_secret:
+//         }
+//     }
+// }
+
 #[derive(Debug, Deserialize)]
-pub struct Mapping {
-    pub github_repo: String,
-    pub gitlab_repo: String,
+pub struct Config {
+    pub server: ServerConfig,
+    pub git: GitConfig,
+    // pub mappings: Vec<Mapping>,
+    // pub features: Vec<Feature>,
 }
 
-lazy_static! {
-    pub static ref HUB_TO_LAB: Mutex<HashMap<String, String>> = {
-        let m: HashMap<String, String> = HashMap::new();
-        Mutex::new(m)
-    };
-}
+// impl Default for Config {
+//     fn default() -> Self {
+//         Self{
+//             server: ServerConfig::default(),
+//         }
+//     }
+// }
 
-lazy_static! {
-    pub static ref LAB_TO_HUB: Mutex<HashMap<String, String>> = {
-        let m: HashMap<String, String> = HashMap::new();
-        Mutex::new(m)
-    };
-}
+// pub fn load_config () {
+// }
+//     pub fn feature_enabled(feature: &Feature) -> bool {
+//     CONFIG.features.contains(&feature)
+// }
 
-fn get_labhub_toml_path() -> String {
-    env::var("LABHUB_TOML").unwrap_or_else(|_| "LabHub.toml".to_string())
+
+// #[derive(Debug, Deserialize)]
+// pub struct Mapping {
+//     pub github_repo: String,
+//     pub gitlab_repo: String,
+// }
+
+// lazy_static! {
+//     pub static ref HUB_TO_LAB: Mutex<HashMap<String, String>> = {
+//         let m: HashMap<String, String> = HashMap::new();
+//         Mutex::new(m)
+//     };
+// }
+
+// lazy_static! {
+//     pub static ref LAB_TO_HUB: Mutex<HashMap<String, String>> = {
+//         let m: HashMap<String, String> = HashMap::new();
+//         Mutex::new(m)
+//     };
+// }
+
+fn get_toml_path() -> String {
+    env::var("WQA_TOML").unwrap_or_else(|_| "wqa.toml".to_string())
 }
 
 lazy_static! {
     pub static ref CONFIG: Config = {
-        let labhub_toml_path = get_labhub_toml_path();
-        let config: Config = toml::from_str(&read_file_to_string(&labhub_toml_path)).unwrap();
+        let toml_path = get_toml_path();
+        let config: Config = toml::from_str(&read_file_to_string(&toml_path)).unwrap();
         config
     };
 }
@@ -109,26 +125,27 @@ fn read_file_to_string(filename: &str) -> String {
 
 pub fn load_config() {
     info!(
-        "Loaded LabHub configuration values from {}",
-        get_labhub_toml_path()
+        "{} loaded configuration values from {}",
+        emoji::WRENCH,
+        get_toml_path()
     );
     info!("CONFIG => {:#?}", Paint::red(&*CONFIG));
 
-    for mapping in CONFIG.mappings.iter() {
-        let mut hub_to_lab_lock = HUB_TO_LAB.lock();
-        let hub_to_lab = hub_to_lab_lock.as_mut().unwrap();
-        hub_to_lab.insert(mapping.github_repo.clone(), mapping.gitlab_repo.clone());
+    // for mapping in CONFIG.mappings.iter() {
+//         let mut hub_to_lab_lock = HUB_TO_LAB.lock();
+//         let hub_to_lab = hub_to_lab_lock.as_mut().unwrap();
+//         hub_to_lab.insert(mapping.github_repo.clone(), mapping.gitlab_repo.clone());
 
-        let mut lab_to_hub_lock = LAB_TO_HUB.lock();
-        let lab_to_hub = lab_to_hub_lock.as_mut().unwrap();
-        lab_to_hub.insert(mapping.gitlab_repo.clone(), mapping.github_repo.clone());
-    }
-    info!(
-        "HUB_TO_LAB => {:#?}",
-        Paint::red(HUB_TO_LAB.lock().unwrap())
-    );
-    info!(
-        "LAB_TO_HUB => {:#?}",
-        Paint::red(LAB_TO_HUB.lock().unwrap())
-    );
+//         let mut lab_to_hub_lock = LAB_TO_HUB.lock();
+//         let lab_to_hub = lab_to_hub_lock.as_mut().unwrap();
+//         lab_to_hub.insert(mapping.gitlab_repo.clone(), mapping.github_repo.clone());
+//     }
+//     info!(
+//         "HUB_TO_LAB => {:#?}",
+//         Paint::red(HUB_TO_LAB.lock().unwrap())
+//     );
+//     info!(
+//         "LAB_TO_HUB => {:#?}",
+//         Paint::red(LAB_TO_HUB.lock().unwrap())
+//     );
 }

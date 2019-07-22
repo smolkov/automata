@@ -12,7 +12,14 @@ use failure::{Fallible, ResultExt};
 /// $ cargo run --example args -- localhost 8080
 /// ```
 // With the "paw" feature enabled in structopt
+// With the "paw" feature enabled in structopt
 
+#[derive(structopt::StructOpt)]
+struct Args {
+    /// Address to listen on.
+    #[structopt(short = "p", long = "path", default_value = ".")]
+    address: String,
+}
 
 #[paw::main]
 fn main(args: paw::Args) -> Fallible<()> {

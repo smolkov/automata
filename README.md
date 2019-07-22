@@ -1,40 +1,18 @@
-[![pipeline status](https://travis-ci.org/lar-ag/wqm-uv.svg?branch=master)]
+#  `wqa`
 
-#  :atm: `wqm-uv`
+<!-- ![pipeline status](https://travis-ci.org/lar-ag/wqm-uv.svg?branch=master) -->
+[![builds.sr.ht status](https://builds.sr.ht/~asmolkov/wqa-settings.svg)](https://builds.sr.ht/~asmolkov/wqa-settings?)
 
-A automation bot written in Rust
-
-  This repo is part of a project  [creating 🌊 web-server .deb binary with rust](https://gill.net.in/posts/creating-web-server-deb-binary-with-rust/)
+A automation bot written in Rust.
+Server on tide [creating 🌊 web-server .deb binary with rust](https://gill.net.in/posts/creating-web-server-deb-binary-with-rust/)
 
 🚧 _Work In Progress_ 🚧
 
+![Minimum Rust Version][min-rust-badge]
 
-[ui]: https://user-images.githubusercontent.com/383250/59148363-53188c80-8a08-11e9-9b29-9cac56809ee2.png "Automaat UI Example"
-## Features
+## Compiling
 
--  ** TODO**
-
-### Commands
-
-Commands can be executed by commenting on a PR with your CI user's login.
-
-- **`@automata info`**:  retry a pipeline that has failed
-
-## The Problem
-
-
-## ✨ The Solution
-
-
-## 🏃‍♀️ In Action
-
-**Using automata?😀**
-
-
-
-##  Compiling
-
-automata requires Rust nightly. To compile using [`rustup`](https://rustup.rs/):
+Requires Rust nightly. To compile using [`rustup`](https://rustup.rs/):
 
 ```ShellSession
 $ rustup toolchain install nightly
@@ -43,6 +21,46 @@ $ cargo build
 ```
 
 Be sure to switch back to `stable` with `rustup default stable` if that's your preferred toolchain.
+
+
+To cross-compile for the Raspberry Pi you will need an
+`gcc-multilib-i686-linux-gnu` GCC toolchain and Rust component installed. Add the Rust target
+with `rustup target add i686-unknown-linux-gnu`. Then you can
+cross-compile with `cargo`:
+
+```ShellSession
+    cargo build --release --target i686-unknown-linux-gnu
+```
+
+`target/i686-unknown-linux-gnu/release/wqm-uv`
+
+
+[ui]: https://user-images.githubusercontent.com/383250/59148363-53188c80-8a08-11e9-9b29-9cac56809ee2.png "Automaat UI Example"
+
+## Features
+
+-  **TODO:**
+
+### :bookmark_tabs: Commands
+Commands can be executed by commenting on a PR with your CI user's login.
+
+View the options with `./wqm-uv -h`. By default it will try to bind the
+webserver to port 80. You can give a regular user the permission to do this
+with:
+
+- **`@wqm-uv info`**:  retry a pipeline that has failed
+
+##  The Problem
+
+
+## ✨ The Solution
+
+
+## 🏃‍♀️ In Action
+
+**Using wqm-uv?😀**
+
+
 
 ## 🎛 Configuration
 
@@ -111,3 +129,8 @@ $ helm upgrade --install labhub . -f myvalues.yaml
 ### Not implemented:
 
 - No periodic reconciling of GitLab branches with open PRs: if a webhook is missed for any reason, the GitLab pipeline may not correctly reflect the PR state
+
+
+<!-- Badges -->
+[min-rust-badge]: https://img.shields.io/badge/rustc-1.38+-blue.svg
+

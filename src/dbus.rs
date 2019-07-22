@@ -14,13 +14,6 @@ use std::{
 //     pin::Pin,
 };
 
-// pub struct MethodNode {
-//     node: Node,
-//     m: Message,
-// }
-
-
-
 pub struct CanDBus{
     conn : Connection,
 }
@@ -55,7 +48,7 @@ impl CanDBus {
 // 			<arg direction="in" type="s" name="value"/>
 // 			<arg direction="out" type="b" name="is_done"/>
 // 		</method>
-impl CanBus for CanDBus {
+impl CanDBus {
    fn get_ain01(&mut self) -> u16 {
         let r = self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analog1", "com.lar.nodes.Analog1", "GetIn1").unwrap());
         r.get1().unwrap()
@@ -121,7 +114,7 @@ impl CanBus for CanDBus {
         // let outdig = self.get_dig18out();
        self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Digital2", "com.lar.nodes.Digital16", "SetDigitalOut").unwrap().append1(num).append1(val));
     }
-    ///com.lar.nodes.Digital16
+    ///Uart.data
     fn get_uart01(&mut self) -> Vec<u8>  {
         let r = self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analog1", "com.lar.nodes.Analog1", "GetUart1").unwrap());
         r.get1().unwrap()
@@ -146,7 +139,6 @@ impl CanBus for CanDBus {
         let r = self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Doppelmotor2", "com.lar.nodes.Doppelmotor3", "GetDigitalIn").unwrap());
         r.get1().unwrap()
     }
-
     fn set_uart01(&mut self, data: Vec<u8>) {
         self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analog1", "com.lar.nodes.Analog1", "GetDigitalIn").unwrap().append1(String::from_utf8(data).unwrap()));
     }
@@ -165,7 +157,6 @@ impl CanBus for CanDBus {
     fn set_uart06(&mut self, data: Vec<u8>) {
         self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Doppelmotor2", "com.lar.nodes.Doppelmotor3", "GetDigitalIn").unwrap().append1(String::from_utf8(data).unwrap()));
     }
-
     fn setup_uart03(&mut self, baut: u16){
        self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Doppelmotor2", "com.lar.nodes.Doppelmotor3", "GetDigitalIn").unwrap().append1(baut));
     }

@@ -1,4 +1,4 @@
-# `quicktocuv`
+# `analyzer`
 
-**uv-2.0**
+WP: **uv-2.0**
 

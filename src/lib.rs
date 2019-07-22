@@ -1,18 +1,20 @@
 #![feature(async_await)]
+#![feature(async_closure)]
 #[allow(dead_code)]
 
-// mod data;
+/// mod data;
 pub mod error;
-pub mod cli;
+pub mod common;
+pub mod analyzer;
+pub mod server;
+// pub mod cli;
 pub mod config;
 pub mod metrics;
-pub mod hardware;
+pub mod emoji;
 
 // mod templates;
-pub mod monitor;
-pub mod device;
-
-pub use monitor::Repo;
+// pub mod monitor;
+// pub use app::AppState;
 // pub use templates::*;
 // pub use staticfile::*;
 // mod graphql;
@@ -21,15 +23,8 @@ pub use monitor::Repo;
 
 // mod metrics;
 
-
 // use github::*;
 pub use self::error::*;
+pub use self::common::*;
 // pub use self::cli::*;
 // pub use self::graphql::*;
-
-
-
-// pub fn hello() {
-  // println!{"Automata,"}
-
-//}
