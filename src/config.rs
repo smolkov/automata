@@ -2,6 +2,7 @@ use log::info;
 // use std::collections::HashMap;
 use std::env;
 use std::fs::File;
+
 use std::io::prelude::*;
 // use std::sync::{Mutex,RwLock};
 use super::emoji;
@@ -11,6 +12,7 @@ use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 // use std::os::;
 
+use std::path::{Path, PathBuf};
 
 // use confy;
 
@@ -21,7 +23,7 @@ use serde::{Deserialize, Serialize};
     // foo: i64,
 // }
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ServerConfig {
     pub address: String,
     pub port: u32,
@@ -107,14 +109,6 @@ fn get_toml_path() -> String {
     env::var("WQA_TOML").unwrap_or_else(|_| "wqa.toml".to_string())
 }
 
-lazy_static! {
-    pub static ref CONFIG: Config = {
-        let toml_path = get_toml_path();
-        let config: Config = toml::from_str(&read_file_to_string(&toml_path)).unwrap();
-        config
-    };
-}
-
 fn read_file_to_string(filename: &str) -> String {
     let mut file = File::open(filename).expect("Unable to open the file");
     let mut contents = String::new();
@@ -123,7 +117,22 @@ fn read_file_to_string(filename: &str) -> String {
     contents
 }
 
-pub fn load_config() {
+// fn load_or_default() -> Config{
+    // let path:PathBuf = get_toml_path().into();
+    // if path.exists() {
+        // config
+    // }
+// }
+
+lazy_static! {
+    pub static ref CONFIG: Config = {
+        let toml_path = get_toml_path();
+        let config: Config = toml::from_str(&read_file_to_string(&toml_path)).unwrap();
+        config
+    };
+}
+
+pub fn setup() {
     info!(
         "{} loaded configuration values from {}",
         emoji::WRENCH,
@@ -148,4 +157,9 @@ pub fn load_config() {
 //         "LAB_TO_HUB => {:#?}",
 //         Paint::red(LAB_TO_HUB.lock().unwrap())
 //     );
+}
+
+
+pub fn server_confit() -> ServerConfig {
+    CONFIG.server.clone()
 }

@@ -1,7 +1,8 @@
 #  `wqa`
 
 <!-- ![pipeline status](https://travis-ci.org/lar-ag/wqm-uv.svg?branch=master) -->
-[![builds.sr.ht status](https://builds.sr.ht/~asmolkov/wqa-settings.svg)](https://builds.sr.ht/~asmolkov/wqa-settings?)
+[![builds.sr.ht status](https://builds.sr.ht/~asmolkov/wqa/.build.yml.svg)](https://builds.sr.ht/~asmolkov/wqa/.build.yml?)
+
 
 A automation bot written in Rust.
 Server on tide [creating 🌊 web-server .deb binary with rust](https://gill.net.in/posts/creating-web-server-deb-binary-with-rust/)
@@ -58,6 +59,20 @@ with:
 
 ## 🏃‍♀️ In Action
 
+## Endpoints
+
+- `GET`
+  - `/`  :  Print `Hello World`
+  - `/user` : Print all of users
+  - `/user/:id` : Print `:id` user
+  - `/api/stream` : Print all streams
+  - `/api/rule` : Print all rules
+- `POST`
+  -  `/stream` : Create new user ( With `{"name": "user_name", "height": INTEGER}` body params )
+- `PATCH`
+   - `/user/:id` : Update user ( With `{"name": "user_name", "height": INTEGER}` body params)
+- `DELETE`
+  - `/user/:id` : Delete user
 **Using wqm-uv?😀**
 
 
@@ -85,10 +100,10 @@ Configure the webhook to send PR and push events.
 You'll need a CI user with SSH keys for both GitHub and GitLab. Create an account on both sites (if you don't already have a CI user), and create an SSH key for LabHub:
 
 ```ShellSession
-$ ssh-keygen -f labhub-key.ecdsa -t ecdsa -b 521
+$ ssh-keygen -f wqa-key.ecdsa -t ecdsa -b 521
 ```
 
-Keep `automata-key.ecdsa` safe, and upload `automata-key.ecdsa.pub` to both GitHub and GitLab for the CI user.
+Keep `wqa-key.ecdsa` safe, and upload `automata-key.ecdsa.pub` to both GitHub and GitLab for the CI user.
 
 ### Create Personal Access Tokens
 
@@ -107,28 +122,12 @@ Create personal access tokens for your CI user on both GitHub, and GitLab. Suppl
 - Give the token a name, and [enable the `api` scope, like this](docs/gitlab-personal-access-token.png).
 - Save that token to your `LabHub.toml`
 
-### Deploy to Kubernetes with Helm
-
-There's a Helm chart included in this repo, which is the preferred method of deployment. To use you, you must first create the SSH key secrets with kubectl. Assuming your SSH private key is `labhub-key.ecdsa`:
-
-```ShellSession
-$ kubectl create secret generic labhub-ssh-keys --from-file=github=labhub-key.ecdsa --from-file=gitlab=labhub-key.ecdsa
-```
-
-You may use separate keys for GitHub and GitLab if you choose, respectively.
-
-Once you have the secrets, install the helm chart from [helm/labhub/](helm/labhub/):
-
-```ShellSession
-$ cd helm/labhub/
-$ cp values.yaml myvalues.yaml
-### Edit myvalues.yaml to your liking ###
-$ helm upgrade --install labhub . -f myvalues.yaml
-```
+### Access Token for git.sr.ht
+- Go to
 
 ### Not implemented:
 
-- No periodic reconciling of GitLab branches with open PRs: if a webhook is missed for any reason, the GitLab pipeline may not correctly reflect the PR state
+
 
 
 <!-- Badges -->

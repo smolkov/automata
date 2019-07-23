@@ -49,7 +49,7 @@ $ cargo add paw
 
 Commands can be executed by commenting on a PR with your CI user's login.
 
-- **`@labhub retry`**: retry a pipeline that has failed
+- **`@setup testt`**: retry a pipeline that has failed
 
 ## The Problem
 

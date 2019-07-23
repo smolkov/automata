@@ -1,9 +1,10 @@
 // use chrono::NaiveDateTime;
 use serde::{Deserialize, Serialize};
-use super::store;
+use crate::workspace as store;
 // use http::status::StatusCode;
 
-use super::WqaError;
+use crate::error::*;
+use log::info;
 // use lazy_static::lazy_static;
 // use std::sync::{RwLock};
 use wqa_settings::ron::Config;
@@ -30,7 +31,7 @@ impl Default for Serial {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub enum Status {
     Off,
     Init,
@@ -65,47 +66,37 @@ impl Device {
     }
     pub fn set_status(&mut self, status: Status) {
         info!("status changed {:?} {:?}",self.status,status);
-        device.status = status;
+        self.status  = status;
         self.updated = systime::now_sec();
     }
 }
 
 impl Default for Device {
     fn default() -> Self {
-        Self {
-            model: Model::Draft,
-            serial: "draft".to_owned(),
-            producted:0,
-        }
+        Device::new(Model::Draft)
     }
 }
 
 
-pub async fn get_local() -> Result<Device,WqaError> {
-    let device = Device::load_no_fallback(store::root_directory().join("device.ron"))?;
+pub async fn get_local() -> Result<Device> {
+    let device = Device::load_no_fallback(store::data_dir()?.join("device.ron"))?;
     Ok(device)
 }
-pub async fn save_local(device: Device) -> Result<(), WqaError> {
-    device.write(store::root_directory().join("device.ron"))?;
+
+pub async fn save_local(device: Device) -> Result<()> {
+    device.write(store::data_dir()?.join("device.ron"))?;
     Ok(())
 }
-// pub async fn from_git() -> Result<Device,WqaError> {
-//     Ok(Device::default())
-// }
 
-pub async fn set_serial( serial: String ) -> Result<(),WqaError> {
+pub async fn set_serial( serial: String ) -> Result<()> {
     let mut device = get_local().await?;
     device.set_serial(serial);
-    device.write(store::root_directory().join("device.ron"))?;
+    device.write(store::data_dir()?.join("device.ron"))?;
     Ok(())
 }
 
-
-pub async fn change_status(status:Status) -> Result<(),WqaError>{
-    let mut device = get_local().await?;
-    device.set_status(status);
-    save_local(device)
-}
-
-
-//
+// pub async fn change_status(status:Status) -> Result<(),WqaError> {
+    // let mut device = get_local().await?;
+    // device.set_status(status);
+    // save_local(device)
+// }

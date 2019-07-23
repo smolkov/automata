@@ -1,12 +1,18 @@
 use serde_derive::{Deserialize, Serialize};
-use std::time::{Duration,SystemTime};
-/// Channel sum parameter
-///
-// use std::{path::PathBuf,fmt};
+// use std::time::{Duration,SystemTime};
+use super::{
+    Statistic,
+};
+use crate::error::*;
+use crate::workspace as store;
 
+use wqa_settings::ron::Config;
+use std::{
+    path::PathBuf,
+    fs::{create_dir_all},
+};
 
-
-
+use walkdir::{WalkDir};
 
 
 /// Modus state.
@@ -18,14 +24,7 @@ pub enum Mode {
 }
 
 
-
-#[derive(Deserialize)]
-#[serde(rename_all = "lowercase")]
-pub enum Mode {
-    Compile,
-    Test,
-}
-
+///ExerciseList
 #[derive(Deserialize)]
 pub struct ExerciseList {
     pub exercises: Vec<Exercise>,
@@ -75,10 +74,14 @@ pub struct Rule {
     pub output:     Output,
 }
 
+#[derive(Deserialize, Serialize,Debug)]
+pub struct RuleList {
+    pub rules: Vec<Rule>,
+}
 
 impl Default for Rule {
     fn default() -> Self {
-
+        Rule::new(1)
     }
 }
 
@@ -88,7 +91,7 @@ impl Rule {
             id:id,
             online: false,
             prioritat: 0,
-            name: "rule",
+            name: format!("{}-rule",id),
             statistic: Statistic::default(),
             inject: Inject::Signal,
             function: Function::None,
@@ -97,36 +100,52 @@ impl Rule {
     }
 }
 
-pub async fn find_all() ->Result<Vec<Rule>,WqaError> {
-    let path = store::rules_directory();
-    let mut streams: Vec<Stream> = Vec::new();
+impl RuleList {
+    pub fn new() -> RuleList {
+        RuleList {
+            rules: Vec::new(),
+        }
+    }
+    pub fn push(&mut self, rule:Rule) {
+        self.rules.push(rule);
+    }
+}
+
+pub async fn find_all() ->Result<Vec<Rule>> {
+    let path = store::rules_dir()?;
+    let mut rules = Vec::new();
     for entry in WalkDir::new(path).min_depth(1) {
         let entry = entry?;
         let metadate = entry.metadata()?;
         if metadate.is_dir(){
-            match entry.file_name().to_str() {
-                Some(sp) => {
-                    let part: Vec<_> = sp.matches("rule").collect();
-                    if part.len() > 0 {
-                        streams.push(Stream::load_no_fallback(entry.into_path().join("config.ron"))?);
-                    }
-                },
-                None => { }
-            }
+            rules.push(Rule::load_no_fallback(entry.into_path().join("rule.ron"))?);
         }
     }
-    Ok(streams)
+    Ok(rules)
+}
+
+pub fn directory(id:u64) -> Result<PathBuf> {
+    let path = store::rules_dir()?.join(format!("{}/",id));
+    if !path.exists() {
+        create_dir_all(path.as_path());
+    }
+    Ok(path)
 }
 
 
-pub async fn set_rule(rule: Rule) -> Result<(),WqaErrir> {
-    
+pub async fn set_rule(rule: Rule) -> Result<()> {
+    let path = directory(rule.id)?;
+    rule.write(path.join("rule.ron"))?;
+    Ok(())
 }
 
-
-pub async fn set_stream() -> Result<(),WqaError> {
-
+pub async fn get_rule(id:u64) -> Result<Rule> {
+    let rule = Rule::load_no_fallback(store::rules_dir()?.join(format!("{}/",id)).join("rule.ron"))?;
+    Ok(rule)
 }
+
+// pub async fn set_stream() -> Result<(),WqaError> {
+// }
 
 #[cfg(test)]
 mod test {
@@ -135,14 +154,15 @@ mod test {
     use std::path::Path;
 
     #[test]
-    fn test_create() {
-        File::create(&temp_file()).unwrap();
-        let exercise = Exercise {
-            path: PathBuf::from("example.rs"),
-            mode: Mode::Test,
-        };
-        exercise.clean();
-        assert!(!Path::new(&temp_file()).exists());
+    fn test_find_all() {
+
+        // File::create(&temp_file()).unwrap();
+        // let exercise = Exercise {
+            // path: PathBuf::from("example.rs"),
+            // mode: Mode::Test,
+        // };
+        // exercise.clean();
+        // assert!(!Path::new(&temp_file()).exists());
     }
 }
 

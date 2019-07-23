@@ -4,7 +4,7 @@ use super::{
     solution::Solution,
 };
 // use std::time::Duration;
-use super::WqaError;
+use crate::*;
 
 use walkdir::{WalkDir};
 use std::{
@@ -74,14 +74,14 @@ pub struct Calibration {
     pub points: Vec<Point>,
 }
 
-impl Default for Calibration {
-    fn default() -> Self {
-        Self{
-            slope : 1.0,
-            intercept : 0.0,
-            min: 0.0,
-            max: 500.0,
-        }
-    }
-}
+// impl Default for Calibration {
+    // fn default() -> Self {
+        // Self{
+            // slope : 1.0,
+            // intercept : 0.0,
+            // min: 0.0,
+            // max: 500.0,
+        // }
+    // }
+// }
 

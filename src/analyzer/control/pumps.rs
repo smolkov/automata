@@ -40,7 +40,6 @@ async fn start_pump_simulation() -> Result<(),WqaError> {
 
 }
 async fn start_pump_simulation() -> Result<(),WqaError> {
-
 }
 
 #[derive(Serialize,Default, Deserialize, Clone, Debug, PartialEq)]

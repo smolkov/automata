@@ -10,9 +10,9 @@ pub use tide::{error::ResultExt, response, App, Context, EndpointResult};
 use tera::{self, compile_templates};
 
 
-// Repo to pass with context and will hold
+// State to pass with context and will hold
 // the interface to the tera rendering engine
-pub struct Repo{
+pub struct State{
     pub template: tera::Tera,
     contents: Mutex<Vec<Message>>,
 }
@@ -24,11 +24,14 @@ struct Message {
 }
 
 
-impl Repo {
+impl State {
     pub fn new() -> Self {
+        use log::info;
+        info!("template directory {}/assets/temolates/*",env!("CARGO_MANIFEST_DIR"));
+
         let template_dir = format!("{}/assets/templates/*", env!("CARGO_MANIFEST_DIR"));
         // let template = compile_templates!(&template_dir);
-        Repo{
+        State{
             template: compile_templates!(&template_dir),
             contents : Mutex::new(Vec::new()),
         }

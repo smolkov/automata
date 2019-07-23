@@ -1,6 +1,5 @@
-# Default settings for can4rpc
-# For details on Rocket configuration, see:
-#  https://rocket.rs/v0.4/guide/configuration/#configuratio
+# Default settings for wqa
+# For details
 
 [server]
 address = "localhost"

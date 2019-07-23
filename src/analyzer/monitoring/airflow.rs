@@ -1,10 +1,10 @@
 /// Pressure sensor
 /// Anschlus `Analog:IN04`
 ///
-/// 
+///
 
 // use crate::io;
-// use std::ops::Range;
+use std::ops::Range;
 use crate::{
     WqaError,
     systime
@@ -13,9 +13,8 @@ use crate::{
 use tempfile::{
     tempdir_in,
     TempDir,
-}
+};
 use serde_derive::{Deserialize, Serialize};
-use std::ops::Range;
 
 use lazy_static::lazy_static;
 use std::sync::RwLock;
@@ -57,7 +56,6 @@ pub struct Airflow {
     pub updated: u64,
     pub fsr :    f32,
     pub broken:  bool,
-    pub range:   Option<FlowRange>,
 }
 
 impl Airflow {
@@ -81,17 +79,18 @@ impl Airflow {
     }
 }
 
+// pub async fn warning_input() -> Option<Range> {
+    // None
+// }
+// pub async fn critical_range_input() -> Option<Range> {
+    // None
+// }
 
-pub async fn warning_input() -> Option<Range> {
-    None
-}
-pub async fn critical_range_input() -> Option<Range> {
-    None
-}
+// pub async fn setup_range_input(warn: Option<Range>, critical : Option<Range>) {
 
-pub async fn setup_range_input(warn: Option<Range>, critical : Option<Range>) {
+// }
 
-}
+
 
 pub async fn setup_range_output() {
 

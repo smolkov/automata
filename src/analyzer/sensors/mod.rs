@@ -1,14 +1,26 @@
 pub mod ndir;
-pub use super::local as store;
+// pub use super::local as store;
 
 use serde_derive::{Deserialize, Serialize};
 use crate::systime;
+
+
+/// Sensor model
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
+pub enum NdirModel {
+    Simulation,
+    Edinburgh,
+}
+
+/// Record state.
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub enum RecState {
     Stop,
     Record,
     Done,
 }
+
+/// Record signal
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct Record {
     pub start: u64,

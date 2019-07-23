@@ -35,3 +35,8 @@ pub type Calibration;
 pub type DetectorBypass;
 pub type NdirZeroCorrection;
 
+
+
+
+pub async fn sample1()
+///

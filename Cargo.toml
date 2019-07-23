@@ -24,6 +24,8 @@ travis-ci = { repository = "lar-rs/wqa", branch = "master"}
 # errors
 failure = "0.1.5"
 # cli
+ferris-says = "0.1.1"
+ci_info = "0.7.1"
 paw = "1.0.0"
 structopt = { version = "0.2.18", features = ["paw"] }
 convey = "0.2.0"
@@ -32,7 +34,6 @@ console = "0.7.7"
 indicatif = "0.11.0"
 termcolor = "1.0.5"
 yansi = "0.5.0"
-ferris-says = "0.1.1"
 atty = "0.2.13"
 #Time date
 chrono = "0.4.7"
@@ -112,6 +113,8 @@ lain = "0.1.2"
 ansi_term = "0.12.0"
 tempfile = "3.1.0"
 memdb = "1.0.0"
+regex = "1.2.0"
+compose = "0.1.0"
 # plotters = "0.2.2"
 # crossbeam-channel = "0.3.8"
 # os_pipe = "0.8.1"

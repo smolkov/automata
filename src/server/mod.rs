@@ -1,5 +1,4 @@
-mod stream;
-mod monitor;
+mod local;
 mod app;
 // use tide::{Error};
 pub use crate::error::*;
@@ -62,7 +61,7 @@ async fn index(ctx: Context<Repo>) -> EndpointResult {
 
 
 
-pub async fn run_server(server_config: ServerConfig) -> Result<(), WqaError> {
+pub async fn run_server(server_config: ServerConfig) -> Result<()> {
     use log::LevelFilter;
     use log4rs::append::console::ConsoleAppender;
     use log4rs::config::{Appender, Config, Root};
@@ -81,12 +80,15 @@ pub async fn run_server(server_config: ServerConfig) -> Result<(), WqaError> {
     app.middleware(tide::middleware::RequestLogger::new());
     app.at("/").get(index);
     app.at("/api").nest(|api| {
-        // api.at("/device").get(device::response_info);
-        // api.at("/device/serial").get( device::get_serial).post(device::set_serial);
-    // api.at("/streams").get()
+        api.at("/device").get(local::get_device);
+        api.at("/device/serial").get(local::get_device_serial).post(local::set_device_serial);
+        api.at("/streams").get(local::get_streams_list);
+        api.at("/stream/:number").get(local::get_stream).post(local::set_stream);
+        api.at("/rules").get(local::get_rules);
     // api.at("/streams").get(stream)
     //   api.at("/info").get(device::get_info);
     });
+
     app.run("127.0.0.1:8000")?;
     Ok(())
 }

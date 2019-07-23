@@ -1,48 +1,30 @@
 /// Sensors: NDir1, NDir2
 /// Anschlus:  `DoppelMotor::UART01`
 /// Model:     `presurei877`
-
-use failure::{Fail};
-use std::io;
+use serde_derive::{Deserialize, Serialize};
+// use failure::{Fail};
+// use std::io;
 use crate::{
     // WqaError,
     systime,
 };
-use super::Record;
+use super::{
+    Record,
+    NdirModel,
+};
 
 
 use lazy_static::lazy_static;
 use std::sync::RwLock;
+
 lazy_static! {
-    static ref NDIR1: RwLock<Sensor> = {
-        RwLock::new(Sensor::new())
+    static ref NDIR1: RwLock<NdirSensor> = {
+        RwLock::new(NdirSensor::new())
     };
-    static ref NDIR1: 
 }
 
-
-
-
-
-
-
-// use std::string::FromUtf8Error;
-
-// use mut_guard::*;
-
-#[derive(Fail, Debug)]
-pub enum SensorError {
-    #[fail(display = "io error - {}",err)]
-    IOError {err: io::Error },
-
-}
-
-impl From<io::Error> for SensorError {
-    fn from(kind:io::Error) -> SensorError {
-        SensorError::IOError{err: kind}
-    }
-}
-
+/// Ndir sensor.
+#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 struct NdirSensor {
     updated: u64,
     fsr : f64,
@@ -51,12 +33,13 @@ struct NdirSensor {
 }
 
 
-impl Sensor {
-    fn new() -> Sensor {
-        Sensor {
+impl NdirSensor {
+    fn new() -> NdirSensor {
+        NdirSensor {
             updated:0,
             fsr:0.0,
             rec:Record::default(),
+            model: NdirModel::Simulation,
         }
     }
     pub fn start_record(&mut self) {
@@ -97,5 +80,6 @@ pub async fn ndir1_stop_record() {
 pub async fn ndir1_get_updated() -> u64  {
     NDIR1.read().unwrap().get_updated()
 }
+
 
 

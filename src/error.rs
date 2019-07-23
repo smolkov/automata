@@ -1,5 +1,5 @@
 #![allow(unused_variables)]
-
+pub use failure::{Error, ResultExt};
 use failure::{Fail};
 use std::io;
 use serde::{Deserialize, Serialize};
@@ -22,6 +22,7 @@ pub enum ErrState {
 }
 
 
+pub type Result<T> = ::std::result::Result<T, Error>;
 
 #[derive(Debug,Clone, Serialize, Deserialize)]
 pub struct WqaErr {

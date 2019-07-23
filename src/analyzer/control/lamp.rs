@@ -60,8 +60,8 @@ pub async fn set_lifetime(lifetime: u64) {
     UVLAMP.write().unwrap().set_lifetime(lifetime);
 }
 
-async fn read_status() -> Result<Lamp,WqaError> {
-  Ok(Lamp::default())
+async fn status() -> Result<Lamp,WqaError> {
+    Ok(Lamp::default())
 }
 
 pub async fn lamp_status() -> Result<Lamp,WqaError> {
@@ -77,6 +77,7 @@ pub async fn lamp_turn_off() -> Result<(),WqaError>{
     UVLAMP.write().unwrap().turn_off();
     Ok(())
 }
+
 
 
 // async fn get_lamp() -> EndpointResult {
