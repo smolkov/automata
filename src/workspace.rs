@@ -66,10 +66,11 @@ pub fn rules_dir() -> Result<PathBuf> {
     Ok(path)
 }
 
-// #[derive(Debug, Clone, PartialEq)]
-// pub struct Workspace {
-//     s: String,
-// }
+
+#[derive(Debug, Clone, PartialEq)]
+pub struct Workspace {
+    root: PathBuf,
+}
 
 // impl Workspace {
 //     #[inline]

@@ -9,11 +9,12 @@ use std::sync::Mutex;
 pub use tide::{error::ResultExt, response, App, Context, EndpointResult};
 use tera::{self, compile_templates};
 
-
+// use staticfile::StaticFile;
 // State to pass with context and will hold
 // the interface to the tera rendering engine
 pub struct State{
     pub template: tera::Tera,
+    // pub staticfs: StaticFile,
     contents: Mutex<Vec<Message>>,
 }
 
@@ -33,6 +34,7 @@ impl State {
         // let template = compile_templates!(&template_dir);
         State{
             template: compile_templates!(&template_dir),
+            // staticfs: StaticFile::new("/."),
             contents : Mutex::new(Vec::new()),
         }
     }

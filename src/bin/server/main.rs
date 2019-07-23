@@ -1,11 +1,14 @@
 #![feature(async_await)]
 #![feature(async_closure)]
 
-#![allow(clippy::doc_markdown)]
+// #![allow(clippy::doc_markdown)]
 
 use structopt::*;
-use wqa::error::*;
+
 use wqa;
+
+
+use wqa::error::*;
 use wqa::analyzer;
 
 mod local;

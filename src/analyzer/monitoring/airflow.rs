@@ -5,10 +5,8 @@
 
 // use crate::io;
 use std::ops::Range;
-use crate::{
-    WqaError,
-    systime
-};
+// use crate::error::*;
+use crate::systime;
 
 use tempfile::{
     tempdir_in,

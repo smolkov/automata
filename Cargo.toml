@@ -6,13 +6,13 @@ edition = "2018"
 description = "Water quality analyzer backend"
 keywords = ["api", "monitor", "server"]
 categories = ["", "os"]
-repository = "https://github.com/lar-ag/wqa"
+repository = "https://github.com/lar-rs/wqa"
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
 # Is it maintained resolution time: `repository` is required.
-is-it-maintained-issue-resolution = { repository = "https://todo.sr.ht/~asmolkov/quicktocuv" }
+# is-it-maintained-issue-resolution = { repository = "https://todo.sr.ht/~asmolkov/quicktocuv" }
 # Is it maintained percentage of open issues: `repository` is required.
-is-it-maintained-open-issues = { repository = "https://todo.sr.ht/~asmolkov/quicktocuv" }
+# is-it-maintained-open-issues = { repository = "https://todo.sr.ht/~asmolkov/quicktocuv" }
 
 
 
@@ -115,6 +115,10 @@ tempfile = "3.1.0"
 memdb = "1.0.0"
 regex = "1.2.0"
 compose = "0.1.0"
+futures-fs = "0.0.5"
+futures-util-preview = { version = "0.3.0-alpha.17", features = ["compat"] }
+http-service = "0.2.0"
+url = "2.0.0"
 # plotters = "0.2.2"
 # crossbeam-channel = "0.3.8"
 # os_pipe = "0.8.1"

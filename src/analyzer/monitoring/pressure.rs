@@ -4,10 +4,8 @@
 ///
 
 use serde_derive::{Deserialize, Serialize};
-use crate::{
-    WqaError,
-    systime,
-};
+use crate::error::*;
+use crate::systime;
 
 
 
@@ -58,7 +56,7 @@ pub async fn set_analog16_value(value:u16) {
     PRESSURE.write().unwrap().set_analog16(value);
 }
 
-pub async fn pressure() -> Result<Pressure,WqaError> {
+pub async fn pressure() -> Result<Pressure> {
     Ok(PRESSURE.read().unwrap().clone())
 }
 

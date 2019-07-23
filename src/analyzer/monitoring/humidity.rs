@@ -4,10 +4,8 @@
 use serde_derive::{Deserialize, Serialize};
 // use futures::prelude::*;
 // use crate::io;
-use crate::{
-    WqaError,
-    systime
-};
+use crate::error::*;
+use crate::systime;
 
 use lazy_static::lazy_static;
 use std::sync::RwLock;
@@ -59,7 +57,7 @@ pub async fn set_analog16(value: u16) {
 // pub type ReadAInput = impl Future<Output=Result<u16, WqaError>>;
 
 
-pub async fn current_value() -> Result <Humidity,WqaError> {
+pub async fn current_value() -> Result <Humidity> {
     // let analog_value  = read.await?;
    Ok(SENSOR.read().unwrap().clone())
 }

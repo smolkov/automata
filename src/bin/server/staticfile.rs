@@ -12,18 +12,19 @@ use tide::{App, Context, EndpointResult, Response};
 
 use std::path::{Component, Path, PathBuf};
 use std::{fs, io};
+// use url::percent_encoding::percent_encode;
 
 const DEFAULT_4XX_BODY: &[u8] = b"Oops! I can't find what you're looking for..." as &[_];
 const DEFAULT_5XX_BODY: &[u8] = b"I'm broken, apparently." as &[_];
 
 /// Simple static file handler for Tide inspired from https://github.com/iron/staticfile.
 #[derive(Clone)]
-struct StaticFile {
+pub struct StaticFile {
     fs_pool: FsPool,
     root: PathBuf,
 }
 
-pub impl StaticFile {
+impl StaticFile {
     /// Creates a new instance of this handler.
     pub fn new(root: impl AsRef<Path>) -> Self {
         let root = PathBuf::from(root.as_ref());
@@ -108,9 +109,9 @@ pub impl StaticFile {
     }
 }
 
-async fn handle_path(ctx: Context<StaticFile>) -> EndpointResult {
+pub async fn handle_path(ctx: Context<StaticFile>) -> EndpointResult {
     let path = ctx.uri().path();
-    ctx.state()
+    ctx.state().staticfs
         .stream_bytes(path, ctx.headers())
         .or_else(|_err| {
             Ok(http::Response::builder()
