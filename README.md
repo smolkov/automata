@@ -1,5 +1,7 @@
 #  `wqa`
 
+LAR water quality analyzers  [🦀 **Rust**](https://github.com/wasmerio/wasmer-rust-example)
+
 <!-- ![pipeline status](https://travis-ci.org/lar-ag/wqm-uv.svg?branch=master) -->
 [![builds.sr.ht status](https://builds.sr.ht/~asmolkov/wqa/.build.yml.svg)](https://builds.sr.ht/~asmolkov/wqa/.build.yml?)
 

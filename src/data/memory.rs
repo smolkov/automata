@@ -1,4 +1,4 @@
-use wqms::memory;
+use heim::memory;
 use futures::prelude::*;
 use bytes::BytesMut;
 

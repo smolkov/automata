@@ -28,3 +28,4 @@ fn main(args: paw::Args) -> Result<(), Box<dyn Error>> {
     }
     Ok(())
 }
+

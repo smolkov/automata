@@ -28,7 +28,7 @@ struct Message {
 impl State {
     pub fn new() -> Self {
         use log::info;
-        info!("template directory {}/assets/temolates/*",env!("CARGO_MANIFEST_DIR"));
+        info!("template directory {}/assets/templates/*",env!("CARGO_MANIFEST_DIR"));
 
         let template_dir = format!("{}/assets/templates/*", env!("CARGO_MANIFEST_DIR"));
         // let template = compile_templates!(&template_dir);

@@ -14,15 +14,6 @@ use serde::{Deserialize, Serialize};
 
 use std::path::{Path, PathBuf};
 
-// use confy;
-
-// #[derive(Debug, Serialize, Deserialize)]
-// struct Config {
-    // name: String,
-    // comfy: bool,
-    // foo: i64,
-// }
-
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ServerConfig {
     pub address: String,

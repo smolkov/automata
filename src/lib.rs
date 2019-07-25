@@ -2,15 +2,14 @@
 #![feature(async_closure)]
 #[allow(dead_code)]
 
-/// mod data;
+
+
+pub mod dbus;
 pub mod error;
-pub mod common;
-pub mod workspace;
-pub mod analyzer;
-// pub mod cli;
 pub mod config;
 pub mod metrics;
 pub mod emoji;
-pub use self::common::*;
-
-// pub use self::error::*;
+pub mod stream;
+pub mod rules;
+pub mod store;
+pub use self::dbus as mio;
