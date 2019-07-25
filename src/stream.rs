@@ -39,10 +39,9 @@ impl Default for Channel {
 /// Stream
 #[derive(Clone, Deserialize, Serialize, Debug)]
 pub struct Stream {
-    pub number:   u64,
+    pub id:   u64,
     pub name:     String,
     pub updated:  u64,
-    pub channels: Vec<Channel>,
     // pub measu:     String,
 }
 
@@ -50,10 +49,11 @@ pub struct Stream {
 impl Default for Stream {
     fn default()-> Self {
         Self {
-            number:   1,
+            id:   1,
             name:     "stream1".to_owned(),
             updated:  0,
-            channels: Vec::new(),
         }
     }
 }
+
+

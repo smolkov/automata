@@ -87,11 +87,6 @@ async fn main()  -> Result<()>{
 
     app.middleware(tide::middleware::RequestLogger::new());
     app.at("/").get(templates::index);
-
-
-   // api.at("/streams").get(stream)
-    //   api.at("/info").get(device::get_info);
-    // });
     app = local::setup_store(app);
     app = uv::setup_routes(app);
     app.run("127.0.0.1:8000")?;

@@ -12,8 +12,8 @@ use std::{
     fs::{create_dir_all},
 };
 
-use super::rules::Rule;
-use super::stream::Stream;
+use super::rules::*;
+use super::stream::*;
 
 pub fn data_dir() -> Result<PathBuf> {
     let path = dirs::data_dir().ok_or_else(|| format_err!("Failed to find data directory"))?;
@@ -41,7 +41,7 @@ pub fn measurements_dir() -> Result<PathBuf> {
     Ok(path)
 }
 pub fn signal_dir() -> Result<PathBuf> {
-    let mut path = history_path()?;
+    let path = history_path()?;
     let path = path.join("signal");
     if !path.exists() {
         fs::create_dir_all(&path).context("Failed to create miasurements directory")?;
@@ -81,12 +81,12 @@ pub struct Workspace {
 
 
 
-pub async fn get_device() -> Result<Device> {
+pub async fn device_get() -> Result<Device> {
     let device = Device::load_no_fallback(data_dir()?.join("device.ron"))?;
     Ok(device)
 }
 
-pub async fn set_device(device: Device) -> Result<()> {
+pub async fn device_save(device: Device) -> Result<()> {
     device.write(data_dir()?.join("device.ron"))?;
     Ok(())
 }
@@ -110,20 +110,40 @@ pub async fn get_stream_list() ->Result<Vec<Stream>> {
     }
     Ok(streams)
 }
-
-pub async fn get_stream(number: u64) -> Result<Stream> {
-    let dir = streams_dir()?.join(format!("{}/",number)).join("stream.ron");
+pub fn stream_get_path(stream:&Stream) -> Result<PathBuf> {
+    let path = streams_dir()?.join(format!("{}/",stream.id));
+    if !path.exists() {
+        fs::create_dir_all(&path).context("Failed to create stream directory")?;
+    }
+    Ok(path)
+}
+pub async fn stream_get_id(id: u64) -> Result<Stream> {
+    let dir = streams_dir()?.join(format!("{}/",id)).join("stream.ron");
     let stream = Stream::load_no_fallback(dir)?;
     Ok(stream)
 }
 
-pub async fn set_stream(stream:Stream) -> Result<()> {
-    let stream_file = streams_dir()?.join(format!("{}/",stream.number)).join("stream.ron");
-    stream.write(stream_file)?;
+pub async fn stream_save(stream:Stream) -> Result<()> {
+    let path = stream_get_path(&stream)?.join("stream.ron");
+    stream.write(path)?;
     Ok(())
 }
 
-pub async fn set_rules_list() ->Result<Vec<Rule>> {
+pub async fn get_stream_channel_list(stream:Stream) -> Result<Vec<Channel>> {
+    let path = stream_get_path(&stream)?.join("channels");
+    let mut channels:Vec<Channel> = Vec::new();
+    for entry in WalkDir::new(path).min_depth(1) {
+        let entry = entry?;
+        let metadate = entry.metadata()?;
+        if metadate.is_file(){
+            channels.push(Channel::load_no_fallback(entry.into_path())?);
+        }
+    }
+    Ok(channels)
+}
+
+
+pub async fn rule_get_list() ->Result<Vec<Rule>> {
     let path = rules_dir()?;
     let mut rules = Vec::new();
     for entry in WalkDir::new(path).min_depth(1) {
@@ -136,32 +156,38 @@ pub async fn set_rules_list() ->Result<Vec<Rule>> {
     Ok(rules)
 }
 
-pub fn get_rule_directory(id:u64) -> Result<PathBuf> {
-    let path = rules_dir()?.join(format!("{}/",id));
+pub async fn rule_save(rule: Rule) -> Result<()> {
+    let path = rules_dir()?.join(format!("{}/",rule.id));
     if !path.exists() {
-        create_dir_all(path.as_path());
+        create_dir_all(path.as_path())?;
     }
-    Ok(path)
-}
-
-pub async fn set_rule(rule: Rule) -> Result<()> {
-    let path = get_rule_directory(rule.id)?;
     rule.write(path.join("rule.ron"))?;
     Ok(())
 }
 
-pub async fn get_rule(id:u64) -> Result<Rule> {
+pub async fn rule_get_id(id:u64) -> Result<Rule> {
     let rule = Rule::load_no_fallback(rules_dir()?.join(format!("{}/",id)).join("rule.ron"))?;
     Ok(rule)
 }
 
+// pub async fn
 
 #[cfg(test)]
 mod tests {
     use super::*;
+    // use futures::executor::block_on;
 
-    #[test]
-    fn test_valid_workspace() {
+
+    #[runtime::test]
+    async fn test_valid_workspace() {
+        let path = data_dir().unwrap();
+        println!("PATH:{:?}",path);
+        let stream = Stream::default();
+        stream_save(stream).await.unwrap();
+        let rule = Rule::new(1);
+        rule_save(rule).await.unwrap();
+        
+
         // let x = Workspace::from_str("abc");
         // assert!(x.is_ok());
     }
