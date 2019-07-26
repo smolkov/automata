@@ -14,8 +14,6 @@ use tera::{self, compile_templates};
 // the interface to the tera rendering engine
 pub struct State{
     pub template: tera::Tera,
-   
-    // pub staticfs: StaticFile,
     contents: Mutex<Vec<Message>>,
 }
 

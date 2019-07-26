@@ -64,7 +64,7 @@ pub async fn set_rule(mut cx: Context<State>) -> EndpointResult<()> {
     wqa::store::rule_save(rule).await.unwrap();
     Ok(())
 }
-
+/// Setup route
 pub fn setup_route(mut app: App<State>) -> App<State> {
     app.at("/api").nest(|api| {
         api.at("/device").get(device);
@@ -75,4 +75,3 @@ pub fn setup_route(mut app: App<State>) -> App<State> {
     });
     app
 }
-//

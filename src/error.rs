@@ -7,6 +7,8 @@ use walkdir;
 use serde_yaml;
 use git2;
 use wqa_settings::ConfigError;
+use dbus::Error as DBusError;
+
 // use regex;
 
 #[derive(Debug,Clone, Serialize, Deserialize)]
@@ -64,7 +66,8 @@ pub enum WqaError {
     GitError {err: git2::Error },
     #[fail(display = "config error - {}",err)]
     ConfigError {err: ConfigError },
-
+    #[fail(display = "dbus  error - {}",err)]
+    DBusError {err: DBusError },
     // #[fail(display = "io error - {}",serde_json)]
     // BadJson(serde_json::Error),
 }
@@ -106,6 +109,12 @@ impl From<serde_yaml::Error> for WqaError {
     WqaError::BadYaml{err:kind}
   }
 }
+impl From<DBusError> for WqaError {
+    fn from(kind:DBusError) -> WqaError {
+        WqaError::DBusError{err:kind}
+    }
+}
+
 // app_error_from!(git2::Error, GitError);
 // app_error_from!(io::Error, IO);
 // app_error_from!(serde_json::Error, BadJson);

@@ -4,7 +4,7 @@
 
 
 
-pub mod dbus;
+pub mod mio;
 pub mod error;
 pub mod config;
 pub mod metrics;
@@ -12,4 +12,3 @@ pub mod emoji;
 pub mod stream;
 pub mod rules;
 pub mod store;
-pub use self::dbus as mio;

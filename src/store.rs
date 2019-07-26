@@ -6,6 +6,7 @@ use std::fs;
 use walkdir::{WalkDir};
 
 use analyzer::Device;
+use analyzer::*;
 use wqa_settings::ron::Config;
 use std::{
     path::PathBuf,
@@ -15,15 +16,17 @@ use std::{
 use super::rules::*;
 use super::stream::*;
 
+/// data dir
 pub fn data_dir() -> Result<PathBuf> {
-    let path = dirs::data_dir().ok_or_else(|| format_err!("Failed to find data directory"))?;
-    let path = path.join("wqa");
+
+    let path = dirs::home_dir().ok_or_else(|| format_err!("Failed to find data directory"))?;
+    let path = path.join(".lar");
     if !path.exists() {
         fs::create_dir_all(&path).context("Failed to create data directory")?;
     }
     Ok(path)
 }
-
+/// history path
 pub fn history_path() -> Result<PathBuf> {
     let path = data_dir()?;
     let path = path.join("history");
@@ -32,6 +35,7 @@ pub fn history_path() -> Result<PathBuf> {
     }
     Ok(path)
 }
+/// measurements dir
 pub fn measurements_dir() -> Result<PathBuf> {
     let path = history_path()?;
     let path = path.join("measurements");
@@ -170,6 +174,11 @@ pub async fn rule_get_id(id:u64) -> Result<Rule> {
     Ok(rule)
 }
 
+
+// pub async fn airflow_input_set(airflow:Airflow) {
+
+// }
+
 // pub async fn
 
 #[cfg(test)]
@@ -186,8 +195,6 @@ mod tests {
         stream_save(stream).await.unwrap();
         let rule = Rule::new(1);
         rule_save(rule).await.unwrap();
-
-
         // let x = Workspace::from_str("abc");
         // assert!(x.is_ok());
     }

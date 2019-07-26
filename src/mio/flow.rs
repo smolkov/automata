@@ -14,7 +14,7 @@ use crate::error::*;
 use lazy_static::lazy_static;
 // use std::sync::RwLock;
 lazy_static! {
-    
+    static ref VAL:f32 = 0.0;
     // static ref SENSOR : RwLock<Humidity> = {
         // RwLock::new(Humidity::from_analog16(0))
     // };
@@ -23,6 +23,10 @@ lazy_static! {
     // };
 }
 
+
+pub async fn calibrate_airflow() -> Result<()> {
+    Ok(())
+}
 
 pub async fn get_airflow_input() -> Result<Airflow> {
     Ok(Airflow::from_analog16(0))

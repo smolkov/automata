@@ -1,55 +1,57 @@
-use super::error::MioError;
-use dbus;
-use dbus::Error as DBusError;
-use dbus::{BusType, Connection, Message};
+use crate::error::*;
+
 // use once_cell::sync::OnceCell;
 // use serde_json::Value;
 // use std::num::ParseIntError;
 // use std::str::FromStr;
-use futures::prelude::*;
-use super::mio::CanBus;
+// use futures::prelude::*;
+// use super::mio::CanBus;
+// use lazy_static::lazy_static;
+use dbus;
+use dbus::Error as DBusError;
+use dbus::{BusType, Connection, Message};
 
-use std::{
-    sync::{Arc,Mutex},
+// use std::{
+    // sync::{Mutex},
 //     pin::Pin,
-};
+// };
+use lazy_static::lazy_static;
+use std::sync::RwLock;
+lazy_static! {
 
-pub struct CanDBus{
-    conn : Connection,
+    // static ref CONN : Connection = Connection::get_private(BusType::System).unwrap();
+    // static ref DATA : RwLock<Vec<f32>> = {
+        // RwLock::new(Vec::new())
+    // };
+}
+
+// pub async fn send_message(m : Connection) -> Message {
+    // self.conn.send_with_reply_and_block(m, 2000).unwrap()
+// }
+
+// pub struct CanDBus{
+    // conn: Connection,
+// }
+
+
+// impl CanDBus {
+    // fn new_for_bus(bus:BusType)
+// }
+
+pub fn send_message(m: Message) -> Result<Message> {
+    let conn = Connection::get_private(BusType::System).unwrap();
+    conn.send_with_reply_and_block(m,2000)
 }
 
 
-
-impl CanDBus {
-    pub fn message(&mut self, m:Message) -> Message {
-        self.conn.send_with_reply_and_block(m, 2000).unwrap()
-    }
-    pub fn new(bus: BusType) -> Result<CanDBus, DBusError> {
-        let c = Connection::get_private(bus)?;
-        Ok(Self {
-            conn: c,
-        })
-    }
+fn dig18out_set(num:u8,val:bool) ->  Result<()> {
+    send_message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Digital1", "com.lar.nodes.Digital16", "SetDigitalOut").unwrap().append1(num).append1(val));
+    Ok(())
 }
 
 
-// <method name="GetIndexValue">
-// 			<arg direction="in" type="s" name="index"/>
-// 			<arg direction="out" type="s" name="value"/>
-// 			<arg direction="out" type="s" name="value_type"/>
-// 		</method>
-// 		<!-- SetIndexValue:
-// 			@index:    Index.
-// 		   	@value:    Intex value in string format.
-// 		   	@is_done:  Done if value changed.
-// 		    @since: 1.10 Set intex value-->
-// 		<method name="SetIndexValue">
-// 			<arg direction="in" type="s" name="index"/>
-// 			<arg direction="in" type="s" name="value"/>
-// 			<arg direction="out" type="b" name="is_done"/>
-// 		</method>
-impl CanDBus {
-   fn get_ain01(&mut self) -> u16 {
+fn get_ain01() -> Result<u16> {
+    set.conn = Connectio
         let r = self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analog1", "com.lar.nodes.Analog1", "GetIn1").unwrap());
         r.get1().unwrap()
     }
@@ -99,7 +101,6 @@ impl CanDBus {
     }
     fn set_dig18out(&mut self,num:u8,val:bool) {
         // let outdig = self.get_dig18out();
-       self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Digital1", "com.lar.nodes.Digital16", "SetDigitalOut").unwrap().append1(num).append1(val));
     }
      ///com.lar.nodes.Digital16
     fn get_dig19in(&mut self,num:u8) -> bool {
@@ -139,9 +140,9 @@ impl CanDBus {
         let r = self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Doppelmotor2", "com.lar.nodes.Doppelmotor3", "GetDigitalIn").unwrap());
         r.get1().unwrap()
     }
-    fn set_uart01(&mut self, data: Vec<u8>) {
-        self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analog1", "com.lar.nodes.Analog1", "GetDigitalIn").unwrap().append1(String::from_utf8(data).unwrap()));
-    }
+fn set_uart01(&mut self, data: Vec<u8>) {
+    self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analog1", "com.lar.nodes.Analog1", "GetDigitalIn").unwrap().append1(String::from_utf8(data).unwrap()));
+}
     fn set_uart02(&mut self, data: Vec<u8>) {
         self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analog1", "com.lar.nodes.Analog1", "GetDigitalIn").unwrap().append1(String::from_utf8(data).unwrap()));
     }
@@ -169,56 +170,3 @@ impl CanDBus {
     fn setup_uart06(&mut self, baut: u16){
         self.message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Doppelmotor2", "com.lar.nodes.Doppelmotor3", "GetDigitalIn").unwrap().append1(baut));
     }
-    // fn dm11_setup(speed:u8,max:u16,invert:bool);
-    // fn dm11_move(sped:u8,max:u16);
-    // fn dm11_setup(speed:u8,max:u16);
-}
-
-
-
-// impl RpcMio for CanDBus {
-// 	fn protocol_version(&self) -> Result<String> {
-// 		Ok("version1".into())
-// 	}
-
-// 	fn read_index(&self,node:u32,index:u16, sub: u8) -> Result<String,MioError> {
-
-//     }
-//     fn write_index(&self,node:u32,index:u16, sub: u8,data:Vec<u8>) -> Result<(),MioError>;
-
-//     #[rpc(name = "get_ain01")]
-//     fn get_ain01(&self) -> Result<u16, MioError>;
-//     #[rpc(name = "get_ain02")]
-//     fn get_ain02(&self) -> Result<u16, MioError>;
-//      #[rpc(name = "get_ain03")]
-//     fn get_ain03(&self) -> Result<u16, MioError>;
-//      #[rpc(name = "get_ain04")]
-//     fn get_ain04(&self) -> Result<u16, MioError>;
-//      #[rpc(name = "get_ain05")]
-//     fn get_ain05(&self) -> Result<u16, MioError>;
-//      #[rpc(name = "get_aout")]
-//     fn get_aout(&self, num: u8) -> Result<u16, MioError>;
-//     #[rpc(name = "set_aout")]
-//     fn set_aout(&self, num: u8, val: u16) -> FutureResult<(), MioError>;
-//     #[rpc(name = "get_temp01")]
-//     fn get_temp01(&self,num:u8) -> Result<u16,MioError>;
-//     #[rpc(name = "get_temp02")]
-//     fn get_temp01(&self,num:u8) -> Result<u16,MioError>;
-//     #[rpc(name = "get_temp03")]
-//     fn get_temp01(&self,num:u8) -> Result<u16,MioError>;
-
-
-//     #[rpc(name = "get_din")]
-//     fn get_din(&self,digit:u8) ->Result<bool,MioError>;
-//     #[rpc(name = "get_dout")]
-//     fn get_dout(&self,digit:u8) ->Result<bool,MioError>;
-//      #[rpc(name = "set_dout")]
-//     fn set_dout(&self,digit:u8,value:bool) ->Result<(),MioError>;
-
-//     #[rpc(name = "setup_uart")]
-//     fn setup_uart(&self,uart:u8,baut: u16)->Result<(),Error>;
-//     #[rpc(name = "read_uart")]
-//     fn read_uart(&self,uart:u8)->FutureResult<Vec<u8>,Error>;
-//     #[rpc(name = "write_uart")]
-//     fn write_uart(&self,uart:u8,data: Vec<u8>)->Result<(),Error>;
-// }

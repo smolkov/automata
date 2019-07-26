@@ -1,5 +1,5 @@
 //! Uv monitor api
-//! 
+//!
 //!
 //!
 use crate::error::*;
@@ -55,6 +55,4 @@ pub async fn is_fluid3() -> Result<bool> { Ok(false) }
 pub async fn is_fluid4() -> Result<bool> { Ok(false) }
 pub async fn is_fluid5() -> Result<bool> { Ok(false) }
 pub async fn is_fluid6() -> Result<bool> { Ok(false) }
-
-
 
