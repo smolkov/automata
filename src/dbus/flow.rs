@@ -14,6 +14,7 @@ use crate::error::*;
 use lazy_static::lazy_static;
 // use std::sync::RwLock;
 lazy_static! {
+    
     // static ref SENSOR : RwLock<Humidity> = {
         // RwLock::new(Humidity::from_analog16(0))
     // };

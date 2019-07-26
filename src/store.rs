@@ -98,7 +98,7 @@ pub async fn device_save(device: Device) -> Result<()> {
     // Ok(())
 // }
 
-pub async fn get_stream_list() ->Result<Vec<Stream>> {
+pub async fn stream_get_list() ->Result<Vec<Stream>> {
     let path = streams_dir()?;
     let mut streams: Vec<Stream> = Vec::new();
     for entry in WalkDir::new(path).min_depth(1) {
@@ -186,7 +186,7 @@ mod tests {
         stream_save(stream).await.unwrap();
         let rule = Rule::new(1);
         rule_save(rule).await.unwrap();
-        
+
 
         // let x = Workspace::from_str("abc");
         // assert!(x.is_ok());

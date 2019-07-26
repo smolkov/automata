@@ -3,14 +3,14 @@
 
 // #![allow(clippy::doc_markdown)]
 
-use structopt::*;
+// use structopt::*;
 
 use wqa;
 
 use wqa::error::*;
-use wqa::mio;
+// use wqa::mio;
 
-mod local;
+mod data;
 mod simulation;
 mod uv;
 mod app;
@@ -24,7 +24,8 @@ mod templates;
 
 use app::State;
 // use runtime;
-use tide::{self, App, Context, EndpointResult, Error};
+// use tide::{self, App, Context, EndpointResult, Error};
+use tide;
 
 // impl WqaError {
 //     pub fn response_500(self) -> Error {
@@ -87,7 +88,7 @@ async fn main()  -> Result<()>{
 
     app.middleware(tide::middleware::RequestLogger::new());
     app.at("/").get(templates::index);
-    app = local::setup_store(app);
+    app = data::setup_route(app);
     app = uv::setup_routes(app);
     app.run("127.0.0.1:8000")?;
     Ok(())
