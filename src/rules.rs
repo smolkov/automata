@@ -110,9 +110,9 @@ impl RuleList {
 
 #[cfg(test)]
 mod test {
-    use super::*;
-    use std::fs::File;
-    use std::path::Path;
+    // use super::*;
+    // use std::fs::File;
+    // use std::path::Path;
 
     #[test]
     fn test_find_all() {

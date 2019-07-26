@@ -19,7 +19,7 @@ matrix:
     - RUSTDOCFLAGS=-Dwarnings cargo doc
         -Zmtime-on-use
         --all --all-features
-        --exclude tide
+        --exclude wqa
         --no-deps
 
   - name: cargo fmt
@@ -50,12 +50,3 @@ matrix:
     - cargo build
         -Zmtime-on-use
         --no-default-features
-
-  - name: cargo test
-    script:
-    - cargo test -Zmtime-on-use --all --verbose
-
-  - name: cargo test --all-features
-    script:
-    - cargo test -Zmtime-on-use --all-features
-    - cargo test -Zmtime-on-use --manifest-path tide-slog/Cargo.toml --all-features
