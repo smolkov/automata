@@ -30,13 +30,13 @@ use std::sync::{Mutex,Arc};
 use once_cell::sync::OnceCell;
 
 
-// lazy_static! {
+lazy_static! {
 
-    // static ref CONN : Mutex<CanDBus> = Mutex::new(CanDBus::new_for_dbus(BusType::System));
+    // static ref NEW : impl Future<Output = Result<Connection>> =
     // static ref DATA : RwLock<Vec<f32>> = {
         // RwLock::new(Vec::new())
     // };
-// }
+}
 
 // pub async fn send_message(m : Connection) -> Message {
     // self.conn.send_with_reply_and_block(m, 2000).unwrap()
@@ -47,7 +47,7 @@ pub struct UvDBus {
 
 }
 
-static DBUSCONN: OnceCell<Connection> = OnceCell::new();
+// static CONNECTION: OnceCell<Connection> = OnceCell::new();
 
 
 
@@ -106,14 +106,17 @@ impl CanDBus {
 }
 
 
+// pub fn setup_connection(conn:Connection) ->Result<()> {
+    // CONNECTION.set(conn);
+    // Ok(())
+// }
 
 
 
 pub fn send_message(m: Message) -> Result<Message> {
-    match DBUSCONN.get() {
-        Some(conn) => Ok(conn.send_with_reply_and_block(m,2000)?),
-        None => Err(WqaError::DBusError{err:DBusError::new_custom("rg.freedesktop.DBus.Error.Failed", "dbus connectio failed")}),
-    }
+    let conn =  Connection::get_private(BusType::System)?;
+    let r = conn.send_with_reply_and_block(m,2000)?;
+    Ok(r)
 }
 
 

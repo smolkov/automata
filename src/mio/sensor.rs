@@ -5,22 +5,31 @@
 
 use crate::error::*;
 
-// use lazy_static::lazy_static;
+use lazy_static::lazy_static;
+
+
+lazy_static! {
+
+}
 
 
 
-// lazy_static!{
-// static ref NDIR1:RwLock<Sensor> = {
-//    }
-// }
+
+async fn edinburgh500_uart_fsr() -> Result<f64> {
+
+    Ok((0.0))
+}
 
 
+
+// pub async fn setup_ndir1(min:f64,max:f64,read: impl Future<Output = Result<f64>>) -> Result<()> {
 pub async fn setup_ndir1(min:f64,max:f64) -> Result<()> {
     Ok(())
 }
 pub async fn setup_ndir2(min:f64,max:f64) -> Result<()> {
     Ok(())
 }
+
 
 pub async fn get_ndir1_value() -> Result<f64> {
     Ok(0.0)

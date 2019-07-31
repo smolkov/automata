@@ -1,11 +1,15 @@
 use crate::{
-    error::*,
-    stream::*,
-    store,
+    // error::*,
+    measure::{
+        store,
+        stream::Stream,
+        // channel::Channel,
+    }
 };
 
-use http::status::StatusCode;
-use tide::{Error,
+
+// use http::status::StatusCode;
+use tide::{
     error::{ ResultExt },
     response, App, Context, EndpointResult,
     // querystring::ContextExt
@@ -16,8 +20,8 @@ use super::app::State;
 
 
 /// Device get status
-pub async fn device_get_info(_cx: Context<State>) -> EndpointResult {
-    let device = store::device_get().await?;
+pub async fn response_device(_cx: Context<State>) -> EndpointResult {
+    let device = store::get_device().await.unwrap();
     Ok(response::json(device))
 }
 /// Device get serial number
@@ -30,65 +34,78 @@ pub async fn device_get_info(_cx: Context<State>) -> EndpointResult {
     // store::et_local().await.unwrap().set_serial(serial);
     // Ok(())
 // }
-async fn stream_get_list(_cx: Context<State>) -> EndpointResult {
+async fn response_stream_list(_cx: Context<State>) -> EndpointResult {
     // let app = cx.state();
-    let list = store::stream_get_list().await?;
+    let list = store::get_streams().await.unwrap();
     Ok(response::json (list))
 }
 
-async fn get_stream(cx: Context<State>) -> EndpointResult {
+async fn response_stream(cx: Context<State>) -> EndpointResult {
     let stream:u64 = cx.param("stream").client_err()?;
-    let stream = store::stream_get_from_id(stream).await?;
+    let stream = store::get_stream_from_id(stream).await.unwrap();
     Ok(response::json(stream))
 }
 
-async fn set_stream(mut cx: Context<State>) -> EndpointResult<()> {
+async fn post_stream(mut cx: Context<State>) -> EndpointResult<()> {
     let stream:Stream = cx.body_json().await.client_err()?;
-    store::stream_save(&stream).await?;
+    store::set_stream(&stream).await.unwrap();
     Ok(())
 }
 
 
 /// Channel settings api
-async fn stream_channel_get_list(_cx: Context<State>) -> EndpointResult {
+async fn response_stream_channels(cx: Context<State>) -> EndpointResult {
+    let stream:u64 = cx.param("stream").client_err()?;
     // let app = cx.state();
-    let list = store::stream__list().await?;
+    let list = store::get_stream_channels(stream).await.unwrap();
     Ok(response::json(list))
 }
+// async fn response_stream_channel(cx: Context<State>) -> EndpointResult {
+//     let stream:u64 = cx.param("stream").client_err()?;
+//     let channel:u64 = cx.param("channel").client_err()?;
+//     let channel = store::get_channel_from_ids(stream,channel).await.unwrap();
+//     Ok(list)
+// set_stream
+// pub async fn set_stream_name(_cx: Context<State>) -> EndpointResult<()> {
+    // Ok(())
+// }
+// async fn post_stream_channel(cx: Context<State>) -> EndpointResult {
+    // let stream:u64 = cx.param("stream").client_err()?;
+    // let channel:u64 = cx.param("channel").client_err()?;
+
 /// set_stream
 // pub async fn set_stream_name(_cx: Context<State>) -> EndpointResult<()> {
     // Ok(())
 // }
-
-pub async fn get_rules(_cx: Context<State>) -> EndpointResult {
-    let rules = store::rule_get_list().await.unwrap();
+pub async fn response_rules(_cx: Context<State>) -> EndpointResult {
+    let rules = store::get_rules().await.unwrap();
     Ok(response::json(rules))
 }
 /// Get rule from id
 ///
-pub async fn get_rule(cx:Context<State>) -> EndpointResult {
-    let stream:u64 = cx.param("rule").client_err()?;
-    let rule = store::rule_get_id(id).await.unwrap();
+pub async fn response_rule(cx:Context<State>) -> EndpointResult {
+    let rule:u64 = cx.param("rule").client_err()?;
+    let rule = store::get_rule_from_id(rule).await.unwrap();
     Ok(response::json (rule))
 }
 
 
 /// Set rule
-pub async fn set_rule(mut cx: Context<State>) -> EndpointResult<()> {
+pub async fn post_rule(mut cx: Context<State>) -> EndpointResult<()> {
     let rule = cx.body_json().await.client_err()?;
-    store::rule_save(rule).await.unwrap();
+    store::set_rule(rule).await.unwrap();
     Ok(())
 }
 /// Setup route
 pub fn setup_route(mut app: App<State>) -> App<State> {
     app.at("/api").nest(|api| {
-        api.at("/device").get(device);
-        api.at("/streams").get(stream_get_list).post(set_stream);
-        api.at("/:stream").get(get_stream);
-        api.at("/:stream/channels").get(get_channels_list)
-        api.at("/:stream/:channel").get(get_channel);
-        api.at("/rules").get(get_rules);
-        api.at("/:rule").get(get_rule).post(set_rule);
+        api.at("/device").get(response_device);
+        api.at("/streams").get(response_stream_list).post(post_stream);
+        api.at("/:stream").get(response_stream);
+        api.at("/:stream/channels").get(response_stream_channels);
+        // api.at("/:stream/:channel").get(response_stream_channel).post(post_stream_channel);
+        api.at("/rules").get(response_rules);
+        api.at("/:rule").get(response_rule).post(post_rule);
     });
     app
 }

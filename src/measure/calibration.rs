@@ -1,19 +1,19 @@
 use serde_derive::{Deserialize, Serialize};
 
-use super::{
-    solution::Solution,
-};
-// use std::time::Duration;
-use crate::*;
+use analyzer::Solution;
 
-use std::{
-    path::{PathBuf},
-};
-use wqa_settings::ron::Config;
+// use std::time::Duration;
+// use crate::*;
+
+// use std::{
+    // path::{PathBuf},
+// };
+// use wqa_settings::ron::Config;
 
 /// Linear
 /// An indicator calibration and adjust
 ///
+
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct Linear {
     pub slope : f64,
@@ -63,6 +63,7 @@ impl Default for Linear {
 #[derive(Clone, Deserialize, Serialize, PartialEq, Debug)]
 pub struct Point {
     pub sol :Solution,
+    pub val: Vec<f64>
     // pub cal: MeasurementIter,
 }
 

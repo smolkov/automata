@@ -3,7 +3,7 @@ use tera;
 // use tera::compile_templates;
 use tide::{self, Context, EndpointResult, Error};
 
-/// AppState to pass with context and will hold
+/// State to pass with context and will hold
 /// the interface to the tera rendering engine
 // Render some data into the 'tera-hello-world.html template in examples/templates directory
 pub async fn index(ctx: Context<State>) -> EndpointResult {

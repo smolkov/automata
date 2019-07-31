@@ -36,14 +36,14 @@ use tide;
 // }
 
 
-fn hello()  {
-        println!(r#"      run it...                                "#);
-        println!(r#"  __ _ _   _| |_ ___  _ __ ___   __ _| |_ __ _ "#);
-        println!(r#" / _` | | | | __/ _ \| '_ ` _ \ / _` | __/ _` |"#);
-        println!(r#"| (_| | |_| | || (_) | | | | | | (_| | || (_| |"#);
-        println!(r#" \__,_|\__,_|\__\___/|_| |_| |_|\__,_|\__\__,_|"#);
-        println!();
-}
+// fn hello()  {
+        // println!(r#"      run it...                                "#);
+        // println!(r#"  __ _ _   _| |_ ___  _ __ ___   __ _| |_ __ _ "#);
+        // println!(r#" / _` | | | | __/ _ \| '_ ` _ \ / _` | __/ _` |"#);
+        // println!(r#"| (_| | |_| | || (_) | | | | | | (_| | || (_| |"#);
+        // println!(r#" \__,_|\__,_|\__\___/|_| |_| |_|\__,_|\__\__,_|"#);
+        // println!();
+// }
 
 // async fn collect(_cx: Context<()>) -> EndpointResult<http::Response<Body>> {
 //     let mut buffer = BytesMut::with_capacity(16_384);

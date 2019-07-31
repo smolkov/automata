@@ -23,20 +23,20 @@ use super::app::State;
 
 /// get airflow current value on in
 async fn get_airflow_input(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::get_airflow_input().await.unwrap()))
+    Ok(response::json(mio::flow::get_airflow_input().await.unwrap()))
 }
 
 /// get airflow current value on in
 async fn get_airflow_output(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::get_airflow_input().await.unwrap()))
+    Ok(response::json(mio::flow::get_airflow_input().await.unwrap()))
 }
 
 async fn get_humidity(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::get_humidity().await.unwrap()))
+    Ok(response::json(mio::flow::get_humidity().await.unwrap()))
 }
 
 async fn get_pressure(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::get_humidity().await.unwrap()))
+    Ok(response::json(mio::flow::get_humidity().await.unwrap()))
 }
 
 pub fn setup_routes(mut app: App<State>) -> App<State> {
@@ -57,17 +57,17 @@ pub fn setup_routes(mut app: App<State>) -> App<State> {
 
 #[cfg(test)]
 mod tests {
-    #![feature(async_await)]
-    use http_service_mock::make_server;
+    // #![feature(async_await)]
+    // use http_service_mock::make_server;
 
-    use http_service;
-    use super::*;
-    use tide::{
-        Server,
-        error::{ StringError, ResultExt },
-        response, App, Context, EndpointResult,
-        querystring::ContextExt
-    };
+    // use http_service;
+    // use super::*;
+    // use tide::{
+        // Server,
+        // error::{ StringError, ResultExt },
+        // response, App, Context, EndpointResult,
+        // querystring::ContextExt
+    // };
 
     #[test]
     fn uvtest() {

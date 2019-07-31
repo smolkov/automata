@@ -2,10 +2,10 @@ use std::io::prelude::*;
 use std::net::TcpListener;
 
 // use std::error::Error;
-use std::io::{self, prelude::*};
+use std::io::{self};
 // use std::net::TcpListener;
 use log::info;
-use failure::{Fallible, ResultExt};
+use failure::{Fallible};
 
 /// To run this example do:
 /// ```sh
@@ -24,7 +24,7 @@ struct Args {
 #[paw::main]
 fn main(args: paw::Args) -> Fallible<()> {
 
-    info!("✨ Setup automata .. ✨");
+    info!("✨ Setup automata ✨");
     let mut args = args.skip(1);
 
     let host = args
