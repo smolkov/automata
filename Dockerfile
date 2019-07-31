@@ -1,10 +1,10 @@
 FROM rust
 RUN apt-get update -q && apt-get install -yq libsqlite3-dev libseccomp-dev \
     && rm -rf /var/lib/apt/lists/*
-WORKDIR /usr/src/sn0int
+WORKDIR /usr/src/wqa
 COPY . .
 RUN cargo build --release --verbose
-RUN strip target/release/sn0int
+RUN strip target/release/wqa-server
 
 FROM debian
 RUN apt-get update -q && apt-get install -yq libsqlite3-dev libseccomp-dev \

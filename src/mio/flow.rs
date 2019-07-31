@@ -7,14 +7,17 @@ use analyzer::{
     Airflow,
     Humidity,
     Pressure,
+    flow::*,
+
 };
 use crate::error::*;
-
+use super::io;
 
 use lazy_static::lazy_static;
 // use std::sync::RwLock;
 lazy_static! {
     static ref VAL:f32 = 0.0;
+    static ref SETTINGS:Setting = Setting::default();
     // static ref SENSOR : RwLock<Humidity> = {
         // RwLock::new(Humidity::from_analog16(0))
     // };
@@ -25,18 +28,27 @@ lazy_static! {
 
 
 pub async fn calibrate_airflow() -> Result<()> {
+
     Ok(())
 }
-
 pub async fn get_airflow_input() -> Result<Airflow> {
-    Ok(Airflow::from_analog16(0))
+    let value = io::get_analog1_input01().await?;
+    Ok(Airflow::from_analog16(value))
 }
 pub async fn get_airflow_output() -> Result<Airflow> {
-    Ok(Airflow::from_analog16(0))
+    let value = io::get_analog1_input02().await?;
+    Ok(Airflow::from_analog16(value))
 }
 pub async fn get_humidity() -> Result<Humidity> {
-    Ok(Humidity::from_analog16(0))
+    let value = io::get_analog1_input03().await?;
+    Ok(Humidity::from_analog16(value))
 }
 pub async fn get_pressure() -> Result<Pressure> {
-    Ok(Pressure::from_analog16(0))
+    let value = io::get_analog1_input04().await?;
+    Ok(Pressure::from_analog16(value))
 }
+
+
+
+
+//

@@ -42,24 +42,24 @@ log = "0.4.7"
 log4rs = "0.8.3"
 slog = "2.5.2"
 sloggers = "0.3.2"
-# config
-config = "0.9.3"
-confy = "0.3.1"
+# Config
+# config = "0.9.3"
+# confy = "0.3.1"
 # Version
 semver = "0.9.0"
 # Serializer
 serde_json = "1.0.40"
-serde = { version = "1.0.97", features = ["derive"] }
-serde_derive = "1.0.97"
+serde = { version = "1.0.98", features = ["derive"] }
+serde_derive = "1.0.98"
 serde_yaml = "0.8.9"
 bincode = "1.1.4"
 toml = "0.5.1"
 ron = "0.5.1"
 # File system
 fs2 = "0.4.3"
-dirs = "2.0.1"
+dirs = "2.0.2"
 bytes = "0.4.12"
-directories = "2.0.1"
+directories = "2.0.2"
 walkdir = "2.2.9"
 # git
 git2 = "0.9.2"
@@ -83,7 +83,7 @@ analyzer = { path = "../analyzer"}
 # Async
 # heapless = "0.4.4"
 graphql_client = "0.8.0"
-juniper = "0.13.0"
+juniper = "0.13.1"
 diesel = { version = "1.4.2", default-features = false, features = ["r2d2", "sqlite"] }
 diesel_derives = "1.4.0"
 # diesel_migrations = { version = "1.4.0", default-features = false, features = ["sqlite"] }
@@ -100,8 +100,10 @@ mime_guess = "2.0.0-alpha.6"
 # Async runtime
 # futures-preview = { version = "0.3.0-alpha.17", features = ["async-await", "nightly"] }
 runtime = "0.3.0-alpha.6"
-http = "0.1.17"
+http = "0.1.18"
 tide = {git = "https://github.com/rustasync/tide.git"}
+futures-fs = "0.0.5"
+futures-util-preview = { version = "0.3.0-alpha.17", features = ["compat"] }
 
 # Metrics
 
@@ -116,15 +118,14 @@ tempfile = "3.1.0"
 memdb = "1.0.0"
 regex = "1.2.0"
 compose = "0.1.0"
-futures-fs = "0.0.5"
-futures-util-preview = { version = "0.3.0-alpha.17", features = ["compat"] }
-http-service = "0.2.0"
+http-service = "0.3.0"
 url = "2.0.0"
 async-log = "1.1.0"
 prometheus = "0.7.0"
 dbus = "0.6.5"
 # futures-preview = "0.3.0-alpha.17"
 sled = "0.24.1"
+reqwest = "0.9.19"
 # plotters = "0.2.2"
 # crossbeam-channel = "0.3.8"
 # os_pipe = "0.8.1"
@@ -145,7 +146,8 @@ sled = "0.24.1"
 # API sync
 
 
-# [dev-dependencies]
+[dev-dependencies]
+http-service-mock = "0.3.0"
 # mockers = "0.20"
 # mockers_derive = "0.20"
 # env_logger = { version = "0.6", default-features = false }

@@ -1,5 +1,5 @@
 #![allow(unused_variables)]
-pub use failure::{Error, ResultExt};
+// use failure::{ResultExt};
 use failure::{Fail};
 use std::io;
 use serde::{Deserialize, Serialize};
@@ -8,6 +8,8 @@ use serde_yaml;
 use git2;
 use wqa_settings::ConfigError;
 use dbus::Error as DBusError;
+use tide::error::Error as TideError;
+// use tide::type
 
 // use regex;
 
@@ -22,9 +24,9 @@ pub enum ErrState {
     Waiting,
     Came,
 }
+use WqaError as Error;
 
-
-pub type Result<T> = ::std::result::Result<T, Error>;
+pub type Result<T> = std::result::Result<T, Error>;
 
 #[derive(Debug,Clone, Serialize, Deserialize)]
 pub struct WqaErr {
@@ -68,6 +70,9 @@ pub enum WqaError {
     ConfigError {err: ConfigError },
     #[fail(display = "dbus  error - {}",err)]
     DBusError {err: DBusError },
+    #[fail(display = "tide responce err - {:?}",err)]
+    ResponceError{err: TideError},
+
     // #[fail(display = "io error - {}",serde_json)]
     // BadJson(serde_json::Error),
 }
@@ -114,7 +119,11 @@ impl From<DBusError> for WqaError {
         WqaError::DBusError{err:kind}
     }
 }
-
+impl From<TideError> for WqaError {
+    fn from(kind:TideError) -> WqaError {
+        WqaError::ResponceError{err:kind}
+    }
+}
 // app_error_from!(git2::Error, GitError);
 // app_error_from!(io::Error, IO);
 // app_error_from!(serde_json::Error, BadJson);

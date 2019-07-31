@@ -6,14 +6,13 @@
 // use structopt::*;
 
 use wqa;
-
 use wqa::error::*;
+use wqa::api::*;
+
 // use wqa::mio;
 
-mod data;
+
 mod simulation;
-mod uv;
-mod app;
 mod templates;
 // use tide::{Error};
 // use crate::{
@@ -22,7 +21,6 @@ mod templates;
     // },
 // };
 
-use app::State;
 // use runtime;
 // use tide::{self, App, Context, EndpointResult, Error};
 use tide;
@@ -79,16 +77,16 @@ async fn main()  -> Result<()>{
         .unwrap();
     let _handle = log4rs::init_config(config).unwrap();
     //  let template_dir = format!("{}/examples/templates/*", env!("CARGO_MANIFEST_DIR"));
-    /// TODO: load configuration.
+    // TODO: load configuration.
     // let severConfig = wqa::config::ServerConfig::default();
-    let state = State::new();
+    let state = app::State::new();
     // let repo = monitor::new_uv().await;
     let mut app      = tide::App::with_state(state);
     app.middleware(tide::middleware::RequestLogger::new());
-
+    info!("🌩️   starting broker");
     app.middleware(tide::middleware::RequestLogger::new());
     app.at("/").get(templates::index);
-    app = data::setup_route(app);
+    app = measure::setup_route(app);
     app = uv::setup_routes(app);
     app.run("127.0.0.1:8000")?;
     Ok(())
@@ -96,4 +94,3 @@ async fn main()  -> Result<()>{
     //
     // wqa::server::`
 }
-

@@ -30,7 +30,7 @@ async fn sample_pump(mut cx: Context<State>) -> EndpointResult<()> {
 }
 
 async fn stream1_valve(cx: Context<State>) -> EndpointResult<()> {
-    let state:bool = cx.param(":state").client_err()?;
+    let state:bool = cx.param(":open").client_err()?;
     mio::stream1_valve(state).await.unwrap();
     Ok(())
 }
@@ -89,12 +89,12 @@ pub fn setup_routes(mut app: App<State>) -> App<State> {
         api.at("/humidity").get(humidity);
         api.at("/pressure").get(pressure);
         api.at("/sample/:start").post(sample_pump);
-        api.at("/valve/sample1/:state").post(stream1_valve);
-        api.at("/valve/sample2/:state").post(stream2_valve);
-        api.at("/valve/sample3/:state").post(stream3_valve);
-        api.at("/valve/sample4/:state").post(stream4_valve);
-        api.at("/valve/sample5/:state").post(stream5_valve);
-        api.at("/valve/sample6/:state").post(stream6_valve);
+        api.at("/valve/1/:open").post(stream1_valve);
+        api.at("/valve/2/:open").post(stream2_valve);
+        api.at("/valve/3/:open").post(stream3_valve);
+        api.at("/valve/4/:open").post(stream4_valve);
+        api.at("/valve/5/:open").post(stream5_valve);
+        api.at("/valve/6/:open").post(stream6_valve);
         api.at("/valve/zeroflow/:state").post(zeroflow_valve);
         api.at("/valve/tic/:state").post(tic_valve);
         api.at("/valve/calibration/:state").post(calibration_valve);
@@ -107,4 +107,37 @@ pub fn setup_routes(mut app: App<State>) -> App<State> {
         // api.at("/info").get(device::get_info);
     });
     app
+}
+
+
+#[cfg(test)]
+mod tests {
+    #![feature(async_await)]
+    use http_service_mock::make_server;
+
+    use http_service;
+    use super::*;
+    use tide::{
+        Server,
+        error::{ StringError, ResultExt },
+        response, App, Context, EndpointResult,
+        querystring::ContextExt
+    };
+
+    #[test]
+    fn uvtest() {
+        // let state = State::new();
+        // let mut app      = tide::App::with_state(state);
+        // app = setup_routes(app);
+        // let mut server = make_server(app.into_http_service()).unwrap();
+
+        // let req = http::Request::get("/add_one/3")
+        //     .body(Body::empty())
+        //     .unwrap();
+        // let res = server.simulate(req).unwrap();
+        // assert_eq!(res.status(), 200);
+        // let body = block_on(res.into_body().into_vec()).unwrap();
+        // assert_eq!(&*body, &*b"4");
+    }
+
 }
