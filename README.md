@@ -1,6 +1,4 @@
-# 📦 `wqa`
 
-🚧 _Work In Progress_ 🚧
 
 <h1 align="center">Water quality analyzer</h1>
 <div align="center">
@@ -53,13 +51,17 @@
 </div>
 
 
-## About
+## 📦 `wqa`
+
+🚧 _Work In Progress_ 🚧
+
+* **TODO: Welche Aufgaben hat es?**
 
 LAR water quality analyzers rewrite in [🦀 **Rust**](https://github.com/lar-rs/wqa)
 
-[![travis build Status](https://travis-ci.com/lar-rs/wqa.svg?branch=master)](https://travis-ci.com/lar-rs/wqa)
+[![travis build Status](https://travis-ci.com/lar-rs/edinburgh.svg?branch=master)](https://travis-ci.com/lar-rs/wqa)
 [![builds.sr.ht status](https://builds.sr.ht/~asmolkov/wqa/.build.yml.svg)](https://builds.sr.ht/~asmolkov/wqa/.build.yml?)
-[![open issue][issue]]
+[![open issue]][issue]
 ![Minimum Rust Version][min-rust-badge]
 
 ## 🎙️ Commands
@@ -123,12 +125,11 @@ cross-compile with `cargo`:
     cargo build --release --target i686-unknown-linux-gnu
 ```
 
-[irc-img]:      https://img.shields.io/badge/hackint-%23lar-blue.svg
-[irc]:          https://webirc.hackint.org/#irc://irc.hackint.org/#lar
-
-[ui]: https://user-images.githubusercontent.com/383250/59148363-53188c80-8a08-11e9-9b29-9cac56809ee2.png "Automaat UI Example"
-[issue]: https://img.shields.io/github/issues/lar-rs/wqa?style=flat-square
-
 <!-- Badges -->
+[irc]:          https://webirc.hackint.org/#irc://irc.hackint.org/#lar
+[issue]: https://img.shields.io/github/issues/lar-rs/wqa?style=flat-square
 [min-rust-badge]: https://img.shields.io/badge/rustc-1.38+-blue.svg
+
+<!-- [irc-img]:      https://img.shields.io/badge/hackint-%23lar-blue.svg -->
+<!-- [ui]: https://user-images.githubusercontent.com/383250/59148363-53188c80-8a08-11e9-9b29-9cac56809ee2.png "Automaat UI Example" -->
 

@@ -72,7 +72,7 @@ async fn response_ndir2_value(_cx: Context<State>) -> EndpointResult {
 
 
 /// Uv io state return all hardware parameter.
-async fn get_uv_state(_cx: Context<State>) -> EndpointResult {
+async fn handle_state(_cx: Context<State>) -> EndpointResult {
     Ok(response::json(0))
 }
 
@@ -101,7 +101,7 @@ async fn handle_can_frame(_cx: Context<State>) -> EndpointResult {
 pub fn setup_routes(mut app: App<State>) -> App<State> {
 
     app.at("/api/uv").nest(|api| {
-        api.at("/state").get(get_uv_state);
+        api.at("/state").get(handle_state);
         api.at("/sample/start").post(handle_start_sample);
         api.at("/sample/stop").post(handle_stop_sample);
         api.at("/valve/:num/open").post(handle_open_sample_valve);

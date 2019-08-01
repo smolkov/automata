@@ -1,3 +1,16 @@
+###
+
+GET  http://127.0.0.1:8000/api/uv/humidity HTTP/1.1
+
+###
+
+GET  http://127.0.0.1:8000/api/uv/pressure HTTP/1.1
+
+###
+
+GET  http://127.0.0.1:8000/api/uv/get_uv_state HTTP/1.1
+
+HTTP/1.1
 POST http://0.0.0.0:8181/log
 Content-Type: application/json
 
