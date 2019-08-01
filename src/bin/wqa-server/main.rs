@@ -7,7 +7,10 @@
 
 use wqa;
 use wqa::error::*;
-use wqa::api::*;
+use wqa::api::{
+    uv as analyzer,
+    app,
+};
 
 // use wqa::mio;
 
@@ -36,14 +39,30 @@ use tide;
 // }
 
 
-// fn hello()  {
-        // println!(r#"      run it...                                "#);
+ fn hello()  {
+
+    println!(r#" "#);
+
+    println!(r#" ##       #    #####   "#);
+    println!(r#" ##      ###   ##  ##  "#);
+    println!(r#" ##     ## ##  #####   "#);
+    println!(r#" ##    ## #### ##  ##  "#);
+    println!(r#" #######     ####   ## "#);
+    println!(r#"   -----------------   "#);
+    println!(r#" PROCESS WATER ANALYZER"#);
+    println!(r#" ###   #   ### #####   #####   "#);
+    println!(r#"  ##   #   ## ##   ## ##   ##  "#);
+    println!(r#"   ## ### ##  ##   ## ##   ##  "#);
+    println!(r#"    #######    ######  ####### "#);
+    println!(r#"                   ##          "#);
+    println!(r#"                   #           "#);
+        //       run it...                                "#);
         // println!(r#"  __ _ _   _| |_ ___  _ __ ___   __ _| |_ __ _ "#);
         // println!(r#" / _` | | | | __/ _ \| '_ ` _ \ / _` | __/ _` |"#);
         // println!(r#"| (_| | |_| | || (_) | | | | | | (_| | || (_| |"#);
         // println!(r#" \__,_|\__,_|\__\___/|_| |_| |_|\__,_|\__\__,_|"#);
         // println!();
-// }
+}
 
 // async fn collect(_cx: Context<()>) -> EndpointResult<http::Response<Body>> {
 //     let mut buffer = BytesMut::with_capacity(16_384);
@@ -68,7 +87,7 @@ async fn main()  -> Result<()>{
     use log4rs::config::{Appender, Config, Root};
     info!("✨ run wqa backend ✨");
     wqa::config::setup();
-    // hello();
+    hello();
 
     let stdout = ConsoleAppender::builder().build();
     let config = Config::builder()
@@ -86,8 +105,7 @@ async fn main()  -> Result<()>{
     info!("🌩️   starting broker");
     app.middleware(tide::middleware::RequestLogger::new());
     app.at("/").get(templates::index);
-    app = measure::setup_route(app);
-    app = uv::setup_routes(app);
+    app = analyzer::setup_routes(app);
     app.run("127.0.0.1:8000")?;
     Ok(())
     // analyzer::store::setup(".").await?;

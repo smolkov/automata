@@ -256,11 +256,12 @@ pub async fn get_rule_from_id(id:u64) -> Result<Rule> {
 
 pub async fn get_measure_stats() -> Result<MeasureStats> {
     let path = data_dir()?.join("mstats.ron");
-    let mut mstat = MeasureStats::load_no_fallback(path)?;
+    let mstat = MeasureStats::load_no_fallback(path)?;
     Ok(mstat)
 }
 
 
+///next measurement
 pub async fn next_measurement() -> Result<MeasureStats> {
     let path = data_dir()?.join("mstat.ron");
     let mut mstat = MeasureStats::load_no_fallback(path.clone())?;

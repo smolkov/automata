@@ -34,19 +34,19 @@ pub async fn response_device(_cx: Context<State>) -> EndpointResult {
     // store::et_local().await.unwrap().set_serial(serial);
     // Ok(())
 // }
-async fn response_stream_list(_cx: Context<State>) -> EndpointResult {
+pub async fn response_stream_list(_cx: Context<State>) -> EndpointResult {
     // let app = cx.state();
     let list = store::get_streams().await.unwrap();
     Ok(response::json (list))
 }
 
-async fn response_stream(cx: Context<State>) -> EndpointResult {
+pub async fn response_stream(cx: Context<State>) -> EndpointResult {
     let stream:u64 = cx.param("stream").client_err()?;
     let stream = store::get_stream_from_id(stream).await.unwrap();
     Ok(response::json(stream))
 }
 
-async fn post_stream(mut cx: Context<State>) -> EndpointResult<()> {
+pub async fn post_stream(mut cx: Context<State>) -> EndpointResult<()> {
     let stream:Stream = cx.body_json().await.client_err()?;
     store::set_stream(&stream).await.unwrap();
     Ok(())
@@ -54,7 +54,7 @@ async fn post_stream(mut cx: Context<State>) -> EndpointResult<()> {
 
 
 /// Channel settings api
-async fn response_stream_channels(cx: Context<State>) -> EndpointResult {
+pub async fn response_stream_channels(cx: Context<State>) -> EndpointResult {
     let stream:u64 = cx.param("stream").client_err()?;
     // let app = cx.state();
     let list = store::get_stream_channels(stream).await.unwrap();
@@ -96,16 +96,17 @@ pub async fn post_rule(mut cx: Context<State>) -> EndpointResult<()> {
     store::set_rule(rule).await.unwrap();
     Ok(())
 }
-/// Setup route
-pub fn setup_route(mut app: App<State>) -> App<State> {
-    app.at("/api").nest(|api| {
-        api.at("/device").get(response_device);
-        api.at("/streams").get(response_stream_list).post(post_stream);
-        api.at("/:stream").get(response_stream);
-        api.at("/:stream/channels").get(response_stream_channels);
-        // api.at("/:stream/:channel").get(response_stream_channel).post(post_stream_channel);
-        api.at("/rules").get(response_rules);
-        api.at("/:rule").get(response_rule).post(post_rule);
-    });
-    app
-}
+
+// Setup route
+// pub fn setup_route(mut app: App<State>) -> App<State> {
+//     app.at("/api").nest(|api| {
+//         api.at("/device").get(response_device);
+//         api.at("/streams").get(response_stream_list).post(post_stream);
+//         api.at("/:stream").get(response_stream);
+//         api.at("/:stream/channels").get(response_stream_channels);
+//         // api.at("/:stream/:channel").get(response_stream_channel).post(post_stream_channel);
+//         api.at("/rules").get(response_rules);
+//         api.at("/:rule").get(response_rule).post(post_rule);
+//     });
+//     app
+// }

@@ -35,6 +35,7 @@ indicatif = "0.11.0"
 termcolor = "1.0.5"
 yansi = "0.5.0"
 atty = "0.2.13"
+ansi_term = "0.12.0"
 #Time date
 chrono = "0.4.7"
 # Log
@@ -42,6 +43,8 @@ log = "0.4.7"
 log4rs = "0.8.3"
 slog = "2.5.2"
 sloggers = "0.3.2"
+env_logger = "0.6.2"
+async-log = "1.1.0"
 # Config
 # config = "0.9.3"
 # confy = "0.3.1"
@@ -61,12 +64,12 @@ dirs = "2.0.2"
 bytes = "0.4.12"
 directories = "2.0.2"
 walkdir = "2.2.9"
+tempfile = "3.1.0"
 # git
 git2 = "0.9.2"
-# wqa={path="../wqa/wqa"}
-# wqm-can ={ git="https://github.com/lar-ag/wqm-can.git"}
+# lazy
 lazy_static = "1.3.0"
-
+once_cell = "0.2.4"
 # publish = false
 
 # Serializer
@@ -76,12 +79,15 @@ lazy_static = "1.3.0"
 
 
 # wqa-settings = { git = "https://git.sr.ht/~asmolkov/wqa-settings",branch = "master" }
-settings = { path = "../settings"}
-analyzer = { path = "../analyzer"}
+# settings = { path = "../settings"}
+settings = { git="https://github.com/lar-rs/settings.git" }
+analyzer = { git="https://github.com/lar-rs/analyzer.git"}
 # socketcan = "1.7.0"
 # dbus = "0.6.4"
 # Async
 # heapless = "0.4.4"
+# Database&KV
+memdb = "1.0.0"
 graphql_client = "0.8.0"
 juniper = "0.13.1"
 diesel = { version = "1.4.2", default-features = false, features = ["r2d2", "sqlite"] }
@@ -111,16 +117,13 @@ tide = {git = "https://github.com/rustasync/tide.git"}
 
 # Templates
 tera = "0.11.20"
-once_cell = "0.2.4"
-lain = "0.1.2"
-ansi_term = "0.12.0"
-tempfile = "3.1.0"
-memdb = "1.0.0"
+
+
+# lain = "0.1.2"
 regex = "1.2.0"
 compose = "0.1.0"
-http-service = "0.3.0"
+# http-service = "0.3.0"
 url = "2.0.0"
-async-log = "1.1.0"
 prometheus = "0.7.0"
 dbus = "0.6.5"
 # futures-preview = "0.3.0-alpha.17"

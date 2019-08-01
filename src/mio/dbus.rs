@@ -18,7 +18,7 @@ use analyzer::uv::*;
 // use super::mio::CanBus;
 // use lazy_static::lazy_static;
 use dbus;
-use dbus::Error as DBusError;
+// use dbus::Error as DBusError;
 use dbus::{BusType, Connection, Message};
 
 // use std::{
@@ -26,8 +26,8 @@ use dbus::{BusType, Connection, Message};
 //     pin::Pin,
 // };
 use lazy_static::lazy_static;
-use std::sync::{Mutex,Arc};
-use once_cell::sync::OnceCell;
+// use std::sync::{Mutex,Arc};
+// use once_cell::sync::OnceCell;
 
 
 lazy_static! {
@@ -43,7 +43,7 @@ lazy_static! {
 // }
 pub struct UvDBus {
     pub state:State,
-    conn: Connection,
+    // conn: Connection,
 
 }
 

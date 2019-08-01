@@ -1,4 +1,21 @@
-# water qualiry analyzer
+# WQA
+```
+
+
+    ##          #      #####
+    ##         ###     ##  ##
+    ##        ## ##    #####
+    ##  ##   ## ####   ##  ##
+    ######  ##     ##  ##   ##
+                        ###   #   ### #####   #####
+                         ##   #   ## ##   ## ##   ##
+                          ## ### ##  ##   ## ##   ##
+                           #######    ######  #######
+                                          ##
+                                          #
+```
+
+**water qualiry analyzer**
 
 - *TODO: description server*
 - *TODO: Beschreibung algemeine Funktionen. Welche Aufgaben soll diese Application ubernehmen?*

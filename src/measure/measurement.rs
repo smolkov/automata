@@ -3,9 +3,9 @@ use serde_derive::{Deserialize, Serialize};
 // use super::common::*;
 use analyzer::Statistic;
 use chrono::Utc;
-use super::stream::*;
-use crate::error::*;
-use super::store;
+// use super::stream::*;
+// use crate::error::*;
+// use super::store;
 use super::channel::Channel;
 use super::stream::Stream;
 
@@ -93,7 +93,6 @@ impl ChannelResult {
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct StreamResult {
-    pub id:       u64,
     pub done:     bool,
     pub stream:   Stream,
     pub count:    u64,

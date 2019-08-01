@@ -11,11 +11,11 @@ pub async fn sample_pump(start: bool) -> Result<()> {
     io::set_digital1_output(2,start).await
 }
 /// Open measurement sample N
-pub async fn open_sample_valve(sample:u8)  -> Result<()> {
-    io::set_digital1_output(4,true).await
+pub async fn open_sample_valve(num:u8)  -> Result<()> {
+    io::set_digital1_output(num,true).await
 }
-pub async fn close_sample_valve(sample:u8)  -> Result<()> {
-    io::set_digital1_output(4,true).await
+pub async fn close_sample_valve(num:u8)  -> Result<()> {
+    io::set_digital1_output(num,true).await
 }
 pub async fn lamp_switch_on() -> Result<()> {
     io::set_digital1_output(4,true).await
