@@ -64,16 +64,12 @@ LAR water quality analyzers rewrite in [🦀 **Rust**](https://github.com/lar-rs
 
 ## 🎙️ Commands
 
-`wqa` is a CLI tool designed for folks who are interested in using Cloudflare workers.
+`wqa` is a CLI tool designed for LAR analyzer rewrited in rust.
 
 <!-- Server on tide [creating 🌊 web-server .deb binary with rust](https://gi.net.in/posts/creating-web-server-deb-binary-with-rust/) -->
 
 ## `Water quality monitoring station`
 
-@font:`PragmataPro`
-
-*Move it to gui readme*
-[Hello Rust](https://github.com/hello-rust)
  `umweltanalytik` ist ein Teilbereich der chemischen Analytik und beschäftigt sich mit der qualitativen und quantitativen Untersuchung von Stoffen in der Umwelt. Umweltkompartimente Luft (einschließlich Innenraumluft), Boden und **Wasser** und können sowohl einzelne Stoffe als auch Summenparameter umfassen.
 
 [Wiki](https://de.wikipedia.org/wiki/Umweltanalytik)
