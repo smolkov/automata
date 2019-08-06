@@ -8,7 +8,7 @@
 ///
 /// ## Analog extension interface
 
-use crate::error::*;
+use crate::Result;
 use analyzer::uv::*;
 // use once_cell::sync::OnceCell;
 // use serde_json::Value;
@@ -91,19 +91,19 @@ pub struct UvDBus {
 //     }
 // }
 
-pub struct CanDBus{
-    conn: Connection,
-}
+// pub struct CanDBus{
+    // conn: Connection,
+// }
 
 
-impl CanDBus {
-    fn new_for_bus(bus:BusType) -> CanDBus{
-        let conn = Connection::get_private(BusType::System).unwrap();
-        CanDBus {
-            conn: conn
-        }
-    }
-}
+// impl CanDBus {
+    // fn new_for_bus(bus:BusType) -> CanDBus{
+        // let conn = Connection::get_private(BusType::System).unwrap();
+        // CanDBus {
+            // conn: conn
+        // }
+    // }
+// }
 
 
 // pub fn setup_connection(conn:Connection) ->Result<()> {
@@ -280,3 +280,7 @@ pub async fn set_analogext_output(num:u8,val: u16) -> Result<()>{
     send_message(Message::new_method_call( "com.lar.service.can", "/com/lar/nodes/Analogext", "com.lar.nodes.Analogext", "SetValue").unwrap().append2(num,val))?;
     Ok(())
 }
+
+
+
+

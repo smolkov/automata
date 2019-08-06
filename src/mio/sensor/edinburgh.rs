@@ -5,17 +5,38 @@
 
 use crate::error::*;
 
-use lazy_static::lazy_static;
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub enum Model {
+    None,
+    Edin500,
+    Edin3000,
+}
 
-lazy_static! {
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Settings {
+}
 
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct Edinburgh {
+    pub model: Model,
+    pub min : f64,
+    pub max: f64,
+}
+
+impl Default for Edinburgh {
+    fn default() -> Edinburgh {
+        Edinburgh {
+            model: Model::None,
+            min: 0.0,
+            max: 1.0,
+        }
+    }
 }
 
 
 
-
-async fn edinburgh500_uart_fsr() -> Result<f64> {
+async fn decode() -> Result<f64> {
 
     Ok((0.0))
 }

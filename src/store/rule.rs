@@ -1,12 +1,13 @@
 use serde_derive::{Deserialize, Serialize};
 // use std::time::{Duration,SystemTime};
-// use crate::error::*;
+use crate::Result;
 // use crate::workspace as store;
 use analyzer::Statistic;
 use std::path::PathBuf;
+use settings::ron::Config;
 
-
-
+use std::fs;
+use walkdir::{WalkDir};
 /// Modus state.
 #[derive(Clone, Deserialize, Serialize, PartialEq,Debug)]
 pub enum Mode {
@@ -92,6 +93,9 @@ impl Rule {
             output: Output::None,
         }
     }
+    // pub fn file_name(&self) -> Rule {
+
+    // }
 }
 
 impl RuleList {
@@ -103,6 +107,40 @@ impl RuleList {
     pub fn push(&mut self, rule:Rule) {
         self.rules.push(rule);
     }
+}
+
+/// Get streams work directory
+pub fn get_directory() -> Result<PathBuf> {
+    let path = super::data_dir()?;
+    let path = path.join("rule");
+    if !path.exists() {
+        fs::create_dir_all(&path)?;
+    }
+    Ok(path)
+}
+
+pub async fn search_all() ->Result<Vec<Rule>> {
+    let path = get_directory()?;
+    let mut rules = Vec::new();
+    for entry in WalkDir::new(path).min_depth(1) {
+        let entry = entry?;
+        let metadate = entry.metadata()?;
+        if metadate.is_file(){
+            rules.push(Rule::load_no_fallback(entry.into_path())?);
+        }
+    }
+    Ok(rules)
+}
+
+pub async fn save(rule: Rule) -> Result<()> {
+    let path = get_directory()?.join(format!("/{}-rule.ron",rule.id));
+    rule.write(path.join("rule.ron"))?;
+    Ok(())
+}
+
+pub async fn read(id:u64) -> Result<Rule> {
+    let rule = Rule::load_no_fallback(get_directory()?.join(format!("/{}-rule.ron",id)))?;
+    Ok(rule)
 }
 
 // pub async fn set_stream() -> Result<(),WqaError> {

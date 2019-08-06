@@ -14,7 +14,7 @@
 use crate::mio;
 use tide::{
     // error::{ ResultExt },
-    response, App, Context, EndpointResult,
+    response, Context, EndpointResult,
 };
 
 use super::app::State;

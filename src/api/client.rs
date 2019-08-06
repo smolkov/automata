@@ -6,88 +6,101 @@ use analyzer::{
     Humidity,
     Pressure,
 };
-use crate::error::*;
+use crate::Result;
 use reqwest;
+use reqwest::header::{HeaderMap, HeaderValue,ACCEPT};
 
-/// Get airflow_input
-pub async fn get_airflow_input() -> Result<Airflow> {
-    let airflow:Airflow = reqwest::Client::new()
-        .get("https://127.0.0.1/uv/airflow/input")
-        .send()?
-        .json()?;
-    Ok(airflow)
+
+
+pub struct ApiClient {
+    pub address: String,
 }
 
-pub async fn get_airflow_output() -> Result<Airflow>{
-    let airflow:Airflow = reqwest::Client::new()
-        .get("https://127.0.0.1/uv/airflow/output")
-        .send()?
-        .json()?;
-    Ok(airflow)
-}
+impl ApiClient {
+    pub fn headers(&self) -> HeaderMap {
+        let mut headers = HeaderMap::new();
+        let value = HeaderValue::from_str("application/json").unwrap();
+        headers.insert(ACCEPT, value);
+        headers
+    }
+    /// Get airflow_input
+    pub async fn get_airflow_input(&self) -> Result<Airflow> {
+        let airflow:Airflow = reqwest::Client::new()
+            .get(format!("{}/airflow/input",self.address).as_str())
+            .send()?
+            .json()?;
+        Ok(airflow)
+    }
+    /// Get airflow_output
+    pub async fn get_airflow_output(&self) -> Result<Airflow>{
+        let airflow:Airflow = reqwest::Client::new()
+            .get(format!("{}/airflow/output",self.address).as_str())
+            .send()?
+            .json()?;
+        Ok(airflow)
+    }
+    /// Get humidity
+    pub async fn get_humidity(&self) -> Result<Humidity> {
+        let humidity:Humidity = reqwest::Client::new()
+            .get(format!("{}/humidity",self.address).as_str())
+            .send()?
+            .json()?;
+        Ok(humidity)
+    }
 
-pub async fn get_humidity() -> Result<Humidity> {
-    let humidity:Humidity = reqwest::Client::new()
-        .get("https://127.0.0.1/uv/humidity")
-        .send()?
-        .json()?;
-    Ok(humidity)
-}
+    /// Get pressure
+    pub async fn get_pressure(&self) -> Result<Pressure>  {
+        let pressure:Pressure = reqwest::Client::new()
+            .get(format!("{}/pressure",self.address).as_str())
+            .send()?
+            .json()?;
+        Ok(pressure)
+    }
 
-pub async fn get_pressure() -> Result<Pressure>  {
-    let pressure:Pressure = reqwest::Client::new()
-        .get("https://127.0.0.1/uv/pressure")
-        .send()?
-        .json()?;
-    Ok(pressure)
-}
+    /// Sample pump start
+    pub async fn sample_pump_start(&self) -> Result<()> {
+        reqwest::Client::new()
+            .get(format!("{}/gp1/start",self.address).as_str())
+            .send()?
+            .json()?;
+        Ok(())
+    }
 
-pub async fn sample_start_pump() -> Result<()> {
-    reqwest::Client::new()
-        .post("https://127.0.0.1/uv/sample/start")
-        .send()?
-        .json()?;
-    Ok(())
-}
+    /// Sample pump stop
+    pub async fn sample_pump_stop(&self) -> Result<()> {
+        reqwest::Client::new()
+            .get(format!("{}/gp1/stop",self.address).as_str())
+            .send()?
+            .json()?;
+        Ok(())
+    }
 
-pub async fn sample_stop_pump() -> Result<()> {
-    reqwest::Client::new()
-        .post("https://127.0.0.1/uv/sample/start")
-        .send()?
-        .json()?;
-    Ok(())
-}
 
-pub async fn open_sample_valve(sample:u8) -> Result<()>  {
+
+    pub async fn open_sample1(&self) -> Result<()>  {
+        reqwest::Client::new()
+            .post(format!("{}/sample1",self.address).as_str())
+            .send()?
+            .json()?;
+        Ok(())
+    }
+    pub async fn close_sample(&self) -> Result<()>  {
       reqwest::Client::new()
-        .post(format!("https://127.0.0.1/uv/sample/{}/open",sample).as_str())
+        .post(format!("{}/sample_close",self.address).as_str())
         .send()?
         .json()?;
-    Ok(())
-}
-pub async fn close_sample_valve(sample:u8) -> Result<()>  {
-      reqwest::Client::new()
-        .post(format!("https://127.0.0.1/uv/sample/{}/close",sample).as_str())
-        .send()?
-        .json()?;
-    Ok(())
-}
+        Ok(())
+    }
 
-pub async fn open_calibration_valve() -> Result<()>  {
-      reqwest::Client::new()
-        .post(format!("https://127.0.0.1/uv/valve/calibration/open").as_str())
+    pub async fn open_calibration(&self) -> Result<()>  {
+        reqwest::Client::new()
+        .post(format!("{}/calibration",self.address).as_str())
         .send()?
         .json()?;
-    Ok(())
-}
-pub async fn close_calibration_valve() -> Result<()>  {
-      reqwest::Client::new()
-        .post(format!("https://127.0.0.1/uv/valve/calibration/close").as_str())
-        .send()?
-        .json()?;
-    Ok(())
-}
+        Ok(())
+    }
 
+}
 
 // async fn zeroflow_valve(cx: Context<State>) -> EndpointResult<()> {
 //     let state:bool = cx.param(":state").client_err()?;

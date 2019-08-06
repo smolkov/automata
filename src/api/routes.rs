@@ -1,12 +1,102 @@
-use crate::mio;
+// use crate::mio;
 use tide::{
     error::{ ResultExt },
     response, App, Context, EndpointResult,
 };
 
+use crate::{
+    store::{
+        self,
+        stream::Stream,
+    },
+    mio,
+};
+
 use super::app::State;
-use super::sensor;
-use super::measure::*;
+// use super::sensor;
+// use super::measure::*;
+
+
+
+
+/// Device get status
+pub async fn response_device(_cx: Context<State>) -> EndpointResult {
+    let device = store::device::read().await.unwrap();
+    Ok(response::json(device))
+}
+/// Device get serial number
+// pub async fn get_device_serial(_cx: Context<State>) -> EndpointResult {
+    // Ok(response::json(store::get_local().await.unwrap().get_serial()))
+// }
+/// Divice set serial number
+// pub async fn device_(mut cx:Context<State>) -> EndpointResult<()> {
+    // let device = cx.body_json().await.client_err()?;
+    // store::et_local().await.unwrap().set_serial(serial);
+    // Ok(())
+// }
+pub async fn response_stream_list(_cx: Context<State>) -> EndpointResult {
+    // let app = cx.state();
+    let list = store::stream::search_all().await.unwrap();
+    Ok(response::json (list))
+}
+
+pub async fn response_stream(cx: Context<State>) -> EndpointResult {
+    let stream:u64 = cx.param("stream").client_err()?;
+    let stream = store::stream::read(stream).await.unwrap();
+    Ok(response::json(stream))
+}
+
+pub async fn post_stream(mut cx: Context<State>) -> EndpointResult<()> {
+    let stream:Stream = cx.body_json().await.client_err()?;
+    store::stream::save(&stream).await.unwrap();
+    Ok(())
+}
+
+
+/// Channel settings api
+pub async fn response_stream_channels(cx: Context<State>) -> EndpointResult {
+    let id:u64 = cx.param("stream").client_err()?;
+
+    // let app = cx.state();
+    let channels = store::stream::channels(id).await.unwrap();
+    Ok(response::json(channels))
+}
+// async fn response_stream_channel(cx: Context<State>) -> EndpointResult {
+//     let stream:u64 = cx.param("stream").client_err()?;
+//     let channel:u64 = cx.param("channel").client_err()?;
+//     let channel = store::get_channel_from_ids(stream,channel).await.unwrap();
+//     Ok(list)
+// set_stream
+// pub async fn set_stream_name(_cx: Context<State>) -> EndpointResult<()> {
+    // Ok(())
+// }
+// async fn post_stream_channel(cx: Context<State>) -> EndpointResult {
+    // let stream:u64 = cx.param("stream").client_err()?;
+    // let channel:u64 = cx.param("channel").client_err()?;
+
+/// set_stream
+// pub async fn set_stream_name(_cx: Context<State>) -> EndpointResult<()> {
+    // Ok(())
+// }
+pub async fn response_rules(_cx: Context<State>) -> EndpointResult {
+    let rules = store::rule::search_all().await.unwrap();
+    Ok(response::json(rules))
+}
+/// Get rule from id
+///
+pub async fn response_rule(cx:Context<State>) -> EndpointResult {
+    let rule:u64 = cx.param("rule").client_err()?;
+    let rule = store::rule::read(rule).await.unwrap();
+    Ok(response::json (rule))
+}
+
+
+/// Set rule
+pub async fn post_rule(mut cx: Context<State>) -> EndpointResult<()> {
+    let rule = cx.body_json().await.client_err()?;
+    store::rule::save(rule).await.unwrap();
+    Ok(())
+}
 
 /// Endpoint:
 ///   POST /api/uv/sample/start
@@ -63,11 +153,12 @@ async fn close_calibration_valve(_cx: Context<State>) -> EndpointResult<()> {
     Ok(())
 }
 async fn response_ndir1_value(_cx: Context<State>) -> EndpointResult {
-    let val = mio::uv::get_ndir1_value().await.unwrap();
+    let val = mio::sensor::get_ndir1_value().await.unwrap();
     Ok(response::json(val))
 }
 async fn response_ndir2_value(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::uv::get_ndir2_value().await.unwrap()))
+    let val = mio::sensor::get_ndir2_value().await.unwrap();
+    Ok(response::json(val))
 }
 
 
@@ -78,34 +169,34 @@ async fn handle_state(_cx: Context<State>) -> EndpointResult {
 
 
 async fn get_airflow_input(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::flow::get_airflow_input().await.unwrap()))
+    Ok(response::json(mio::airflow::get_airflow_input().await.unwrap()))
 }
 
 /// get airflow current value on in
 async fn get_airflow_output(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::flow::get_airflow_input().await.unwrap()))
+    Ok(response::json(mio::airflow::get_airflow_input().await.unwrap()))
 }
 
 async fn get_humidity(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::flow::get_humidity().await.unwrap()))
+    Ok(response::json(mio::humidity::get_humidity().await.unwrap()))
 }
 
 async fn get_pressure(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::flow::get_humidity().await.unwrap()))
+    Ok(response::json(mio::humidity::get_humidity().await.unwrap()))
 }
 
 async fn handle_can_frame(_cx: Context<State>) -> EndpointResult {
-    Ok(response::json(mio::flow::get_humidity().await.unwrap()))
+    Ok(response::json(mio::humidity::get_humidity().await.unwrap()))
 }
 
-pub fn setup_routes(mut app: App<State>) -> App<State> {
+pub fn setup(mut app: App<State>) -> App<State> {
 
-    app.at("/api/uv").nest(|api| {
+    app.at("/api/").nest(|api| {
         api.at("/state").get(handle_state);
-        api.at("/sample/start").post(handle_start_sample);
-        api.at("/sample/stop").post(handle_stop_sample);
-        api.at("/valve/:num/open").post(handle_open_sample_valve);
-        api.at("/valve/:num/close").post(handle_close_sample_valve);
+        api.at("/gp1/start").post(handle_start_sample);
+        api.at("/gp1/stop").post(handle_stop_sample);
+        api.at("/sample/:num/open").post(handle_open_sample_valve);
+        api.at("/sample/close").post(handle_close_sample_valve);
         api.at("/valve/zeroflow/open").post(open_zeroflow_valve);
         api.at("/valve/zeroflow/close").post(close_zeroflow_valve);
         api.at("/valve/tic/open").post(open_tic_valve);

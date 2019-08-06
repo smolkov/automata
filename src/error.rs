@@ -8,7 +8,7 @@ use serde_yaml;
 use git2;
 use settings::ConfigError;
 use dbus::Error as DBusError;
-use tide::error::Error as TideError;
+
 // use tide::type
 
 // use regex;
@@ -116,16 +116,4 @@ impl From<DBusError> for WqaError {
         WqaError::DBusError{err:kind}
     }
 }
-// impl From<TideError> for WqaError {
-    // fn from(kind:TideError) -> WqaError {
-        // WqaError::ResponceError{err:kind}
-    // }
-// }
-// app_error_from!(git2::Error, GitError);
-// app_error_from!(io::Error, IO);
-// app_error_from!(serde_json::Error, BadJson);
-// app_error_from!(regex::Error, Regex);
-// app_error_from!(gitlab::Error, GitlabApiError);
 
-
-//

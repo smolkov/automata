@@ -4,19 +4,20 @@
 // #![allow(clippy::doc_markdown)]
 
 // use structopt::*;
-
-use wqa;
 use wqa::error::*;
 use wqa::api::{
-    uv as analyzer,
     app,
+    templates,
+    routes,
 };
+//  use wqa::api::{
+//     uv as analyzer,
+    // app,
+// };
 
 // use wqa::mio;
 
 
-mod simulation;
-mod templates;
 // use tide::{Error};
 // use crate::{
     // config::{
@@ -41,27 +42,14 @@ use tide;
 
  fn hello()  {
 
-    println!(r#" "#);
-
-    println!(r#" ##       #    #####   "#);
-    println!(r#" ##      ###   ##  ##  "#);
-    println!(r#" ##     ## ##  #####   "#);
-    println!(r#" ##    ## #### ##  ##  "#);
-    println!(r#" #######     ####   ## "#);
-    println!(r#"   -----------------   "#);
-    println!(r#" PROCESS WATER ANALYZER"#);
-    println!(r#" ###   #   ### #####   #####   "#);
-    println!(r#"  ##   #   ## ##   ## ##   ##  "#);
-    println!(r#"   ## ### ##  ##   ## ##   ##  "#);
-    println!(r#"    #######    ######  ####### "#);
-    println!(r#"                   ##          "#);
-    println!(r#"                   #           "#);
-        //       run it...                                "#);
-        // println!(r#"  __ _ _   _| |_ ___  _ __ ___   __ _| |_ __ _ "#);
-        // println!(r#" / _` | | | | __/ _ \| '_ ` _ \ / _` | __/ _` |"#);
-        // println!(r#"| (_| | |_| | || (_) | | | | | | (_| | || (_| |"#);
-        // println!(r#" \__,_|\__,_|\__\___/|_| |_| |_|\__,_|\__\__,_|"#);
-        // println!();
+    println!(r#"    "#);
+    println!(r#"  ██╗      █████╗ ██████╗  "#);
+    println!(r#"  ██║     ██╔══██╗██╔══██╗  "#);
+    println!(r#"  ██║     ███████║██████╔╝  "#);
+    println!(r#"  ██║     ██╔══██║██╔══██╗  "#);
+    println!(r#"  ███████╗██║  ██║██║  ██║  "#);
+    println!(r#"  ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝  "#);
+    println!(r#"   PROCESS WATER ANALYZER   "#);
 }
 
 // async fn collect(_cx: Context<()>) -> EndpointResult<http::Response<Body>> {
@@ -81,18 +69,18 @@ use tide;
 
 #[runtime::main]
 async fn main()  -> Result<()>{
-    use log::info;
+    use log::{info,warn};
     use log::LevelFilter;
     use log4rs::append::console::ConsoleAppender;
     use log4rs::config::{Appender, Config, Root};
+    hello();
     info!("✨ run wqa backend ✨");
     wqa::config::setup();
-    hello();
-
+    warn!("⚠️ setup warning test");
     let stdout = ConsoleAppender::builder().build();
     let config = Config::builder()
         .appender(Appender::builder().build("stdout", Box::new(stdout)))
-        .build(Root::builder().appender("stdout").build(LevelFilter::Info))
+        .build(Root::builder().appender("stdout").build(LevelFilter::Trace))
         .unwrap();
     let _handle = log4rs::init_config(config).unwrap();
     //  let template_dir = format!("{}/examples/templates/*", env!("CARGO_MANIFEST_DIR"));
@@ -103,9 +91,9 @@ async fn main()  -> Result<()>{
     let mut app      = tide::App::with_state(state);
     app.middleware(tide::middleware::RequestLogger::new());
     info!("🌩️   starting broker");
-    app.middleware(tide::middleware::RequestLogger::new());
+    // app.middleware(tide::middleware::RequestLogger::new());
     app.at("/").get(templates::index);
-    app = analyzer::setup_routes(app);
+    app = routes::setup(app);
     app.run("127.0.0.1:8000")?;
     Ok(())
     // analyzer::store::setup(".").await?;

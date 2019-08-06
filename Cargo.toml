@@ -108,6 +108,7 @@ futures-preview = { version = "0.3.0-alpha.17", features = ["async-await", "nigh
 # futures-util-preview = { version = "0.3.0-alpha.17",features = ["async-await", "nightly"] }
 runtime = "0.3.0-alpha.6"
 http = "0.1.18"
+http-service = "0.3.0"
 tide = {git = "https://github.com/rustasync/tide.git"}
 # futures-fs = "0.0.5"
 
@@ -120,9 +121,8 @@ tera = "0.11.20"
 
 
 # lain = "0.1.2"
-regex = "1.2.0"
+regex = "1.2.1"
 compose = "0.1.0"
-# http-service = "0.3.0"
 url = "2.0.0"
 prometheus = "0.7.0"
 dbus = "0.6.5"
@@ -130,6 +130,7 @@ dbus = "0.6.5"
 sled = "0.24.1"
 reqwest = "0.9.19"
 rand = "0.7.0"
+hex = "0.3.2"
 # plotters = "0.2.2"
 # crossbeam-channel = "0.3.8"
 # os_pipe = "0.8.1"

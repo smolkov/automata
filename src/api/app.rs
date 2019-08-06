@@ -9,9 +9,9 @@ use std::sync::Mutex;
 pub use tide::{error::ResultExt, response, App, Context, EndpointResult};
 use tera::{self, compile_templates};
 
-lazy_static!{
+// lazy_static!{
 
-}
+// }
 
 // use staticfile::StaticFile;
 // State to pass with context and will hold

@@ -1,4 +1,4 @@
-//! Emoji contants used by `quicktocuv`.
+//! Emoji contants used by `wqa`.
 //!
 //! For the woefully unfamiliar:
 //!

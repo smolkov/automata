@@ -39,5 +39,10 @@ pub mod error;
 pub mod config;
 pub mod metrics;
 pub mod emoji;
-pub mod measure;
+pub mod store;
 pub mod api;
+
+pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
+
+// pub mod api;
+

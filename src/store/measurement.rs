@@ -1,7 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
 // use std::time::{Duration};
 // use super::common::*;
-use analyzer::Statistic;
+use super::statistic::Statistic;
 use chrono::Utc;
 // use super::stream::*;
 // use crate::error::*;
@@ -53,7 +53,7 @@ pub struct AnalyseResult {
 }
 
 
-impl AnalyseResult {
+impl AnalyseResult{
     pub fn new (counter:u64) -> Self{
         Self{
             timestamp:     Utc::now().timestamp() as u64,
@@ -68,6 +68,8 @@ pub struct ChannelResult {
     pub channel:    Channel,
     pub count:      u64,
     pub value:      f64,
+    pub cv:         f64,
+    pub measurements: Vec<AnalyseResult>
 }
 
 impl ChannelResult {
@@ -76,9 +78,11 @@ impl ChannelResult {
            channel: channel,
            value:   0.0,
            count:   0,
+           cv:      0.0,
+           measurements: Vec::new(),
        }
     }
-    // pub fn get_result(&self) -> Option<MeasurementResult> {
+    // pub fn evaluate_statistic(&self,statistic: &Statistic) -> Option<MeasurementResult> {
         // if !self.done {
             // None
         // }
@@ -91,48 +95,64 @@ impl ChannelResult {
     // }
 }
 
+
+// impl Evaluation for ChannelResult {
+
+// }
+
+
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct StreamResult {
     pub done:     bool,
     pub stream:   Stream,
     pub count:    u64,
     pub channels: Vec<ChannelResult>,
+
+}
+
+
+pub struct Measurement {
+    pub stats : MeasureStats,
+    pub last : Option<StreamResult>,
+    
+
 }
 
 
 
-impl Evaluation for StreamResult {
-    fn calc_statistic(&mut self, statistic: &Statistic) -> bool {
+
+// impl Evaluation for StreamResult {
+    // fn calc_statistic(&mut self, _statistic: &Statistic) -> bool {
         // for evaluate in self.channels.iter_mut() {
             // evaluate.atistic_calculation(statistic);
             // if !evaluate.acceptable() {
                 // self.done = false;
             // }
         // }
-        self.done
-    }
-    fn get_acceptable(&self) -> bool {
-        self.done
-    }
-    fn get_replication(&self) -> u8 {
-        let mut replicates = 0;
+        // self.done
+    // }
+    // fn get_acceptable(&self) -> bool {
+        // self.done
+    // }
+    // fn get_replication(&self) -> u8 {
+        // let mut replicates = 0;
         // for ch in self.channels {
             // if ch.get_replication() > replicates {
                 // replicates = ch.get_replication();
             // }
         // }
-        replicates
-    }
-    fn get_cv(&self) -> f64 {
-        let mut maxcv = 0.0;
+        // replicates
+    // }
+    // fn get_cv(&self) -> f64 {
+        // let mut maxcv = 0.0;
         // for ch in self.channels {
             // if ch.get_cv() > maxcv{
                 // maxcv= ch.get_cv();
             // }
         // }
-        maxcv
-    }
-}
+        // maxcv
+    // }
+// }
 
 
 //
