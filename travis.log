@@ -1,5 +1,5 @@
 Command line:
-"travis --help"
+"travis"
 
 
    ________                                 __
@@ -25,7 +25,7 @@ Command line:
 
      There is absolutely no warranty on any results obtained from TRAVIS.
 
-  #  Running on sascha-ThinkPad-L380 at Thu Aug  1 06:18:02 2019 (PID 31946)
+  #  Running on sascha-ThinkPad-L380 at Wed Aug  7 14:29:08 2019 (PID 3744)
   #  Running in /home/sascha/ws/lar-rs/wqa
   #  Code version: Jan 01 2019,  Compiled at Feb 12 2019, 01:11:32,  Compiler "8.2.0", GCC 8.2.0
   #  Target platform: Linux,  Compile flags: DEBUG_ARRAYS 
@@ -37,47 +37,25 @@ Command line:
 
     Loading configuration from /home/sascha/.travis.conf ...
 
-[Renaming existing File input.txt to #2#input.txt ...OK.]
-    List of supported command line options:
+    No trajectory file specified.
+    Please use the "-p" flag to specify an input trajectory in the command line.
 
-      -p <file>       Load position data from specified trajectory file.
-                      File format may be *.xyz, *.pdb, *.lmp (LAMMPS), HISTORY (DLPOLY), or *.prmtop/*.mdcrd (Amber).
-                      BQB format (*.bqb, *.btr, *.emp, *.blist) is also supported.
-      -vel <file>     Read atom velocities from a file in addition to the position trajectory.
-                      Currently, only .xyz format is supported for velocity data.
-      -i <file>       Read input from specified text file.
-      -c <file>       Read and execute control file (experimental).
-      -config <file>  Load the specified configuration file.
-      -stream         Treat input trajectory as a stream (e.g. named pipe): No fseek, etc.
-      -showconf       Show a tree structure of the configuration file.
-      -writeconf      Write the default configuration file, including all defines values.
+    Enter the file name of the trajectory file to open: [Quit] 
 
-      -verbose        Show detailed information about what's going on.
-      -nocolor        Execute TRAVIS in monochrome mode (suitable for white background).
-      -dimcolor       Use dim instead of bright colors.
-
-      -credits        Display a list of persons who contributed to TRAVIS.
-      -help, -?       Shows this help.
-
-    If only one argument is specified, it is assumed to be the name of a trajectory file.
-    If argument is specified at all, TRAVIS asks for the trajectory file to open.
-
-
-    Note: To show a list of all persons who contributed to TRAVIS,
-          please add "-credits" to your command line arguments, or set the
-          variable "SHOWCREDITS" to "TRUE" in your travis.conf file.
-
-    Source code from other projects used in TRAVIS:
-      - lmfit     from Joachim Wuttke
-      - kiss_fft  from Mark Borgerding
-      - voro++    from Chris Rycroft
-
-    http://www.travis-analyzer.de
-
-    Please cite the following articles:
-
-  * "TRAVIS - A Free Analyzer and Visualizer for Monte Carlo and Molecular Dynamics Trajectories",
-    M. Brehm, B. Kirchner; J. Chem. Inf. Model. 2011, 51 (8), pp 2007-2023.
-
-*** The End ***
-
+*** SIGINT caught: Hard interrupt by user ***
+Stopping execution.
+Decoding line numbers... ("addr2line <addr> -f -i -C -e /usr/bin/travis")
+ # 13 - [0x56532cfdadb4] - ?? - ??:0 
+ # 12 - [0x56532cfdb449] - ?? - ??:0 
+ # 11 - [0x56532cfdb514] - ?? - ??:0 
+ # 10 - [0x7fb5c7807f60] - ?? - ??:0 
+ #  9 - [0x7fb5c78d0f7f] - ?? - ??:0 
+ #  8 - [0x7fb5c7853e50] - ?? - ??:0 
+ #  7 - [0x7fb5c7855182] - ?? - ??:0 
+ #  6 - [0x7fb5c78471fa] - ?? - ??:0 
+ #  5 - [0x7fb5c78461ab] - ?? - ??:0 
+ #  4 - [0x56532cfa1054] - ?? - ??:0 
+ #  3 - [0x56532cf263ac] - ?? - ??:0 
+ #  2 - [0x7fb5c77eab6b] - ?? - ??:0 
+ #  1 - [0x56532cf529fa] - ?? - ??:0 
+Delivering control to operating system.

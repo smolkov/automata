@@ -14,10 +14,13 @@ lazy_static!{
       static ref UVLAMP: RwLock<Lamp> = RwLock::new(Lamp::default());
 }
 
+
+
 pub struct Lamp {
     pub uptime: SystemTime,
     pub lifetime: Duration,
     pub on: bool,
+    pub wqa: Wqa,
 }
 
 
@@ -32,7 +35,12 @@ impl Default for Lamp {
 }
 
 impl Lamp {
+    pub fn new(wqa :Wqa) -> Lamp {
+        wqa.mio()
+        Lamp{
 
+        }
+    }
     pub fn turn_on( &mut self) {
         self.on     = true;
         self.uptime = SystemTime::now();
@@ -69,15 +77,15 @@ pub async fn lamp_status() -> Result<Lamp,WqaError> {
     Ok(UVLAMP.read().unwrap().clone())
 }
 
-pub async fn turn_on() -> Result<(),WqaError>{
-    UVLAMP.write().unwrap().turn_on();
-    Ok(())
-}
+// pub async fn turn_on() -> Result<(),WqaError>{
+//     UVLAMP.write().unwrap().turn_on();
+//     Ok(())
+// }
 
-pub async fn turn_off() -> Result<(),WqaError>{
-    UVLAMP.write().unwrap().turn_off();
-    Ok(())
-}
+// pub async fn turn_off() -> Result<(),WqaError>{
+//     UVLAMP.write().unwrap().turn_off();
+//     Ok(())
+// }
 
 
 

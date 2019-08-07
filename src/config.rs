@@ -1,7 +1,12 @@
+#![allow(dead_code, unused_imports)]
 use log::info;
+use super::Wqa;
 // use std::collections::HashMap;
 use std::env;
-use std::fs::File;
+use std::{
+    fs::{self,File },
+    path::Path,
+};
 
 use std::io::prelude::*;
 // use std::sync::{Mutex,RwLock};
@@ -11,8 +16,10 @@ use yansi::Paint;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 // use std::os::;
-
+use super::Result;
 // use std::path::{Path, PathBuf};
+
+const MANIFEST_TOML: &'static str = include_str!("assets/manifest.toml");
 
 #[derive(Debug, Serialize, Deserialize, Clone)]
 pub struct ServerConfig {
@@ -44,6 +51,10 @@ pub struct GitConfig {
     pub api_token: String,
     pub hostname: Option<String>,
 }
+
+// impl GitConfig {
+
+// }
 
 // impl Default for GitConfig {
 //     fn default() -> GitConfig {
@@ -97,15 +108,16 @@ pub struct Config {
 // }
 
 fn get_toml_path() -> String {
-    env::var("WQA_TOML").unwrap_or_else(|_| "wqa.toml".to_string())
+    env::var("WQATOML").unwrap_or_else(|_| "larwqa.toml".to_string())
 }
 
-fn read_file_to_string(filename: &str) -> String {
-    let mut file = File::open(filename).expect("Unable to open the file");
-    let mut contents = String::new();
-    file.read_to_string(&mut contents)
-        .expect("Unable to read the file");
-    contents
+fn read_file_to_string(filename: &str) -> Result<String> {
+    let path = Path::new(filename);
+    if path.exists() {
+        let content = fs::read_to_string(path)?;
+        return Ok(content);
+    }
+    Ok(MANIFEST_TOML.to_string())
 }
 
 // fn load_or_default() -> Config{
@@ -115,42 +127,53 @@ fn read_file_to_string(filename: &str) -> String {
     // }
 // }
 
-lazy_static! {
-    pub static ref CONFIG: Config = {
-        let toml_path = get_toml_path();
-        let config: Config = toml::from_str(&read_file_to_string(&toml_path)).unwrap();
-        config
-    };
-}
+// lazy_static! {
+//     pub static ref CONFIG: Config = {
+//         let toml_path = get_toml_path();
 
-pub fn setup() {
-    info!(
-        "{} loaded configuration values from {}",
-        emoji::WRENCH,
-        get_toml_path()
-    );
-    info!("CONFIG => {:#?}", Paint::red(&*CONFIG));
+//         let config: Config = toml::from_str(&read_file_to_string(&toml_path).unwrap()).unwrap();
+//         config
+//     };
+// }
 
-    // for mapping in CONFIG.mappings.iter() {
-//         let mut hub_to_lab_lock = HUB_TO_LAB.lock();
-//         let hub_to_lab = hub_to_lab_lock.as_mut().unwrap();
-//         hub_to_lab.insert(mapping.github_repo.clone(), mapping.gitlab_repo.clone());
+use once_cell::sync::OnceCell;
 
-//         let mut lab_to_hub_lock = LAB_TO_HUB.lock();
-//         let lab_to_hub = lab_to_hub_lock.as_mut().unwrap();
-//         lab_to_hub.insert(mapping.gitlab_repo.clone(), mapping.github_repo.clone());
-//     }
-//     info!(
-//         "HUB_TO_LAB => {:#?}",
-//         Paint::red(HUB_TO_LAB.lock().unwrap())
-//     );
-//     info!(
-//         "LAB_TO_HUB => {:#?}",
-//         Paint::red(LAB_TO_HUB.lock().unwrap())
-//     );
+
+// pub fn server_confit() -> ServerConfig {
+    // CONFIG.server.clone()
+// }
+
+
+
+pub struct GLobalConfig {
+    wqa: Wqa,
 }
 
 
-pub fn server_confit() -> ServerConfig {
-    CONFIG.server.clone()
+impl GLobalConfig {
+    pub fn new(wqa: Wqa) -> GLobalConfig {
+        GLobalConfig{
+            wqa:wqa
+        }
+    }
+    fn global(&self) -> &'static Config {
+        static CONFIG: OnceCell<Config> = OnceCell::new();
+        CONFIG.get_or_init(|| {
+            let toml_path = get_toml_path();
+            let config: Config = toml::from_str(&read_file_to_string(&toml_path).unwrap()).unwrap();
+            config
+        })
+    }
+    pub fn setup(&self) {
+        info!(
+            "{} loaded configuration values from {}",
+            emoji::WRENCH,
+                get_toml_path()
+            );
+        info!("CONFIG => {:#?}", Paint::red(&*self.global()));
+    }
+    pub fn server(&self) -> ServerConfig {
+       self.global().server.clone()
+    }
 }
+//

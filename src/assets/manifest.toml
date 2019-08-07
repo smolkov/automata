@@ -1,0 +1,35 @@
+#
+#           ██╗      █████╗ ██████╗ ██╗    ██╗ ██████╗  █████╗
+#           ██║     ██╔══██╗██╔══██╗██║    ██║██╔═══██╗██╔══██╗
+#           ██║     ███████║██████╔╝██║ █╗ ██║██║   ██║███████║
+#           ██║     ██╔══██║██╔══██╗██║███╗██║██║▄▄ ██║██╔══██║
+#           ███████╗██║  ██║██║  ██║╚███╔███╔╝╚██████╔╝██║  ██║
+#           ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝ ╚══╝╚══╝  ╚══▀▀═╝ ╚═╝  ╚═╝
+#                   WATER QUALITY ANALYSERS CONFIGURATION
+#
+# ------------------------------------------------------------------------------
+# Website: https://lar.dev
+# Docs: https://lar.wqa.dev
+# Community: https://lar.dev/community
+# Repo: https://github.com/lar-rs/wqa
+# Lager:https://github.com/lar-rs/wqadata
+# ------------------------------------------------------------------------------
+# Default settings for wqa
+# For details
+[station]
+name = "qqq"
+
+[server]
+address = "localhost"
+port = 8000
+keep_alive = 5
+log = "normal"
+# limits = { forms = 32768 }
+
+# Settings for Git
+[git]
+webhook_secret = "secret"
+username = "ci-user"
+ssh_key = "/etc/ssh-keys/labhub-key.ecdsa"
+api_token = "token"
+hostname = "github.com"

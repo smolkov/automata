@@ -53,27 +53,10 @@ static A0:f32 = 0.39159;
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct AirflowSetting {
-    pub airflow_correlation:  f32,
-    pub airflow_soll_value:   f32,
-    pub input_deviation:      f32,
-    pub output_deviation:     f32,
-    pub monitorin_interval:   u64,
+
     // pub injection_threshold:  f32,
 }
 
-
-
-impl Default for AirflowSetting {
-    fn default() -> Self {
-        Self {
-            airflow_correlation:  1.0,
-            airflow_soll_value:   30.0,
-            input_deviation:      0.0,
-            output_deviation:     0.0,
-            monitorin_interval:   0,
-        }
-    }
-}
 
 
 
@@ -83,7 +66,14 @@ impl Default for AirflowSetting {
 pub struct Airflow {
     pub value:   f32,
     pub broken:  bool,
+    pub correlation:  f32,
+    pub soll_value:   f32,
+    pub input_deviation:      f32,
+    pub output_deviation:     f32,
+    pub monitorin_interval:   u64,
 }
+
+
 
 impl Airflow {
     pub fn from_voltage(voltage:f32) -> Airflow{
@@ -110,15 +100,21 @@ pub async fn calibrate_airflow() -> Result<()> {
 
     Ok(())
 }
-pub async fn get_airflow_input() -> Result<Airflow> {
+
+pub async fn get_input() -> Result<Airflow> {
     let value = io::get_analog1_input01().await?;
     Ok(Airflow::from_analog16(value))
 }
-pub async fn get_airflow_output() -> Result<Airflow> {
+
+pub async fn get_output() -> Result<Airflow> {
     let value = io::get_analog1_input02().await?;
     Ok(Airflow::from_analog16(value))
 }
+use crate::local::*;
 
+pub async read() -> Airflow {
+    let path = WQ
+}
 
 
 

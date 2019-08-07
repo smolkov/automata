@@ -111,7 +111,7 @@ impl RuleList {
 
 /// Get streams work directory
 pub fn get_directory() -> Result<PathBuf> {
-    let path = super::data_dir()?;
+    let path = super::Local::root_dir()?;
     let path = path.join("rule");
     if !path.exists() {
         fs::create_dir_all(&path)?;
@@ -119,7 +119,7 @@ pub fn get_directory() -> Result<PathBuf> {
     Ok(path)
 }
 
-pub async fn search_all() ->Result<Vec<Rule>> {
+pub async fn read_all() ->Result<Vec<Rule>> {
     let path = get_directory()?;
     let mut rules = Vec::new();
     for entry in WalkDir::new(path).min_depth(1) {

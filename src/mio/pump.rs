@@ -45,8 +45,7 @@ async fn start_pump_simulation() -> Result<(),WqaError> {
 #[derive(Serialize,Default, Deserialize, Clone, Debug, PartialEq)]
 pub struct GearPump {
     pub hid: u64,
-    pub state: Vec<bool>
-
+    pub state: State,
 }
 
 impl GearPump {
@@ -63,19 +62,11 @@ impl GearPump {
     }
 }
 
-pub struct SamplePump {
-    gp : Vec<GearPump>,
-    updated: u64,
-}
-
-impl Default for SamplePump {
-
-}
 
 
 
 
-pub async fn sample1_start() -> Result<()> {
+pub async fn gp1_start() -> Result<()> {
     Ok(())
 }
 pub async fn sample1_stop() -> Result<()> {

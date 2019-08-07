@@ -1,32 +1,7 @@
 use serde_derive::{Deserialize, Serialize};
 // use super::integration::Integration;
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct SignalIter {
-    pub value : f64,
-    pub state:  u8,
-}
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct Record {
-/// start time in mili seconds
-    pub start:   u64,
-/// Pereodic
-    pub period:  u64,
-/// Data
-    pub data: Vec<SignalIter>,
-}
-
-
-impl Default for Record {
-    fn default() -> Self {
-        Self {
-            start:  0,
-            period: 300,
-            data:  Vec::new(),
-        }
-    }
-}
 
 // Average signal record;
 // #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]

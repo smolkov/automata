@@ -34,9 +34,9 @@ pub async fn response_device(_cx: Context<State>) -> EndpointResult {
     // store::et_local().await.unwrap().set_serial(serial);
     // Ok(())
 // }
-pub async fn response_stream_list(_cx: Context<State>) -> EndpointResult {
+pub async fn response_streams(_cx: Context<State>) -> EndpointResult {
     // let app = cx.state();
-    let list = store::stream::search_all().await.unwrap();
+    let list = store::stream::read_all().await.unwrap();
     Ok(response::json (list))
 }
 
@@ -58,7 +58,7 @@ pub async fn response_stream_channels(cx: Context<State>) -> EndpointResult {
     let id:u64 = cx.param("stream").client_err()?;
 
     // let app = cx.state();
-    let channels = store::stream::channels(id).await.unwrap();
+    let channels = store::stream::read_channels(id).await.unwrap();
     Ok(response::json(channels))
 }
 // async fn response_stream_channel(cx: Context<State>) -> EndpointResult {
@@ -79,7 +79,7 @@ pub async fn response_stream_channels(cx: Context<State>) -> EndpointResult {
     // Ok(())
 // }
 pub async fn response_rules(_cx: Context<State>) -> EndpointResult {
-    let rules = store::rule::search_all().await.unwrap();
+    let rules = store::rule::read_all().await.unwrap();
     Ok(response::json(rules))
 }
 /// Get rule from id
@@ -153,11 +153,11 @@ async fn close_calibration_valve(_cx: Context<State>) -> EndpointResult<()> {
     Ok(())
 }
 async fn response_ndir1_value(_cx: Context<State>) -> EndpointResult {
-    let val = mio::sensor::get_ndir1_value().await.unwrap();
+    let val =  0.0;// mio::sensor::get_ndir1_value().await.unwrap();
     Ok(response::json(val))
 }
 async fn response_ndir2_value(_cx: Context<State>) -> EndpointResult {
-    let val = mio::sensor::get_ndir2_value().await.unwrap();
+    let val = 0.0;//mio::sensor::get_ndir2_value().await.unwrap();
     Ok(response::json(val))
 }
 
@@ -210,7 +210,7 @@ pub fn setup(mut app: App<State>) -> App<State> {
         api.at("/humidity").get(get_humidity);
         api.at("/pressure").get(get_pressure);
         api.at("/device").get(response_device);
-        api.at("/streams").get(response_stream_list).post(post_stream);
+        api.at("/streams").get(response_streams).post(post_stream);
         api.at("/:stream").get(response_stream);
         api.at("/:stream/channels").get(response_stream_channels);
         // api.at("/:stream/:channel").get(response_stream_channel).post(post_stream_channel);

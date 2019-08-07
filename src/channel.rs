@@ -20,7 +20,6 @@ use std::{
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub struct Channel {
     pub id:         u64,
-    pub stream:     u64,
     pub value:      f64,
     pub name:       String,
     pub unit:       String,
@@ -29,9 +28,10 @@ pub struct Channel {
     pub path:       String,
 }
 
-impl Channel {
+impl ChannelSetting {
     /// create new channel
     pub fn new(id:u64) -> Channel {
+
         Channel {
             id:  id,
             stream: 1,
@@ -40,11 +40,19 @@ impl Channel {
             unit:"mg/l".to_owned(),
             sensor: 0,
             adjust: Vec::new(),
-            path: ".".to_owned(),
         }
     }
-    pub fn get_path(&self) -> Result<PathBuf> {
-        let path = stream::get_path(self.stream)?.join(format!("/{}",self.id));
+
+}
+
+impl Default for Channel{
+    fn default() -> Self {
+        Channel::new(1)
+    }
+}
+
+pub fn get_path(&self) -> Result<PathBuf> {
+        let path = (self.stream)?.join(format!("/{}",self.id));
         if !path.exists() {
             fs::create_dir_all(&path)?;
         }
@@ -52,20 +60,18 @@ impl Channel {
     }
 }
 
-
-
-
-impl Default for Channel {
-    fn default() -> Self {
-        Channel::new(1)
-    }
-}
-
 pub async fn save(channel: &Channel) -> Result<()> {
-    let path = channel.get_path()?.join("channel.ron");
+    let path = channel.get_path()?.join("config.ron");
     channel.write(path)?;
     Ok(())
 }
+
+
+pub struct Chan {
+    pub fn
+}
+
+
 
 // pub async fn get_stream_channel(stream:u64,channel:u64) ->
 // pub async fn save(channel:&Channel) -> Result<()> {

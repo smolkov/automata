@@ -6,19 +6,19 @@ edition = "2018"
 description = "Water quality analyzer core"
 keywords = ["api", "monitor", "server"]
 categories = ["", "os"]
-repository = "https://github.com/lar-rs/core"
+repository = "https://github.com/lar-rs/wqa"
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
 # Is it maintained resolution time: `repository` is required.
-# is-it-maintained-issue-resolution = { repository = "https://todo.sr.ht/~asmolkov/quicktocuv" }
+# is-it-maintained-issue-resolution = { repository = "https://todo.sr.ht/~asmolkov/wqa" }
 # Is it maintained percentage of open issues: `repository` is required.
-# is-it-maintained-open-issues = { repository = "https://todo.sr.ht/~asmolkov/quicktocuv" }
+# is-it-maintained-open-issues = { repository = "https://todo.sr.ht/~asmolkov/wqa" }
 
 
 
 [badges]
 maintenance = { status = "experimental" }
-travis-ci = { repository = "lar-rs/core", branch = "master"}
+travis-ci = { repository = "lar-rs/wqa", branch = "master"}
 
 [dependencies]
 # errors
@@ -131,6 +131,10 @@ sled = "0.24.1"
 reqwest = "0.9.19"
 rand = "0.7.0"
 hex = "0.3.2"
+csv = "1.1.1"
+glob = "0.3.0"
+path-table = "1.0.0"
+rust-embed = "5.1.0"
 # plotters = "0.2.2"
 # crossbeam-channel = "0.3.8"
 # os_pipe = "0.8.1"

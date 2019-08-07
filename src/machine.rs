@@ -9,15 +9,16 @@ use hex::{FromHex, ToHex};
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::de::{Visitor, Unexpected, Error};
 
+// use settings::ron::Config;
 #[derive(Hash, PartialEq,Debug, Eq, PartialOrd, Ord, Clone)]
 pub struct MachineId([u8; 16]);
-
+use super::Wqa;
 
 struct IdVisitor;
 
 
 impl MachineId {
-    pub fn read() -> Result<MachineId, io::Error> {
+    pub fn read() -> Result<MachineId,io::Error> {
         let mut buf = String::with_capacity(33);
         File::open("/etc/machine-id")
         .and_then(|mut f| f.read_to_string(&mut buf))
@@ -36,7 +37,7 @@ impl MachineId {
 
 impl FromStr for MachineId {
     type Err = String;
-    fn from_str(hash: &str) -> Result<MachineId, String> {
+    fn from_str(hash: &str) -> Result<MachineId,String> {
         if hash.len() != 32 {
             return Err(String::from(
                 "MachineId must be exactly 32 hex chars"));
@@ -48,6 +49,62 @@ impl FromStr for MachineId {
         Ok(MachineId(val))
     }
 }
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub enum Model {
+    Draft,
+    QuickTOCuv,
+    QuickTOCultra,
+}
+
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DataSheet {
+    pub model: Model,
+    pub producted: u64,
+    pub updated: u64,
+    pub wartung: u64
+}
+
+#[derive(Clone, Debug)]
+pub struct Machine {
+    wqa:Wqa,
+
+}
+
+
+impl Machine {
+    pub fn new(wqa: Wqa)-> Machine {
+        Machine{
+            wqa: wqa,
+        }
+    }
+
+    // pub fn get_machine_id(&self) -> Result<MachineId,io:Error> {
+        // let id : MachineId = MachineId::read()?;
+        // id
+    // }
+    // pub fn set_serial(&mut self,id:Hid) {
+        // self.id = id;
+    // }
+    // pub async fn data_sheet(&self) -> Result<Device> {
+    // let device = DataSheet::load_no_fallback(super::Local::root_dir()?.join("device.ron"))?;
+    // Ok(device)
+// }
+    // MachineId
+}
+
+
+
+// pub async fn change_status(status:Status) -> Result<(),WqaError> {
+    // let mut device = get_local().await?;
+    // device.set_status(status);
+    // save_local(device)
+// }
+
+// pub async fn save(device: &Device) -> Result<()> {
+//     device.write(super::Local::root_dir()?.join("device.ron"))?;
+//     Ok(())
+// }
 
 // impl fmt::Debug for MachineId {
     // fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {

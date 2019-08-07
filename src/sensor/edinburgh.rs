@@ -1,7 +1,4 @@
-/// Sensors: NDir1, NDir2
-/// Anschlus:  `DoppelMotor::UART01`
-/// Model:     `presurei877`
-// use serde_derive::{Deserialize, Serialize};
+
 
 use crate::error::*;
 
@@ -36,11 +33,10 @@ impl Default for Edinburgh {
 
 
 
-async fn decode() -> Result<f64> {
+pub async fn decode_uart_data(read: impl Future<Output= Result<Vec<u8>>) -> Result<f64> {
 
     Ok((0.0))
 }
-
 
 
 // pub async fn setup_ndir1(min:f64,max:f64,read: impl Future<Output = Result<f64>>) -> Result<()> {
