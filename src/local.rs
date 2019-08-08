@@ -1,4 +1,4 @@
-//! linux fs local storage.
+//! Local device linux fs
 //! .
 //! ├── /wqa
 //! │   ├── stats.ron
@@ -50,31 +50,37 @@
 //!
 //!      history/
 //!      logs/
-use crate::Result;
-// use failure::{format_err};
+use serde::{Deserialize, Serialize};
+
+// use crate::Result;
+use failure::{Fallible};
 // use regex::Regex;
 // use dirs;
 use std::fs;
 // use walkdir::{WalkDir};
 use log::info;
-use analyzer::Device;
+// use tempfile::{
+//     TempDir,
+//     Builder,
+// };
 // use analyzer::flow::*;
 // use analyzer::*;
-use settings::ron::Config;
+// use settings::ron::Config;
 use std::{
     path::PathBuf,
 };
 // use super::mio::airflow::AirflowSetting;
 use std::env;
 use std::ffi::OsStr;
+// use tempfile::Builder;
 // use super::calibration::*;
 
 // use std::collections::HashMap;
 
-use super::Result;
+// use super::Result;
 
 lazy_static! {
-    pub static ref ROOTDIR: PathBuf = {
+    pub static ref WQAROOT: PathBuf = {
 
         let path:PathBuf = env::var_os("WQAROOT")
             .unwrap_or_else(|| OsStr::new("/wqa").to_os_string())
@@ -85,11 +91,11 @@ lazy_static! {
         }
         path
     };
-    pub static ref MIO:TempDir =  {
-            Builder::new().prefix("mio").tempdir().unwrap()
-        };
+    // pub static ref MIO:TempDir =  {
+        // Builder::new().prefix("wqaio").tempdir()
+    // };
 
-    pub static ref LOCAL_DIR: PathBuf = WQADIR.join("local");
+    pub static ref LOCAL_DIR: PathBuf = WQAROOT.join("local");
     pub static ref CARGO_HOME: String = LOCAL_DIR.join("cargo-home").to_string_lossy().into();
     pub static ref RUSTUP_HOME: String = LOCAL_DIR.join("rustup-home").to_string_lossy().into();
     // Where cargo puts its output, when running outside a docker container,
@@ -101,22 +107,45 @@ lazy_static! {
     // Where GitHub crate mirrors are stored
     pub static ref GH_MIRRORS_DIR: PathBuf = LOCAL_DIR.join("gh-mirrors");
     // Where crates.io sources are stores
-    pub static ref CRATES_DIR: PathBuf = WQADIR.join("shared/crates");
-    pub static ref EXPERIMENT_DIR: PathBuf = WQADIR.join("ex");
-    pub static ref LOG_DIR: PathBuf = WQADIR.join("logs");
+    pub static ref CRATES_DIR: PathBuf = WQAROOT.join("shared/crates");
+    pub static ref EXPERIMENT_DIR: PathBuf = WQAROOT.join("ex");
+    pub static ref LOG_DIR: PathBuf = WQAROOT.join("logs");
     pub static ref LOCAL_CRATES_DIR: PathBuf = "local-crates".into();
-    pub static ref SOURCE_CACHE_DIR: PathBuf = WQADIR.join("cache").join("sources");
+    pub static ref SOURCE_CACHE_DIR: PathBuf = WQAROOT.join("cache").join("sources");
 }
 
 
 
-pub fn rootdir() -> Result<PathBuf> {
-    let path = ROOTDIR.clone();
+pub fn rootdir() -> Fallible<PathBuf> {
+    let path = WQAROOT.clone();
     Ok(path)
 }
 
-pub fn createtmp() -> Result<PathBuf> {
+// use super::Hid;
 
+// use http::status::StatusCode;
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub enum Model {
+    Draft,
+    QuickTOCuv,
+    QuickTOCultra,
 }
 
+
+#[derive(Serialize, Deserialize, Clone, Debug)]
+pub struct DataSheet {
+    pub model: Model,
+    pub producted: u64,
+    pub updated: u64,
+    pub wartung: u64
+}
+
+
+
+
+// pub fn createtmp() -> Result<PathBuf> {
+// }
+
 //
+

@@ -1,6 +1,8 @@
 #![allow(dead_code, unused_imports)]
 use log::info;
-use super::Wqa;
+use crate::error::*;
+use failure::Fallible;
+// use super::Wqa;
 // use std::collections::HashMap;
 use std::env;
 use std::{
@@ -16,7 +18,6 @@ use yansi::Paint;
 use lazy_static::lazy_static;
 use serde::{Deserialize, Serialize};
 // use std::os::;
-use super::Result;
 // use std::path::{Path, PathBuf};
 
 const MANIFEST_TOML: &'static str = include_str!("assets/manifest.toml");
@@ -111,7 +112,7 @@ fn get_toml_path() -> String {
     env::var("WQATOML").unwrap_or_else(|_| "larwqa.toml".to_string())
 }
 
-fn read_file_to_string(filename: &str) -> Result<String> {
+fn read_file_to_string(filename: &str) -> Fallible<String> {
     let path = Path::new(filename);
     if path.exists() {
         let content = fs::read_to_string(path)?;
@@ -145,35 +146,36 @@ use once_cell::sync::OnceCell;
 
 
 
-pub struct GLobalConfig {
-    wqa: Wqa,
-}
+// pub struct GLobalConfig {
+    // wqa: Wqa,
+// }
 
 
-impl GLobalConfig {
-    pub fn new(wqa: Wqa) -> GLobalConfig {
-        GLobalConfig{
-            wqa:wqa
-        }
-    }
-    fn global(&self) -> &'static Config {
+// impl GLobalConfig {
+    // pub fn new(wqa: Wqa) -> GLobalConfig {
+        // GLobalConfig{
+            // wqa:wqa
+        // }
+    // }
+
+// }
+
+fn global() -> &'static Config {
         static CONFIG: OnceCell<Config> = OnceCell::new();
         CONFIG.get_or_init(|| {
             let toml_path = get_toml_path();
             let config: Config = toml::from_str(&read_file_to_string(&toml_path).unwrap()).unwrap();
             config
         })
-    }
-    pub fn setup(&self) {
-        info!(
+}
+pub fn setup() {
+    info!(
             "{} loaded configuration values from {}",
             emoji::WRENCH,
                 get_toml_path()
             );
-        info!("CONFIG => {:#?}", Paint::red(&*self.global()));
+        info!("CONFIG => {:#?}", Paint::red(&*global()));
     }
-    pub fn server(&self) -> ServerConfig {
-       self.global().server.clone()
-    }
+pub fn server() -> ServerConfig {
+    global().server.clone()
 }
-//

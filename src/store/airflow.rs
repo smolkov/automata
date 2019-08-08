@@ -13,10 +13,13 @@
     // tempdir_in,
     // TempDir,
 // };
-use serde::{Deserialize, Serialize};
 use rand::prelude::*;
-use super::io;
-use crate::Result;
+use failure::Fallible;
+use std::path::PathBuf;
+
+use crate::local::*;
+
+use serde::{Deserialize, Serialize};
 
 // use lazy_static::lazy_static;
 // use std::sync::RwLock;
@@ -50,19 +53,7 @@ static A1:f32 = -1.4032;
 /// für 0..60:  23.49542;
 static A0:f32 = 0.39159;
 
-
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct AirflowSetting {
-
-    // pub injection_threshold:  f32,
-}
-
-
-
-
-// pub type FlowRange = Range<f32>;
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 pub struct Airflow {
     pub value:   f32,
     pub broken:  bool,
@@ -74,9 +65,13 @@ pub struct Airflow {
 }
 
 
+use crate::Route;
+
+
+use settings::ron::Config;
 
 impl Airflow {
-    pub fn from_voltage(voltage:f32) -> Airflow{
+    pub fn from_voltage(&self,voltage:f32) -> f32{
         let broken = voltage > 1.0;
         let airflow = 60.0 * ((((((A6*voltage +A5)*voltage +A4) *voltage +A3) *voltage + A2) * voltage + A1) *voltage + A0);
         Airflow {
@@ -84,38 +79,51 @@ impl Airflow {
             broken: broken,
         }
     }
-    pub fn from_analog16(value:u16) -> Airflow{
+    pub fn from_analog16(&self,value:u16) -> f32{
         let voltage = value as f32 / 4095.0 * 5.0;
         Airflow::from_voltage(voltage)
     }
 }
 
-pub async fn simulate_airflow_5v() -> Result<f32> {
+pub async fn simulate_airflow_5v() -> Fallible<f32> {
     let mut rng = thread_rng();
     let r5v:f32 = rng.gen_range(1.0, 5.0);
     Ok(r5v)
 }
 
-pub async fn calibrate_airflow() -> Result<()> {
+pub async fn calibrate_airflow() -> Fallible<()> {
 
     Ok(())
 }
 
-pub async fn get_input() -> Result<Airflow> {
-    let value = io::get_analog1_input01().await?;
-    Ok(Airflow::from_analog16(value))
+pub async fn get_input(airflow:Airflow) -> Fallible<f32> {
+    // let value = io::get_analog1_input01().await?;
+    Ok(airflow.from_analog16(0 as u16))
 }
 
-pub async fn get_output() -> Result<Airflow> {
-    let value = io::get_analog1_input02().await?;
-    Ok(Airflow::from_analog16(value))
-}
-use crate::local::*;
-
-pub async read() -> Airflow {
-    let path = WQ
+pub async fn get_output(airflow:Airflow) -> Fallible<f32> {
+    // let value = io::get_analog1_input02().await?;
+    Ok(airflow.from_analog16(0))
 }
 
+
+
+pub fn directory() -> Fallible<PathBuf> {
+    let path = rootdir()?.join("/airflow/");
+    Ok(path)
+}
+
+pub async fn read(route:Route) -> Fallible<Airflow> {
+    let path = directory()?.join("config");
+    let airflow = Airflow::load_no_fallback(path)?;
+    Ok(airflow)
+}
+
+pub async fn save(airflow: Airflow) -> Fallible<()> {
+    let path = directory()?.join("config");
+    airflow.write(path)?;
+    Ok(())
+}
 
 
 

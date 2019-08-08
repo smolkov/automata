@@ -70,12 +70,12 @@ async fn main()  -> Result<()>{
     use std::fs::File;
     use std::io::{ Write};
 
-    let wqa = Wqa::new("/wqa");
+    // let wqa = Wqa::new("/wqa");
     // let welcome = wqa::Asset::get("welcome.md").unwrap();
     // let welcom = fs::read_to_string()
     // println!(r#" {:#?} "#,Paint::blue( std::str::from_utf8(welcome.as_ref())));
     // println!(r#" {:#?} "#,Paint::blue("ONLINE WATER QUALITY ANALYSIS ENVIRONMENTAL MONITORING"));
-    wqa.config().setup();
+    wqa::config::setup();
     wqa::welcom::larwqa();
     // let server_config = wqa.config().server();
 

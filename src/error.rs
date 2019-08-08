@@ -2,40 +2,23 @@
 // use failure::{ResultExt};
 use failure::{Fail};
 use std::io;
-use serde::{Deserialize, Serialize};
 use walkdir;
 use serde_yaml;
 use git2;
 use settings::ConfigError;
+
+#[cfg(feature = "canbus")]
 use dbus::Error as DBusError;
 
+// use serde::{Deserialize, Serialize};
+// pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
 // use tide::type
 
 // use regex;
 
-#[derive(Debug,Clone, Serialize, Deserialize)]
-pub enum ErrLevel {
-    Warning,
-    Critical,
-}
-#[derive(Debug,Clone, Serialize, Deserialize)]
-pub enum ErrState {
-    Ok,
-    Waiting,
-    Came,
-}
-use WqaError as Error;
 
-pub type Result<T> = std::result::Result<T, Error>;
+// pub use WqaError as Error;
 
-#[derive(Debug,Clone, Serialize, Deserialize)]
-pub struct WqaErr {
-    pub level: ErrLevel,
-    pub description: String,
-    pub changed: u64,
-    pub state: ErrState,
-    pub number: u16,
-}
 
 
 
@@ -55,16 +38,23 @@ pub struct WqaErr {
 
 #[derive(Fail, Debug)]
 pub enum WqaError {
+
     #[fail(display = "io error - {}",err)]
     IOError {err: io::Error },
+
     #[fail(display = "directory error - {}",err)]
     DirError {err: walkdir::Error },
+
     #[fail(display = "yaml error - {}",err)]
     BadYaml {err:serde_yaml::Error },
+
     #[fail(display = "git error - {}",err)]
     GitError {err: git2::Error },
+
     #[fail(display = "config error - {}",err)]
     ConfigError {err: ConfigError },
+
+    #[cfg(feature = "candbus")]
     #[fail(display = "dbus  error - {}",err)]
     DBusError {err: DBusError },
     // #[fail(display = "tide responce err - {:?}",err)]
@@ -111,6 +101,8 @@ impl From<serde_yaml::Error> for WqaError {
     WqaError::BadYaml{err:kind}
   }
 }
+
+#[cfg(feature = "candbus")]
 impl From<DBusError> for WqaError {
     fn from(kind:DBusError) -> WqaError {
         WqaError::DBusError{err:kind}

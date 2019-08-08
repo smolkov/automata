@@ -3,26 +3,22 @@ use serde_derive::{Deserialize, Serialize};
 use std::time::{Duration,SystemTime};
 use log::{info,warn};
 use lazy_static::lazy_static;
-use crate::WqaError;
-
+use failure::Fallible;
 #[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
 
 use super::io;
 
 
-lazy_static!{
-      static ref UVLAMP: RwLock<Lamp> = RwLock::new(Lamp::default());
-}
 
 
-
-pub struct Lamp {
+pub struct State {
     pub uptime: SystemTime,
     pub lifetime: Duration,
     pub on: bool,
-    pub wqa: Wqa,
 }
-
+pub struct Lamp {
+    patch: Route,
+}
 
 impl Default for Lamp {
     fn default() -> Self {
@@ -64,18 +60,24 @@ impl Lamp {
         self.lifetime = Duration::from_secs(lifetime);
     }
 }
+use crate::local::*;
+pub async fn directory() -> Result<PathBuf> {
+
+}
+
+pub async fn read() -> Result<Lamp> {
+
+}
 
 pub async fn set_lifetime(lifetime: u64) {
     UVLAMP.write().unwrap().set_lifetime(lifetime);
 }
 
-async fn status() -> Result<Lamp,WqaError> {
+async fn status(lamp:Lamp) -> Result<Lamp,WqaError> {
+    
     Ok(Lamp::default())
 }
 
-pub async fn lamp_status() -> Result<Lamp,WqaError> {
-    Ok(UVLAMP.read().unwrap().clone())
-}
 
 // pub async fn turn_on() -> Result<(),WqaError>{
 //     UVLAMP.write().unwrap().turn_on();

@@ -1,26 +1,26 @@
-name: automata
+name: wqa
 version: 0.7.0
 summary: A fast static site generator in a single binary with everything built-in.
 description: |
   A fast static site generator in a single binary with everything built-in.
-  https://www.getzola.org
+  https://www.lar-wqa.org
 
 base: core18
 grade: stable # must be 'stable' to release into candidate/stable channels
 confinement: strict # use 'strict' once you have the right plugs and slots
 
 apps:
-  zola:
-    command: automata 
+  wqa:
+    command: wqa
     plugs:
       - home
       - network
       - network-bind
 
 parts:
-  zola:
+  wqa:
     source-type: git
-    source: https://github.com/getzola/zola.git
+    source: https://github.com/lar-rs/wqa.git
     source-tag: v0.7.0
     plugin: rust
     rust-channel: stable

@@ -1,16 +1,14 @@
+#   `wqa`
 
-
-
-
-## 📦 `wqa`
-
+ **📦  water quality analyzers rewrite in [🦀 **Rust**](https://github.com/lar-rs/wqa)**
 
 * Design-UI package : :iphone:
 🚧 _Work In Progress_ 🚧
 
 * **TODO: Welche Aufgaben hat es?**
 
-LAR water quality analyzers rewrite in [🦀 **Rust**](https://github.com/lar-rs/wqa)
+
+ * �
 
 [![travis build Status](https://travis-ci.com/lar-rs/edinburgh.svg?branch=master)](https://travis-ci.com/lar-rs/wqa)
 [![builds.sr.ht status](https://builds.sr.ht/~asmolkov/wqa/.build.yml.svg)](https://builds.sr.ht/~asmolkov/wqa/.build.yml?)
@@ -39,6 +37,9 @@ LAR water quality analyzers rewrite in [🦀 **Rust**](https://github.com/lar-rs
     ```
     wqa config --uart=2 --path=`test1`
     ```
+
+
+  - ### ☁️ 🆙 `publish`
 
   - ### 🔬 🕵️‍♀️ `check`: run this command to confirm that your configuration is appropriately set up.
 

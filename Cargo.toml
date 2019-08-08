@@ -23,13 +23,12 @@ travis-ci = { repository = "lar-rs/wqa", branch = "master"}
 [dependencies]
 # errors
 failure = "0.1.5"
-# cli
+# Terminal cli
 ferris-says = "0.1.1"
 ci_info = "0.7.1"
 paw = "1.0.0"
 structopt = { version = "0.2.18", features = ["paw"] }
 convey = "0.2.0"
-# Terminal
 console = "0.7.7"
 indicatif = "0.11.0"
 termcolor = "1.0.5"
@@ -125,7 +124,6 @@ regex = "1.2.1"
 compose = "0.1.0"
 url = "2.0.0"
 prometheus = "0.7.0"
-dbus = "0.6.5"
 # futures-preview = "0.3.0-alpha.17"
 sled = "0.24.1"
 reqwest = "0.9.19"
@@ -135,6 +133,8 @@ csv = "1.1.1"
 glob = "0.3.0"
 path-table = "1.0.0"
 rust-embed = "5.1.0"
+path-tree = "0.1.8"
+lockfile = "0.2.1"
 # plotters = "0.2.2"
 # crossbeam-channel = "0.3.8"
 # os_pipe = "0.8.1"
@@ -151,8 +151,22 @@ rust-embed = "5.1.0"
 # runtime = "0.0.0"
 # paw = "1.0.0"
 # WQMS package
+dbus = {version= "0.6.5", optional = true}
+bytecount = "0.5.1"
+
+
+# Flame graph
+flame = { version = "0.2.2", optional = true }
+flamer = { version = "0.3", optional = true }
+
 # wqa = {path="../wqa"}
 # API sync
+[features]
+default = []
+# The std feature enables std support. Currently it's used only to
+# implement std::error::Error on zg_co2::Error.
+candbus = ["dbus"]
+flame_it = ["flame", "flamer"]
 
 
 [dev-dependencies]

@@ -1,5 +1,5 @@
 #![allow(dead_code, unused_imports)]
-use super::Wqa;
+use super::WqRepo;
 use tera;
 // use tera::compile_templates;
 use tide::{self, Context, EndpointResult, Error};
@@ -14,7 +14,7 @@ lazy_static! {
 /// State to pass with context and will hold
 /// the interface to the tera rendering engine
 // Render some data into the 'tera-hello-world.html template in examples/templates directory
-pub async fn example_index(_ctx: Context<Wqa>) -> EndpointResult {
+pub async fn example_index(_ctx: Context<WqRepo>) -> EndpointResult {
     // Create the context for the template
     let mut context = tera::Context::new();
     context.insert("page_title", "Hello from Tera templating!");
@@ -40,18 +40,18 @@ pub async fn example_index(_ctx: Context<Wqa>) -> EndpointResult {
     Ok(resp)
 }
 
-pub struct Template{
-    wqa : Wqa,
-}
-impl Template {
+pub struct Template;
+//     wqa : WqRepo,
+// }
+// impl Template {
 
-    pub fn new(wqa: Wqa) -> Template {
-        Template{
-            wqa:wqa
-        }
-    }
+//     pub fn new(wqa: WqRepo) -> Template {
+//         Template{
+//             wqa:wqa
+//         }
+//     }
 
-}
+// }
 
 
 // fn templates_create() -> tera::Tera{

@@ -50,32 +50,37 @@
 //!
 //!      history/
 //!      logs/
-use crate::Result;
-use crate::Local;
+// use crate::Local;
 // use failure::{format_err};
 // use regex::Regex;
 // use dirs;
-use std::fs;
+// use std::fs;
 // use walkdir::{WalkDir};
-use analyzer::Device;
+// use analyzer::Device;
 // use analyzer::flow::*;
 // use analyzer::*;
-use settings::ron::Config;
-use std::{
-    path::PathBuf,
-};
-pub mod integration;
-pub mod adjustment;
+// use settings::ron::Config;
+// use std::{
+    // path::PathBuf,
+// };
 pub mod measurement;
-pub mod statistic;
+pub mod airflow;
+pub mod humidity;
+pub mod pressure;
+pub mod sensor;
 
 pub mod rule;
 pub mod stream;
 pub mod channel;
 
-use super::Wqa;
 
-use self::measurement::MeasureStats;
+// use crate::Wqa;
+
+pub use crate::*;
+
+
+
+// use self::measurement::MeasureStats;
 // pub use self::rule;
 // pub use self::stream;
 // pub use self::channel;
@@ -84,7 +89,7 @@ use self::measurement::MeasureStats;
 // use super::calibration::*;
 
 // use std::collections::HashMap;
-use analyzer::flow::MonitoringSetting;
+// use analyzer::flow::MonitoringSetting;
 
 
 // pub(crate) fn crate_source_dir(ex: &Experiment, tc: &Toolchain, krate: &Crate) -> PathBuf {
@@ -114,45 +119,40 @@ use analyzer::flow::MonitoringSetting;
 
 
 
-#[derive(Debug, Clone)]
-pub struct Store {
-    path: PathBuf,
-    wqa : Wqa,
+// #[derive(Debug, Clone)]
+// pub struct Store {
+//     // path: PathBuf,
+//     wqa : Wqa,
 
-    // list:
-}
+//     // list:
+// }
 
 
-impl Store {
-    pub fn new(wqa: Wqa) -> Store {
-        Store {
-            wqa: wqa,
-            path: Local::root_dir().unwrap(),
-        }
-    }
-    pub fn setup(&self) -> Result<()> {
-        if !self.path.exists() {
-            fs::create_dir_all(&self.path)?;
-        }
-        Ok(())
-    }
-}
+// impl Store {
+//     pub fn new(wqa: Wqa) -> Store {
+//         Store {
+//             wqa: wqa,
+//             // path: Local::root_dir().unwrap(),
+//         }
+//     }
+
+// }
 
 // pub async fn setup_root_directory() -> Result<()> {
 
     // Ok(())
 // }
 
-pub async fn setup(path: &str) -> Result<()> {
-    let path = PathBuf::from(path);
-    let file = path.join("device.ron");
-    if !file.exists() {
-        Device::default().write(file)?;
-    }
-    let file = path.join("monitoring.ron");
-    if !file.exists() {
-        // FlowSetting::default().write(file)?;
-    }
+// pub async fn setup(path: &str) -> Result<()> {
+//     let path = PathBuf::from(path);
+//     let file = path.join("device.ron");
+//     if !file.exists() {
+//         Device::default().write(file)?;
+//     }
+//     let file = path.join("monitoring.ron");
+//     if !file.exists() {
+//         // FlowSetting::default().write(file)?;
+//     }
 
     // let path = stream_dir()?.join("1");
     // if !path.exists() {
@@ -163,20 +163,20 @@ pub async fn setup(path: &str) -> Result<()> {
         // stream_save(&st1).await?;
         // stream_channel_save(&st1,&ch1).await?
    // }
-    Ok(())
-}
+    // Ok(())
+// }
 
 
 
-pub async fn get_flow_monitoring_settings() -> Result<MonitoringSetting> {
-    let settings = MonitoringSetting::load_no_fallback(Local::root_dir()?.join("flowmonitoring.ron"))?;
-    Ok(settings)
-}
+// pub async fn get_flow_monitoring_settings() -> Result<MonitoringSetting> {
+//     let settings = MonitoringSetting::load_no_fallback(Local::root_dir()?.join("flowmonitoring.ron"))?;
+//     Ok(settings)
+// }
 
-pub async fn set_flow_monitoring_settings(settings:MonitoringSetting) -> Result<()> {
-    settings.write(Local::root_dir()?.join("airflow.ron"))?;
-    Ok(())
-}
+// pub async fn set_flow_monitoring_settings(settings:MonitoringSetting) -> Result<()> {
+//     settings.write(Local::root_dir()?.join("airflow.ron"))?;
+//     Ok(())
+// }
 
 // pub async fn set_serial( serial: String ) -> Result<()> {
     // let mut device = get_().await?;
@@ -187,27 +187,27 @@ pub async fn set_flow_monitoring_settings(settings:MonitoringSetting) -> Result<
 
 
 
-pub async fn measurement_evaluation_save() {}
+// pub async fn measurement_evaluation_save() {}
 
 // pub async fn stream_channel(stream:&Stream,channel:&Channel),
 
 
 
-pub async fn get_measure_stats() -> Result<MeasureStats> {
-    let path = Local::root_dir()?.join("mstats.ron");
-    let mstat = MeasureStats::load_no_fallback(path)?;
-    Ok(mstat)
-}
+// pub async fn get_measure_stats() -> Result<MeasureStats> {
+//     let path = Local::root_dir()?.join("mstats.ron");
+//     let mstat = MeasureStats::load_no_fallback(path)?;
+//     Ok(mstat)
+// }
 
 
 ///next measurement
-pub async fn next_measurement() -> Result<MeasureStats> {
-    let path = Local::root_dir()?.join("mstat.ron");
-    let mut mstat = MeasureStats::load_no_fallback(path.clone())?;
-    mstat.counter +=1;
-    mstat.write(path)?;
-    Ok(mstat)
-}
+// pub async fn next_measurement() -> Result<MeasureStats> {
+//     let path = Local::root_dir()?.join("mstat.ron");
+//     let mut mstat = MeasureStats::load_no_fallback(path.clone())?;
+//     mstat.counter +=1;
+//     mstat.write(path)?;
+//     Ok(mstat)
+// }
 
 
 // pub async fn
@@ -230,12 +230,12 @@ mod tests {
 
     #[runtime::test]
     async fn test_valid_workspace() {
-        let path = Local::root_dir().unwrap();
-        println!("PATH:{:?}",path);
-        let first = stream::Stream::default();
-        stream::save(&first).await.unwrap();
-        let measrule = rule::Rule::new(1);
-        rule::save(measrule).await.unwrap();
+        // let path = Local::root_dir().unwrap();
+        // println!("PATH:{:?}",path);
+        // let first = stream::Stream::default();
+        // stream::save(&first).await.unwrap();
+        // let measrule = rule::Rule::new(1);
+        // rule::save(measrule).await.unwrap();
         // let x = Workspace::from_str("abc");
         // assert!(x.is_ok());
     }

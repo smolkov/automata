@@ -1,7 +1,8 @@
 use serde_derive::{Deserialize, Serialize};
 // use std::time::{Duration};
 // use super::common::*;
-use super::statistic::Statistic;
+use failure::Fallible;
+use super::Statistic;
 use chrono::Utc;
 // use super::stream::*;
 // use crate::error::*;
@@ -114,7 +115,7 @@ pub struct StreamResult {
 pub struct Measurement {
     pub stats : MeasureStats,
     pub last : Option<StreamResult>,
-    
+
 
 }
 

@@ -1,7 +1,6 @@
 use serde_derive::{Deserialize, Serialize};
 // use std::time::{Duration,SystemTime};
-use crate::Result;
-// use crate::workspace as store;
+use failure::Fallible;
 use analyzer::Statistic;
 use std::path::PathBuf;
 use settings::ron::Config;
@@ -110,8 +109,8 @@ impl RuleList {
 }
 
 /// Get streams work directory
-pub fn get_directory() -> Result<PathBuf> {
-    let path = super::Local::root_dir()?;
+pub fn get_directory() -> Fallible<PathBuf> {
+    let path = crate::local::rootdir()?;
     let path = path.join("rule");
     if !path.exists() {
         fs::create_dir_all(&path)?;
@@ -119,7 +118,7 @@ pub fn get_directory() -> Result<PathBuf> {
     Ok(path)
 }
 
-pub async fn read_all() ->Result<Vec<Rule>> {
+pub async fn read_all() ->Fallible<Vec<Rule>> {
     let path = get_directory()?;
     let mut rules = Vec::new();
     for entry in WalkDir::new(path).min_depth(1) {
@@ -132,13 +131,13 @@ pub async fn read_all() ->Result<Vec<Rule>> {
     Ok(rules)
 }
 
-pub async fn save(rule: Rule) -> Result<()> {
+pub async fn save(rule: Rule) -> Fallible<()> {
     let path = get_directory()?.join(format!("/{}-rule.ron",rule.id));
     rule.write(path.join("rule.ron"))?;
     Ok(())
 }
 
-pub async fn read(id:u64) -> Result<Rule> {
+pub async fn read(id:u64) -> Fallible<Rule> {
     let rule = Rule::load_no_fallback(get_directory()?.join(format!("/{}-rule.ron",id)))?;
     Ok(rule)
 }

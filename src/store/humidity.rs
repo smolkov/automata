@@ -2,40 +2,37 @@
 /// Anschlus Analog:IN04
 ///
 use serde::{Deserialize, Serialize};
-use super::io;
-use crate::Result;
+use failure::Fallible;
+use lazy_static::lazy_static;
+
+lazy_static! {
+    static ref INTERVAL:u64 = 2000;
+}
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct HumiditySetting {
-    pub humidity_crit_level:  f32,
-    pub monitorin_interval:   u64,
+pub struct Humidity {
+    id:  u64,
+    broken: bool
     // pub injection_threshold:  f32,
 }
 
 
 
-impl Default for HumiditySetting {
+impl Default for Humidity {
     fn default() -> Self {
         Self {
-            humidity_crit_level:  70.0,
-            monitorin_interval:   0,
+            id: 0,
+            broken: true,
         }
     }
 }
 
-
-#[derive(Serialize, Deserialize, Clone, Debug, PartialEq)]
-pub struct Humidity {
-    pub value:   f32,
-    pub broken:  bool,
-}
-
 impl Humidity {
-    pub fn from_analog16(value: u16) -> Humidity {
+    pub fn from_analog16(&self, value: u16) -> f32 {
         let signal =  value as f32 / 4096.0 * 5.0;
         Humidity::from_voltage(signal)
     }
-    pub fn from_voltage(voltage:f32) -> Humidity {
+    pub fn from_voltage(&self, voltage:f32) -> f32 {
         let broken = voltage < 0.8 * 4.0 / 5.0;
         let humidity = ((voltage - 0.8)  / (3.6 - 0.8))*100.0;
         Humidity {

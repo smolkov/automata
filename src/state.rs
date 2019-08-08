@@ -1,14 +1,15 @@
 /// Wqa monitoring station state
+use super::node::Node;
+use failure::Fallible;
+
+use settings::ron::Config;
 use serde::{Deserialize, Serialize};
-use super::Wqa;
-
-
 
 
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
 pub enum Status {
-    None,
+    Unimplemented,
     Init,
     Wait,
     Wartung,
@@ -16,21 +17,42 @@ pub enum Status {
     Calibration,
 }
 
-
-#[derive(Clone,Debug)]
-pub struct State {
-    wqa: Wqa,
-
-}
-
-impl State
-{
-    pub fn new(wqa:Wqa) -> State {
-        State {
-            wqa : wqa ,
-        }
+impl Default for Status {
+    fn default() -> Status {
+        Status::Unimplemented
     }
 }
+
+pub struct State{}
+
+pub async fn status(node:Node<State>) -> Fallible<Status> {
+    let status = Status::load_no_fallback(node.path())?;
+    Ok(status)
+}
+
+
+
+
+//
+// }
+
+// #[derive(Clone,Debug)]
+// pub struct State {
+    // repo: WqRepo,
+
+// }
+
+
+// impl State
+// {
+    // pub fn new(wqa:WqRepo) -> State {
+        // State {
+            // repo : wqa ,
+        // }
+    // }
+// }
+
+
 
 
 

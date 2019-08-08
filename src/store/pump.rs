@@ -2,7 +2,7 @@
 ///
 use serde_derive::{Deserialize, Serialize};
 use std::sync::RwLock;
-use crate::error::*;
+use failure::Fallible;
 // use lpcan::can::{
 // can0,
 // Message,
@@ -41,10 +41,15 @@ async fn start_pump_simulation() -> Result<(),WqaError> {
 }
 async fn start_pump_simulation() -> Result<(),WqaError> {
 }
+pub struct Pump {
+    id: u64
+}
+
+
 
 #[derive(Serialize,Default, Deserialize, Clone, Debug, PartialEq)]
 pub struct GearPump {
-    pub hid: u64,
+    pump: Pump,
     pub state: State,
 }
 
@@ -61,46 +66,18 @@ impl GearPump {
         self.state = State::Runned;
     }
 }
-
-
-
-
-
-pub async fn gp1_start() -> Result<()> {
-    Ok(())
-}
-pub async fn sample1_stop() -> Result<()> {
-    Ok(())
+pub async fn directory(pump:Pump) -> Result<> {
+    let path = rootdir()?.join(format!("/pump:{}/",pump.id));
+    Ok(path)
 }
 
-pub async fn sample2_start() -> Result<()> {
+
+
+pub async fn start(pump:Pump) -> Result<()> {
     Ok(())
 }
-pub async fn sample2_stop() -> Result<()> {
+pub async fn stop(pump:Pump) -> Result<()> {
     Ok(())
 }
-pub async fn sample3_start() -> Result<()> {
-    Ok(())
-}
-pub async fn sample3_stop() -> Result<()> {
-    Ok(())
-}
-pub async fn sample4_start() -> Result<()> {
-    Ok(())
-}
-pub async fn sample4_stop() -> Result<()> {
-    Ok(())
-}
-pub async fn sample5_start() -> Result<()> {
-    Ok(())
-}
-pub async fn sample5_stop() -> Result<()> {
-    Ok(())
-}
-pub async fn sample6_start() -> Result<()> {
-    Ok(())
-}
-pub async fn sample6_stop() -> Result<()> {
-    Ok(())
-}
+
 
