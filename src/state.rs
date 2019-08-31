@@ -1,10 +1,9 @@
-/// Wqa monitoring station state
-use super::node::Node;
-use failure::Fallible;
-
-use settings::ron::Config;
+/// automata monitoring station state
+// use super::node::Node;
+// use failure::Fallible;
+use std::path::PathBuf;
+// use store::ron::Config;
 use serde::{Deserialize, Serialize};
-
 
 
 #[derive(Serialize, Deserialize, Clone, Debug)]
@@ -23,14 +22,24 @@ impl Default for Status {
     }
 }
 
-pub struct State{}
-
-pub async fn status(node:Node<State>) -> Fallible<Status> {
-    let status = Status::load_no_fallback(node.path())?;
-    Ok(status)
+pub struct State {
+    repo : PathBuf,
+    status : Status,
+    // controller: Controller,
 }
 
+// pub async fn status(node:Node<State>) -> Fallible<Status> {
+    // let status = Status::load_no_fallback(node.path())?;
+    // Ok(status)
+// }
 
+
+// pub struct device()
+
+
+// pub async fn generate(state:State) {
+
+// }
 
 
 //
@@ -45,9 +54,9 @@ pub async fn status(node:Node<State>) -> Fallible<Status> {
 
 // impl State
 // {
-    // pub fn new(wqa:WqRepo) -> State {
+    // pub fn new(automata:WqRepo) -> State {
         // State {
-            // repo : wqa ,
+            // repo : automata ,
         // }
     // }
 // }

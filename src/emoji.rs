@@ -1,4 +1,4 @@
-//! Emoji contants used by `wqa`.
+//! Emoji contants used by `automata`.
 //!
 //! For the woefully unfamiliar:
 //!

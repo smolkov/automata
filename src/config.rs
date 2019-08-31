@@ -2,7 +2,8 @@
 use log::info;
 use crate::error::*;
 use failure::Fallible;
-// use super::Wqa;
+use serde_json::from_slice;
+// use super::automata;
 // use std::collections::HashMap;
 use std::env;
 use std::{
@@ -109,7 +110,7 @@ pub struct Config {
 // }
 
 fn get_toml_path() -> String {
-    env::var("WQATOML").unwrap_or_else(|_| "larwqa.toml".to_string())
+    env::var("automataTOML").unwrap_or_else(|_| "larautomata.toml".to_string())
 }
 
 fn read_file_to_string(filename: &str) -> Fallible<String> {
@@ -147,14 +148,14 @@ use once_cell::sync::OnceCell;
 
 
 // pub struct GLobalConfig {
-    // wqa: Wqa,
+    // automata: automata,
 // }
 
 
 // impl GLobalConfig {
-    // pub fn new(wqa: Wqa) -> GLobalConfig {
+    // pub fn new(automata: automata) -> GLobalConfig {
         // GLobalConfig{
-            // wqa:wqa
+            // automata:automata
         // }
     // }
 

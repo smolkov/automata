@@ -1,12 +1,12 @@
 [package]
-name = "wqa"
-version = "0.0.5"
+name = "automata"
+version = "0.0.6"
 authors = ["smolkov <asmolkov@lar.com>"]
 edition = "2018"
-description = "Water quality analyzer core"
+description = "automatisation for linux"
 keywords = ["api", "monitor", "server"]
-categories = ["", "os"]
-repository = "https://github.com/lar-rs/wqa"
+categories = ["linux", "automatisation"]
+repository = "https://github.com/smolkov/automata"
 readme = "README.md"
 license = "Apache-2.0 OR MIT"
 # Is it maintained resolution time: `repository` is required.
@@ -18,57 +18,66 @@ license = "Apache-2.0 OR MIT"
 
 [badges]
 maintenance = { status = "experimental" }
-travis-ci = { repository = "lar-rs/wqa", branch = "master"}
+travis-ci = { repository = "smolkov/automata", branch = "master"}
 
 [dependencies]
 # errors
 failure = "0.1.5"
 # Terminal cli
 ferris-says = "0.1.1"
-ci_info = "0.7.1"
+ci_info = "0.8.0"
 paw = "1.0.0"
 structopt = { version = "0.2.18", features = ["paw"] }
 convey = "0.2.0"
-console = "0.7.7"
+console = "0.8.0"
 indicatif = "0.11.0"
 termcolor = "1.0.5"
 yansi = "0.5.0"
 atty = "0.2.13"
 ansi_term = "0.12.0"
+prettytable-rs = "0.8.0"
+clicolors-control = "1.0.1"
+
 #Time date
 chrono = "0.4.7"
+# Units
+uom = "0.25.0"
 # Log
-log = "0.4.7"
+log = "0.4.8"
 log4rs = "0.8.3"
 slog = "2.5.2"
-sloggers = "0.3.2"
+sloggers = "0.3.3"
 env_logger = "0.6.2"
-async-log = "1.1.0"
+async-log = "2.0.0"
 # Config
 # config = "0.9.3"
 # confy = "0.3.1"
 # Version
 semver = "0.9.0"
-# Serializer
+# Serializer file format
 serde_json = "1.0.40"
-serde = { version = "1.0.98", features = ["derive"] }
-serde_derive = "1.0.98"
+serde = { version = "1.0.99", features = ["derive"] }
+
 serde_yaml = "0.8.9"
 bincode = "1.1.4"
-toml = "0.5.1"
+toml = "0.5.3"
 ron = "0.5.1"
+csv = "1.1.1"
+
 # File system
 fs2 = "0.4.3"
-dirs = "2.0.2"
+lockfile = "0.2.1"
+
+# dirs = "2.0.2"
 bytes = "0.4.12"
-directories = "2.0.2"
-walkdir = "2.2.9"
+# directories = "2.0.2"
+# walkdir = "2.2.9"
 tempfile = "3.1.0"
 # git
 git2 = "0.9.2"
 # lazy
-lazy_static = "1.3.0"
-once_cell = "0.2.4"
+lazy_static = "1.4.0"
+once_cell = "1.0.0-pre.2"
 # publish = false
 
 # Serializer
@@ -79,18 +88,13 @@ once_cell = "0.2.4"
 
 # wqa-settings = { git = "https://git.sr.ht/~asmolkov/wqa-settings",branch = "master" }
 # settings = { path = "../settings"}
-settings = { git="https://github.com/lar-rs/settings.git" }
+store = { git="https://github.com/lar-rs/store.git" }
 analyzer = { git="https://github.com/lar-rs/analyzer.git"}
 # socketcan = "1.7.0"
 # dbus = "0.6.4"
 # Async
 # heapless = "0.4.4"
-# Database&KV
-memdb = "1.0.0"
-graphql_client = "0.8.0"
-juniper = "0.13.1"
-diesel = { version = "1.4.2", default-features = false, features = ["r2d2", "sqlite"] }
-diesel_derives = "1.4.0"
+#
 # diesel_migrations = { version = "1.4.0", default-features = false, features = ["sqlite"] }
 # matches = "0.1.8"
 dtoa = "0.4.4"
@@ -98,20 +102,15 @@ itoa = "0.4.4"
 # reqwest = "0.9.18"
 # serde_with = "1.3.1"
 mime = "0.3.13"
-mime_guess = "2.0.0-alpha.6"
+mime_guess = "2.0.1"
 # regex = "1.1.9"
 # futures-fs = "0.0.5"
 # rocket = "0.4.2"
 # Async runtime
-futures-preview = { version = "0.3.0-alpha.17", features = ["async-await", "nightly"] }
 # futures-util-preview = { version = "0.3.0-alpha.17",features = ["async-await", "nightly"] }
-runtime = "0.3.0-alpha.6"
-http = "0.1.18"
-http-service = "0.3.0"
-tide = {git = "https://github.com/rustasync/tide.git"}
+# http-service = "0.3.0"
 # futures-fs = "0.0.5"
 
-# Metrics
 
 # prometheus = "0.7.0"
 
@@ -122,19 +121,12 @@ tera = "0.11.20"
 # lain = "0.1.2"
 regex = "1.2.1"
 compose = "0.1.0"
-url = "2.0.0"
-prometheus = "0.7.0"
-# futures-preview = "0.3.0-alpha.17"
-sled = "0.24.1"
-reqwest = "0.9.19"
+url = "2.1.0"
+reqwest = "0.9.20"
 rand = "0.7.0"
 hex = "0.3.2"
-csv = "1.1.1"
 glob = "0.3.0"
-path-table = "1.0.0"
 rust-embed = "5.1.0"
-path-tree = "0.1.8"
-lockfile = "0.2.1"
 # plotters = "0.2.2"
 # crossbeam-channel = "0.3.8"
 # os_pipe = "0.8.1"
@@ -151,13 +143,39 @@ lockfile = "0.2.1"
 # runtime = "0.0.0"
 # paw = "1.0.0"
 # WQMS package
-dbus = {version= "0.6.5", optional = true}
-bytecount = "0.5.1"
+# dbus = {version= "0.6.5", optional = true}
+bytecount = "0.6.0"
 
+# path table.
+path-table = "1.0.0"
+path-tree = "0.1.8"
+# RestAPi Async
+futures-preview = { version = "0.3.0-alpha.18", features = [ "async-await", "nightly" ] }
+async-std = "0.99.4"
+tide = {git = "https://github.com/rustasync/tide.git"}
+http = "0.1.18"
+
+#  Database&KV
+sled = "0.26.3"
+memdb = "1.0.0"
+# graphql_client = "0.8.0"
+juniper = "0.13.1"
+# diesel = { version = "1.4.2", default-features = false, features = ["r2d2", "sqlite"] }
+# diesel_derives = "1.4.0"
+
+# Metrics
+metrics = "0.11.1"
+metrics-core = "0.5.1"
+metrics-runtime = { version = "0.1.0", default-features = false, features = ["metrics-observer-prometheus"] }
+heim = "0.0.7"
+# prometheus = "0.7.0"
+
+# DBus
+dbus = { git = "https://github.com/diwic/dbus-rs.git", optional = true}
 
 # Flame graph
 flame = { version = "0.2.2", optional = true }
-flamer = { version = "0.3", optional = true }
+flamer = { version = "0.4.0", optional = true }
 
 # wqa = {path="../wqa"}
 # API sync
@@ -176,8 +194,8 @@ http-service-mock = "0.3.0"
 # env_logger = { version = "0.6", default-features = false }
 
 
-[patch.crates-io]
-http-service = { git = "https://github.com/rustasync/http-service", branch = "master" }
+# [patch.crates-io]
+# http-service = { git = "https://github.com/rustasync/http-service", branch = "master" }
 # http-service-hyper = { git = "https://github.com/rustasync/http-service", branch = "master" }
 # http-service-mock = { git = "https://github.com/rustasync/http-service", branch = "master" }
 

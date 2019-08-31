@@ -1,15 +1,16 @@
 
 use log::info;
 use std::path::{PathBuf,Path};
-
-use crate::templates::Template;
+use super::rootdir;
+// use super::error::Result;
+use async_std::io;
 
 #[cfg(feature = "flame_it")]
 extern crate flame;
 #[cfg(feature = "flame_it")]
 #[macro_use] extern crate flamer;
 
-
+use serde::{Deserialize, Serialize};
 
 
 // pub mod data;
@@ -17,6 +18,7 @@ use lockfile::Lockfile;
 use failure::Fallible;
 
 #[cfg_attr(feature = "flame_it", flame)]
+#[derive(Debug)]
 struct Lock{
     lock: Lockfile,
 }
@@ -28,39 +30,36 @@ fn lock_path(lockfile:&Path) -> Fallible<Lock> {
     info!("🔒 directory lock {:?}",lockfile);
     Ok(lock)
 }
-pub struct Node<T> {
-    path: PathBuf,
-    data: T,
+#[derive(Serialize, Deserialize,Debug)]
+pub struct Node {
+    pub path: PathBuf,
+    #[serde(skip_serializing,skip_deserializing)]
     lock: Option<Lock>,
 }
 
-pub struct Root;
-
-impl <R>Node<R> {
-    pub fn root(path : &str) -> Node<Root> {
+impl Node {
+    pub fn root() -> Node {
         Node{
-            path:PathBuf::from(path),
+            path:rootdir(),
             lock: None,
-            data: Root{}
         }
     }
-    pub fn lock(mut self) -> Fallible<Node<R>> {
+    pub fn new(path : &Path) -> Node {
+       Node{
+           path: path.to_path_buf(),
+           lock: None,
+       }
+    }
+    pub fn path(&self) -> &Path {
+        self.path.as_path()
+    }
+    pub fn lock(&self) -> Fallible<Node> {
         let node = Node {
             lock: Some(lock_path(&self.path.join("lock"))?),
-            path: self.path,
-            data: self.data
+            path: self.path.clone(),
 
         };
         Ok(node)
     }
-    pub fn templates(mut self) -> Node<Template> {
-        Node {
-            path: self.path.join("template"),
-            lock: None,
-            data:Template{},
-        }
-    }
-    pub fn path(&self) -> PathBuf {
-        self.path.clone()
-    }
 }
+

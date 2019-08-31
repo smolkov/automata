@@ -1,23 +1,24 @@
 #![allow(unused_variables)]
 // use failure::{ResultExt};
 use failure::{Fail};
-use std::io;
-use walkdir;
+// use std::io;
+// use walkdir;
 use serde_yaml;
 use git2;
-use settings::ConfigError;
-
-#[cfg(feature = "canbus")]
+use store::ConfigError;
+use async_std::io as async_io;
+#[cfg(feature = "candbus")]
 use dbus::Error as DBusError;
 
+// pub type Result<T> = async_std::io::Result<T,async_std::Error + Send + Sync>;
 // use serde::{Deserialize, Serialize};
-// pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
+pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + Sync>>;
 // use tide::type
-
+// pub type Result<T> = std::result::Result<T, Error>;
 // use regex;
 
 
-// pub use WqaError as Error;
+// pub use AutomataError as Error;
 
 
 
@@ -37,13 +38,10 @@ use dbus::Error as DBusError;
 // use mut_guard::*;
 
 #[derive(Fail, Debug)]
-pub enum WqaError {
+pub enum AutomataError {
 
-    #[fail(display = "io error - {}",err)]
-    IOError {err: io::Error },
-
-    #[fail(display = "directory error - {}",err)]
-    DirError {err: walkdir::Error },
+    #[fail(display = "async io error - {}",err)]
+    AsyncIOError {err: async_io::Error },
 
     #[fail(display = "yaml error - {}",err)]
     BadYaml {err:serde_yaml::Error },
@@ -57,55 +55,52 @@ pub enum WqaError {
     #[cfg(feature = "candbus")]
     #[fail(display = "dbus  error - {}",err)]
     DBusError {err: DBusError },
-    // #[fail(display = "tide responce err - {:?}",err)]
-    // ResponceError{err: TideError},
+
+    #[fail(display = "IO device not found - {:}",msg)]
+    IoNotFound{msg:String},
 
     // #[fail(display = "io error - {}",serde_json)]
     // BadJson(serde_json::Error),
 }
 
+
+
 // macro_rules! app_error_from {
 //   ($error: ty, $app_error: ident) => {
-//     impl From<$error> for WqaError {
-//       fn from(err: $error) -> WqaError {
-//         WqaError::$app_error(err)
+//     impl From<$error> for AutomataError {
+//       fn from(err: $error) -> AutomataError {
+//         AutomataError::$app_error(err)
 //       }
 //     }
 //   };
 // }
-impl From<ConfigError> for WqaError {
-    fn from(kind:ConfigError) -> WqaError {
-        WqaError::ConfigError{err: kind}
+impl From<ConfigError> for AutomataError {
+    fn from(kind:ConfigError) -> AutomataError {
+        AutomataError::ConfigError{err: kind}
     }
 }
 
-impl From<git2::Error> for WqaError {
-    fn from(kind:git2::Error) -> WqaError {
-        WqaError::GitError{err: kind}
+impl From<git2::Error> for AutomataError {
+    fn from(kind:git2::Error) -> AutomataError {
+        AutomataError::GitError{err: kind}
     }
 }
 
-impl From<io::Error> for WqaError {
-    fn from(kind:io::Error) -> WqaError {
-        WqaError::IOError{err: kind}
+impl From<async_io::Error> for AutomataError {
+    fn from(kind:async_io::Error) -> AutomataError {
+        AutomataError::AsyncIOError{err: kind}
     }
 }
-
-impl From<walkdir::Error> for WqaError {
-  fn from(kind: walkdir::Error) -> WqaError {
-    WqaError::DirError{err:kind}
-  }
-}
-impl From<serde_yaml::Error> for WqaError {
-  fn from(kind: serde_yaml::Error) -> WqaError {
-    WqaError::BadYaml{err:kind}
+impl From<serde_yaml::Error> for AutomataError {
+  fn from(kind: serde_yaml::Error) -> AutomataError {
+    AutomataError::BadYaml{err:kind}
   }
 }
 
 #[cfg(feature = "candbus")]
-impl From<DBusError> for WqaError {
-    fn from(kind:DBusError) -> WqaError {
-        WqaError::DBusError{err:kind}
+impl From<DBusError> for AutomataError {
+    fn from(kind:DBusError) -> AutomataError {
+        AutomataError::DBusError{err:kind}
     }
 }
 

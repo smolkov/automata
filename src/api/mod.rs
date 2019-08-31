@@ -12,7 +12,7 @@ use http::StatusCode;
 use http_service::Body;
 
 
-impl IntoResponse for WqaError {
+impl IntoResponse for automataError {
     fn into_response(self) -> Response {
         empty(StatusCode::INTERNAL_SERVER_ERROR)
         // match self {
@@ -70,9 +70,9 @@ fn empty(code: StatusCode) -> Response {
 //     *response.status_mut() = code;
 //     response
 // }
-// impl From<TideError> for WqaError {
-    // fn from(kind:TideError) -> WqaError {
-        // WqaError::ResponceError{err:kind}
+// impl From<TideError> for automataError {
+    // fn from(kind:TideError) -> automataError {
+        // automataError::ResponceError{err:kind}
     // }
 // }
 // app_error_from!(git2::Error, GitError);

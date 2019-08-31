@@ -1,19 +1,27 @@
-pub mod lamp;
-pub mod pumps;
-pub mod relay;
-pub mod valve;
-pub mod timers;
+pub mod uv;
+
+pub mod AnalyzerModel {
+    QuickTocUv(uv::Uv),
+
+}
 
 
 
-pub struct UvState {
-    
+pub struct Platform {
+    pub name : String,
+    pub model: AnalyzerModel,
+    pub dbus: bool,
+
 }
 
 
-pub async fn status () -> {
+
+
+
+pub async fn platform() -> Platform {
 
 }
+
 
 
 

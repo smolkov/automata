@@ -1,92 +1,128 @@
-//! Mio async api
+//! automata mio async API
 //!
 //!
+//!
 
-pub mod dbus;
-// pub mod uv;
-pub mod airflow;
-pub mod humidity;
-pub mod pressure;
+pub mod pump;
+pub mod sensor;
 
-pub mod uv;
-use super::Wqa;
-pub use self::dbus as io;
-pub mod uart;
+use serde::{Deserialize, Serialize};
+use async_std::fs;
+use async_std::io;
+use async_std::os::unix::fs::symlink;
+use async_std::os::unix::net::UnixDatagram;
+use async_std::prelude::*;
+use async_std::task;
 
-// use std::pin::Pin;
-// use std::sync::Mutex;
-// use std::thread;
+use log::info;
+use std::path::{PathBuf,Path};
 
-// Lazily initialize a singleton router,
-// so we only end up with one routing thread per process.
-// lazy_static! {
-//     static ref ROUTER: Router = {
-//         let (send, mut recv) = futures::channel::mpsc::unbounded();
-//         thread::spawn(move || {
-//             let mut receivers = IpcReceiverSet::new().expect("Failed to create receiver set");
-//             let mut senders = HashMap::<u64, UnboundedSender<OpaqueIpcMessage>>::new();
-//             let _ = receivers.add(wakee);
-//             while let Ok(mut selections) = receivers.select() {
-//                 for selection in selections.drain(..) {
-//                     match selection {
-//                         IpcSelectionResult::MessageReceived(id, msg) => if let Some(sender) = senders.get(&id) {
-//                             let _ = sender.unbounded_send(msg);
-//                         },
-//                         IpcSelectionResult::ChannelClosed(id) => {
-//                             senders.remove(&id);
-//                         },
-//                     }
-//                 }
-//                 if !recv.is_terminated() {
-//                     while let Ok(Some((receiver, sender))) = recv.try_next() {
-//                         if let Ok(id) = receivers.add_opaque(receiver) {
-//                             senders.insert(id, sender);
-// 			}
-//         }
-//     }
-//     }
-//         });
-//         Router {
-//             add_route: send,
-//             wakeup: Mutex::new(waker),
-//         }
-    // };
-// pub use self::dbus as io;
-
-// pub struct Frame {
-    // pub data: Vec<u8>,
-// }
-
-
-
-
-// pub use self::uv::*;
-// pub use self::flow::*;
-// pub use self::sensor::*;
-
-
-// pub struct Node {
-    // id: u64,
-// }
-
-
-#[derive(Clone, Debug)]
+#[derive(Serialize,Deserialize, Clone, Debug)]
 pub struct Mio {
-    wqa: Wqa,
-
-
+    path: PathBuf,
 }
-
-
-
-impl Mio  {
-    pub fn new( wqa : Wqa ) -> Mio {
-        Mio {
-            wqa: wqa,
-        }
+impl Mio {
+    pub fn directory(&self) -> PathBuf {
+        rootdir().join(self.name())
     }
-    // pub fn lamp() -> Result<Lamp> {
-
-    // }
+    pub fn name(&self) -> String {
+        format!("mio")
+    }
+    pub fn datagramm(&self) -> PathBuf {
+        self.directory().join("datagram.socket")
+    }
 }
 
+pub fn workdir() -> PathBuf {
+    super::workdir().join("mio")
+}
+
+pub fn rootdir() -> PathBuf {
+    let path = PathBuf::from("/var/run/automata/mio");
+    path
+}
+
+// pub async fn create(id: u64) -> io::Result<Mio> {
+//     use yansi::Paint;
+//     let mio = Mio { id };
+//     let path = mio.directory();
+//     if !path.exists() {
+//         fs::DirBuilder::new()
+//             .recursive(true)
+//             .create(path.as_path())
+//             .await?;
+//         info!("{:} new creat", Paint::cyan(format!("MIO:{}", id)));
+//     }
+//     Ok(mio)
+// }
+
+
+pub async fn label(path: &Path)-> io::Result<String> {
+    let label = path.join("label");
+    fs::read_to_string(&label).await
+}
+
+
+pub async fn state(mio: &Mio) -> io::Result<String> {
+    let path = mio.directory().join("state");
+    let mut file = fs::File::open(path.as_path()).await?;
+    let mut contents = Vec::new();
+    let _n = file.read(&mut contents).await?;
+    let res = String::from_utf8(contents).unwrap();
+    Ok(res)
+}
+
+pub async fn link(mio: &Mio, owner: PathBuf) -> io::Result<()> {
+    let path = mio.directory().join("owner");
+    symlink(path.as_path(), owner.as_path()).await?;
+    let link = owner.join(format!("mio12"));
+    let path = mio.directory();
+    symlink(path.as_path(), link.as_path()).await?;
+    Ok(())
+}
+
+pub async fn datagram(mio: &Mio) -> io::Result<UnixDatagram> {
+    let path = mio.directory().join("socket");
+    let socket = UnixDatagram::bind(path.as_path()).await?;
+    Ok(socket)
+}
+
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn create_send_recv() -> io::Result<()> {
+        task::block_on(async {
+            // let mio    = create(23).await?;
+            // let socket = datagram(&mio).await?;
+            //  let path = mio.directory().join("socket");
+            // let reciever = UnixDatagram::bind("/tmp/socket").await?;
+            // let mut buf = vec![0; 1024];
+            // let n = socket.recv(&mut buf).await?;
+
+            // let sender = UnixDatagram::unbound()?;
+            // socket.send(b"hello world").await?;
+            // let mut buf = vec![0u8; 1024];
+            // let (n, peer) =reciever.recv_from(&mut buf).await?;
+            // let p = buf.as_slice();
+            // println!("n={} peer={:?} {:?}",n,peer,&buf);
+            // assert_eq!(&buf[..n], b"hello world");
+            // let socket1 = UdpSocket::bind("127.0.0.1:0").await?;
+            // let socket2 = UdpSocket::bind("127.0.0.1:0").await?;
+
+            // socket1.connect(socket2.local_addr()?).await?;
+            // socket2.connect(socket1.local_addr()?).await?;
+
+            // socket1.send(THE_MERCHANT_OF_VENICE).await?;
+
+            // let mut buf = [0u8; 1024];
+            // let n = socket2.recv(&mut buf).await?;
+            // assert_eq!(&buf[..n], THE_MERCHANT_OF_VENICE);
+
+            Ok(())
+        })
+    }
+}

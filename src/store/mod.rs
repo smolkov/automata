@@ -1,8 +1,8 @@
 //! Default structur
 //! .
-//! ├── /wqa
+//! ├── /automata
 //! │   ├── stats.ron
-//! │   ├── wqa.toml
+//! │   ├── automata.toml
 //! │   ├──stream
 //! │   │   └── 1
 //! │   │   │   └── stream.ron
@@ -42,7 +42,7 @@
 //! │   │       ├── query_builder.rs
 //! │   │       ├── reordered_attrs.rs
 //! │   │       └── store.rs
-//! //! .wqa/
+//! //! .automata/
 //! //!      streams/
 //!             1/
 //!               stream.ron
@@ -74,7 +74,7 @@ pub mod stream;
 pub mod channel;
 
 
-// use crate::Wqa;
+// use crate::automata;
 
 pub use crate::*;
 
@@ -122,16 +122,16 @@ pub use crate::*;
 // #[derive(Debug, Clone)]
 // pub struct Store {
 //     // path: PathBuf,
-//     wqa : Wqa,
+//     automata : automata,
 
 //     // list:
 // }
 
 
 // impl Store {
-//     pub fn new(wqa: Wqa) -> Store {
+//     pub fn new(automata: automata) -> Store {
 //         Store {
-//             wqa: wqa,
+//             automata: automata,
 //             // path: Local::root_dir().unwrap(),
 //         }
 //     }
@@ -240,4 +240,10 @@ mod tests {
         // assert!(x.is_ok());
     }
 
+}
+
+
+
+pub struct Store {
+    node: Node,
 }
