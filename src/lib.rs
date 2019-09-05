@@ -43,7 +43,7 @@ pub mod templates;
 // pub mod local;
 pub mod error;
 pub mod config;
-pub mod measure;
+pub mod analysis;
 pub mod metrics;
 pub mod emoji;
 // pub mod store;

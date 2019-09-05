@@ -1,11 +1,11 @@
-use crate::rootdir;
-use super::stream;
+use super::*;
 use chrono::prelude::*;
 // use walkdir::{WalkDir,DirEntry};
 // use log::info;
 // use analyzer::flow::*;
 use serde::{Deserialize, Serialize};
 
+use async_std::fs;
 use std::path::PathBuf;
 use super::adjustment::Adjustment;
 // use crate::error::*;
@@ -21,6 +21,7 @@ pub struct Channel {
     pub label:      String,
     pub unit:       String,
     pub range:      Range,
+    pub value:      f64,
 }
 
 pub struct Limit{
@@ -34,6 +35,8 @@ pub struct Limit{
 pub async fn is_channel(path: PathBuf ) -> io::Result<bool> {
     Ok(true)
 }
+
+
 
 // impl Channel {
 //     /// create new channel
@@ -62,50 +65,73 @@ pub async fn is_channel(path: PathBuf ) -> io::Result<bool> {
     // Ok(path)
 // }
 
-#[derive(Serialize, Deserialize, Clone, Debug)]
-pub struct Measurement {
-    pub timestamp: u64,
-    pub value: f64,
+pub async fn channel(path:PathBuf) -> Result<Channel> {
+    Ok(
+        Channel{
+            path:path,
+            label:"CH".to_owned(),
+            unit: "mg/l".to_owned(),
+            range: Range{start:0.0,end:0.0},
+            value: 0.0,
+
+        }
+    )
 }
 
-pub async fn read_measurement(channel:&Channel) -> io::Result<Measurement> {
-    let path = channel.path.join("measurement");
-    let mut file = fs::File::open(path.as_path()).await?;
-    let mut buf = Vec::new();
-    file.read_to_end(&mut buf).await?;
-    let measurement: Measurement = from_slice(buf.as_slice())?;
-    Ok(measurement)
-}
+
+// #[derive(Serialize, Deserialize, Clone, Debug)]
+// pub struct Measurement {
+    // pub timestamp: u64,
+    // pub value: f64,
+// }
+
+// pub async fn read_measurement(channel:&Channel) -> io::Result<Measurement> {
+//     let path = channel.path.join("measurement");
+//     let mut file = fs::File::open(path.as_path()).await?;
+//     let mut buf = Vec::new();
+//     file.read_to_end(&mut buf).await?;
+//     let measurement: Measurement = from_slice(buf.as_slice())?;
+//     Ok(measurement)
+// }
 
 /// read config
-pub async fn read_config(channel:&Channel) -> io::Result<Config>{
-    let path = channel.path.join("config");
-    let mut file = fs::File::open(path.as_path()).await?;
-    let mut buf = Vec::new();
-    file.read_to_end(&mut buf).await?;
-    let config: Config = from_slice(buf.as_slice())?;
-    Ok(config)
-}
+// pub async fn read_config(channel:&Channel) -> io::Result<Config>{
+//     let path = channel.path.join("config");
+//     let mut file = fs::File::open(path.as_path()).await?;
+//     let mut buf = Vec::new();
+//     file.read_to_end(&mut buf).await?;
+//     let config: Config = from_slice(buf.as_slice())?;
+//     Ok(config)
+// }
 
 /// write config
-pub async fn write_config(channel:&Channel,config:&Config) -> io::Result<()> {
-    let path = channel.path.join("config");
-    let mut file = fs::File::create(path.as_path()).await?;
-    let state = serde_json::to_vec(config).unwrap();
-    file.write_all(state.as_slice()).await?;
-    file.sync_data().await?;
-    // info!("c[{}] turn {}", Paint::cyan(format!("{}", id)), Paint::cyan("close"));
+// pub async fn write_config(channel:&Channel,config:&Config) -> io::Result<()> {
+//     let path = channel.path.join("config");
+//     let mut file = fs::File::create(path.as_path()).await?;
+//     let state = serde_json::to_vec(config).unwrap();
+//     file.write_all(state.as_slice()).await?;
+//     file.sync_data().await?;
+//     // info!("c[{}] turn {}", Paint::cyan(format!("{}", id)), Paint::cyan("close"));
+//     Ok(())
+// }
+
+/// read channel adjustment
+pub async fn adjustment(channel: &Channel) -> io::Result<()> {
+    let path = channel.path.join("adjustment");
+    let adj = fs::read_to_string(&path).await?;
+    // let adj : Adjustment = from_slice(adj.as_slice())?;
     Ok(())
 }
 
-/// read channel adjustment
-pub async fn adjustment(channel: &Channel) -> io::Result<Adjustment> {
-    let path = channel.path.join("adjustment");
-    let mut file = fs::File::create(path.as_path()).await?;
-    let mut buf = Vec::new();
-    file.read_to_end(&mut buf).await?;
-    let adj : Adjustment = from_slice(buf.as_slice())?;
-    Ok(adj)
+
+/// read channel sensor component
+pub async fn sensor(channel: &Channel) -> Result<PathBuf> {
+    Ok(channel.path.join("sensor"))
+}
+
+/// get channel calibration component
+pub async fn calibration(channel: &Channel) -> Result<PathBuf> {
+    Ok(channel.path.join("calibration"))
 }
 
 // pub async fn write_config(channel:&Channel,config:&Config) -> io::Result<()> {

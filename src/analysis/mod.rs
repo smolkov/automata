@@ -1,30 +1,29 @@
 #[allow(dead_code)]
 use serde::{Deserialize, Serialize};
-// pub mod channel;
-// pub mod adjustment;
-// pub mod indicator;
+pub mod channel;
+pub mod adjustment;
+pub mod indicator;
+pub mod solution;
+pub mod calibration;
 // pub mod statistic;
 use {
     futures::{
         channel::mpsc,
-        prelude::*,
     },
 };
-use futures::{
-    future::FutureExt, // for `.fuse()`
-    pin_mut,
-    select,
-};
-use chrono::prelude::*;
+use chrono::Utc;
 use std::path::{PathBuf,Path};
 use async_std::fs;
 use async_std::io;
 use async_std::prelude::*;
 use async_std::task;
 use async_std::stream;
-use crate::error::Result;
+use async_std::stream::{Stream};
 
-///
+pub use crate::error::Result;
+pub use channel::{Channel};
+
+//
 // use async_std::fs;
 // use async_std::io;
 // use async_std::prelude::*;
@@ -49,7 +48,7 @@ use crate::error::Result;
 
 pub type License = String;
 
-/// Stream
+/// Method
 #[derive(Clone, Deserialize, Serialize, Debug)]
 pub struct Method{
     pub updated:     u64,
@@ -78,9 +77,18 @@ pub async fn method(path: &Path) -> Result<Method> {
 }
 
 
+pub async fn channels(method: &Method) ->  Result<Vec<Channel>> {
+    let channels: Vec<Channel> = Vec::new();
+    Ok(channels)
+}
 
-// pub async fn methods(path:&Path) -> Result<impl Stream<Item = Result<Method>>> {
 
+pub async fn methods(path:&Path) -> Result<Vec<Method>>{
+    let methods: Vec<Method> = Vec::new();
+    let mut dir = fs::read_dir(&path).await?;
+    while let Some(entry) = dir.next().await {
+        println!("{}", entry?.file_name().to_string_lossy());
+    }
 //     let mut dir = fs::read_dir(path).await?;
 //     let methods:Vec<Method> = Vec::new();
 
@@ -88,10 +96,8 @@ pub async fn method(path: &Path) -> Result<Method> {
 
 //         println!("{}", entry?.file_name().to_string_lossy());
 //     }
-
-//     let mut s = stream::empty::<Method>();
-//     Ok(s)
-// }
+    Ok(methods)
+}
 
 
 // Load from stream/:id/stream.ron

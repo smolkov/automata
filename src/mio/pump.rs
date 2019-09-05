@@ -55,7 +55,6 @@ pub struct Pump {
 }
 
 impl Pump {
-
     /// Pump run time in seconds
     pub fn runtime(&self) -> u64 {
         self.runtime

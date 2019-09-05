@@ -1,8 +1,8 @@
 // use crate::schema::articles;
 // use crate::schema::users;
 use chrono::NaiveDateTime;
-use diesel::{Insertable, Queryable};
-use serde_derive::{Deserialize, Serialize};
+// use diesel::{Insertable, Queryable};
+use serde::{Deserialize, Serialize};
 
 // #[derive(Insertable, Deserialize, Debug, Clone)]
 // #[table_name = "indicator"]
@@ -13,12 +13,13 @@ use serde_derive::{Deserialize, Serialize};
     // pub value: f64,
 // }
 
-#[derive(Queryable, Serialize, Deserialize, Debug, Clone)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct Indicator {
-    pub id : u64,
-    pub count: u64,
+    pub method : u64,
+    pub measurement: u64,
     pub timestamp:u64,
     pub value: f64,
 }
+
 
 

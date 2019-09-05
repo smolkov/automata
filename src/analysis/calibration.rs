@@ -1,13 +1,12 @@
-use serde_derive::{Deserialize, Serialize};
-
-use analyzer::Solution;
-
+use serde::{Deserialize, Serialize};
+use super::*;
+use solution::Solution;
 // use std::time::Duration;
 // use crate::*;
 
-// use std::{
-    // path::{PathBuf},
-// };
+use std::{
+    path::{Path,PathBuf},
+};
 // use automata_settings::ron::Config;
 
 /// Linear
@@ -62,18 +61,40 @@ impl Default for Linear {
 
 #[derive(Clone, Deserialize, Serialize, PartialEq, Debug)]
 pub struct Point {
-    pub sol :Solution,
+    pub sol: Solution,
     pub val: Vec<f64>
     // pub cal: MeasurementIter,
 }
 
 #[derive(Clone, Deserialize, Serialize, PartialEq, Debug)]
 pub struct Calibration {
-    pub time: u64,
-    pub adjustment: Adjustment,
-    pub points: Vec<Point>,
+    pub method: PathBuf,
+    pub path: PathBuf,
+    // pub timestamp: u64,
+    // pub adjustment: Adjustment,
+    // pub points: Vec<Point>,
 }
 
+
+pub async fn history(method:&Method) -> Result<Calibration> {
+    let path = method.path.join("history");
+    let method = method.path.clone();
+    Ok(Calibration{
+        method:method,
+        path :path,
+        })
+}
+
+// pub async fn last(method: &Method) -> Result<Calibration> {
+    // let path = method.path.join("last");
+    // let path = path.to_path_buf();
+    // Ok(Calibration{path })
+// }
+
+// pub async fn
+// pub async fn setup() -> Result<Calibration> {
+
+// }
 
 // impl Default for Calibration {
     // fn default() -> Self {

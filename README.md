@@ -1,12 +1,11 @@
-#   `automata`
+#  🐳 `automata`
 
- **📦  water quality analyzers rewrite in [🦀 **Rust**](https://github.com/smolkov/automata)**
+ **📦  Linux automatisation tools writed in [🦀 **Rust**](https://github.com/smolkov/automata)**
 
-* Design-UI package : :iphone:
 
 🚧 _Work In Progress_ 🚧
 
-* **TODO: Welche Aufgaben hat es?**
+* **TODO: Was noch zu tun ist?
 
 
  * �

@@ -260,6 +260,7 @@ impl fmt::Display for Sensor {
     }
 }
 
+
 // async fn reader(sensor: &Sensor ) -> Result<()> {
 //     let mut stream = UnixStream::connect("/tmp/socket").await?;
 //     let (reader, mut writer) = (&stream, &stream); // 1

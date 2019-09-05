@@ -102,7 +102,7 @@ pub async fn state() -> io::Result<Lamp> {
 
 }
 
-pub async fn command(lamp:&Lamp ) ->
+// pub async fn command(lamp:&Lamp ) ->
 
 pub async fn start(pump :&Pump ) -> io::Result<()> {
     let path = pump.mio.directory().join("state");
