@@ -1,9 +1,10 @@
+use async_std::fs;
+use async_std::io;
 
 use log::info;
 use std::path::{PathBuf,Path};
 use super::rootdir;
 // use super::error::Result;
-use async_std::io;
 
 #[cfg(feature = "flame_it")]
 extern crate flame;
@@ -61,5 +62,11 @@ impl Node {
         };
         Ok(node)
     }
+}
+
+
+pub async fn label(path: &Path) -> io::Result<String>{
+    let label = path.join("label");
+    fs::read_to_string(&label).await
 }
 

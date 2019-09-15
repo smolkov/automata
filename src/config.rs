@@ -74,6 +74,38 @@ pub struct Config {
     // pub features: Vec<Feature>,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+#[serde(rename_all = "kebab-case")]
+pub struct Cfgh {
+    // #[serde(default = "mk_unknown")]
+    maintainer: String,
+    // #[serde(default = "mk_unknown")]
+    maintainer_email: String,
+
+    // #[serde(default = "default_meep_root")]
+    meep_root: String,
+    database_url: String,
+    default_theme: String,
+    extra_syntaxes_path: String,
+}
+
+impl Cfgh {
+    pub fn load<P: AsRef<Path>>(path: P) -> Result<Cfgh> {
+        let contents = File::open(&path).and_then(|mut file| {
+            let mut buf = String::new();
+            file.read_to_string(&mut buf).map(|_| buf)
+        })?;
+
+        Ok(toml::from_str(&contents[..])?)
+    }
+
+    pub fn save<P: AsRef<Path>>(&self, path: P) -> Result<()> {
+        let mut file = File::create(&path)?;
+        let contents = toml::to_string(self)?;
+        file.write_all(contents.as_bytes())?;
+        Ok(())
+    }
+}
 // impl Default for Config {
 //     fn default() -> Self {
 //         Self{

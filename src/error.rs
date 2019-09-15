@@ -1,4 +1,10 @@
 #![allow(unused_variables)]
+use std::error;
+use std::ffi;
+use std::fmt;
+use std::net;
+use std::num;
+use std::string;
 // use failure::{ResultExt};
 use failure::{Fail};
 // use std::io;
@@ -38,7 +44,7 @@ pub type Result<T> = std::result::Result<T, Box<dyn std::error::Error + Send + S
 // use mut_guard::*;
 
 #[derive(Fail, Debug)]
-pub enum AutomataError {
+pub enum Error {
 
     #[fail(display = "async io error - {}",err)]
     AsyncIOError {err: async_io::Error },
@@ -59,6 +65,9 @@ pub enum AutomataError {
     #[fail(display = "IO device not found - {:}",msg)]
     IoNotFound{msg:String},
 
+    #[doc(hidden)]
+    Other(Box<dyn error::Error + Send + 'static>),
+
     // #[fail(display = "io error - {}",serde_json)]
     // BadJson(serde_json::Error),
 }
@@ -74,28 +83,106 @@ pub enum AutomataError {
 //     }
 //   };
 // }
-impl From<ConfigError> for AutomataError {
-    fn from(kind:ConfigError) -> AutomataError {
-        AutomataError::ConfigError{err: kind}
+impl From<ConfigError> for Error {
+    fn from(kind:ConfigError) -> Error {
+        Error::ConfigError{err: kind}
     }
 }
 
-impl From<git2::Error> for AutomataError {
-    fn from(kind:git2::Error) -> AutomataError {
-        AutomataError::GitError{err: kind}
+impl From<git2::Error> for Error {
+    fn from(kind:git2::Error) -> Error {
+        Error::GitError{err: kind}
     }
 }
 
-impl From<async_io::Error> for AutomataError {
-    fn from(kind:async_io::Error) -> AutomataError {
-        AutomataError::AsyncIOError{err: kind}
+impl From<async_io::Error> for Error {
+    fn from(kind:async_io::Error) -> Error {
+        Error::AsyncIOError{err: kind}
     }
 }
-impl From<serde_yaml::Error> for AutomataError {
-  fn from(kind: serde_yaml::Error) -> AutomataError {
-    AutomataError::BadYaml{err:kind}
+impl From<serde_yaml::Error> for Error {
+  fn from(kind: serde_yaml::Error) -> Error {
+    Error::BadYaml{err:kind}
   }
 }
+
+impl error::Error for Error {
+    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+        match self {
+            Error::Other(e) => Some(&**e),
+            _ => None,
+        }
+    }
+}
+impl fmt::Display for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match self {
+            Error::Other(e) => fmt::Display::fmt(e, f),
+            _ => f.write_str("Unknown error"),
+        }
+    }
+}
+
+
+impl From<num::ParseIntError> for Error {
+    fn from(e: num::ParseIntError) -> Self {
+        Error::Other(Box::new(e))
+    }
+}
+
+impl From<num::ParseFloatError> for Error {
+    fn from(e: num::ParseFloatError) -> Self {
+        Error::Other(Box::new(e))
+    }
+}
+
+impl From<ffi::NulError> for Error {
+    fn from(e: ffi::NulError) -> Self {
+        Error::Other(Box::new(e))
+    }
+}
+
+impl From<ffi::IntoStringError> for Error {
+    fn from(e: ffi::IntoStringError) -> Self {
+        Error::Other(Box::new(e))
+    }
+}
+
+impl From<string::ParseError> for Error {
+    fn from(e: string::ParseError) -> Self {
+        Error::Other(Box::new(e))
+    }
+}
+
+impl From<string::FromUtf8Error> for Error {
+    fn from(e: string::FromUtf8Error) -> Self {
+        Error::Other(Box::new(e))
+    }
+}
+
+impl From<net::AddrParseError> for Error {
+    fn from(e: net::AddrParseError) -> Self {
+        Error::Other(Box::new(e))
+    }
+}
+
+impl<T> From<Box<T>> for Error
+where
+    T: error::Error + Send + 'static,
+{
+    fn from(e: Box<T>) -> Self {
+        Error::Other(e)
+    }
+}
+
+// #[cfg(unix)]
+// impl From<nix::Error> for Error {
+    // fn from(e: nix::Error) -> Self {
+        // Error::Other(Box::new(e))
+    // }
+// }
+
+
 
 #[cfg(feature = "candbus")]
 impl From<DBusError> for AutomataError {

@@ -1,7 +1,7 @@
 #[allow(dead_code)]
 use std::fmt;
 use std::fs;
-use std::io::{Read};
+// use std::io::{Read};
 use std::str::FromStr;
 use failure::{Fallible};
 

@@ -6,7 +6,7 @@ use tide::{self, Context, EndpointResult, Error};
 
 // Assuming the Rust file is at the same level as the templates folder
 // we can get a Tera instance that way:
-lazy_static! {
+lazy_static::lazy_static! {
     pub static ref TERA: tera::Tera =
         tera::compile_templates!(concat!(env!("CARGO_MANIFEST_DIR"), "/assets/templates/**/*"));
 }

@@ -19,9 +19,7 @@
 
 `automata` is a CLI tool designed for setup and read ndir sensors data.
 
-  - `address`: defaults name `system`. For remote acces use adress like this `tcp:host=0.0.0.0,port=6666`
-
-  - ### 🦀⚙️ `driver`
+  - ### 🦀⚙️ `server`
     run driver and wath socket for connections.
     All of the arguments and flags to this command are optional:
 
@@ -38,6 +36,7 @@
     wqa config --uart=2 --path=`test1`
     ```
 
+  - ### 🆙 `osgen`
 
   - ### ☁️ 🆙 `publish`
 

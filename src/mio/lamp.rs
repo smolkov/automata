@@ -15,6 +15,7 @@ pub enum Command {
     TurnOn,
     TurnOff,
 }
+///State
 pub struct State {
     pub lifetime: u64,
     pub on: bool,

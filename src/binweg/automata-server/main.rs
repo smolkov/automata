@@ -4,7 +4,7 @@
 #![allow(clippy::doc_markdown)]
 
 // use structopt::*;
-// use automata::error::*;
+use automata;
 use automata::Automata;
 use async_std::{
     io,
@@ -36,6 +36,8 @@ use log::{info,warn};
 // use runtime;
 // use tide::{self, App, Context, EndpointResult, Error};
 use tide;
+
+
 
 // impl automataError {
 //     pub fn response_500(self) -> Error {
@@ -84,8 +86,8 @@ async fn server(address: &str) -> io::Result<()> {
 fn main()  -> io::Result<()>{
     use log::{info,warn};
     use log::LevelFilter;
-    use log4rs::append::console::ConsoleAppender;
-    use log4rs::config::{Appender, Config, Root};
+    // use log4rs::append::console::ConsoleAppender;
+    // use log4rs::config::{Appender, Config, Root};
     use tempfile::tempdir;
 
     use yansi::Paint;
@@ -107,7 +109,7 @@ fn main()  -> io::Result<()>{
         .appender(Appender::builder().build("stdout", Box::new(stdout)))
         .build(Root::builder().appender("stdout").build(LevelFilter::Info))
         .unwrap();
-    let _handle = log4rs::init_config(config).unwrap();
+    // let _handle = log4rs::init_config(config).unwrap();
      //  let template_dir = format!("{}/examples/templates/*", env!("CARGO_MANIFEST_DIR"));
     // TODO: load configuration.
     // let severConfig = automata::config::ServerConfig::default();

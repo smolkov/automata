@@ -12,9 +12,8 @@ use async_std::io;
 use async_std::os::unix::fs::symlink;
 use async_std::os::unix::net::UnixDatagram;
 use async_std::prelude::*;
-use async_std::task;
 
-use log::info;
+// use log::info;
 use std::path::{PathBuf,Path};
 
 #[derive(Serialize,Deserialize, Clone, Debug)]
@@ -92,6 +91,7 @@ pub async fn datagram(mio: &Mio) -> io::Result<UnixDatagram> {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use async_std::task;
 
     #[test]
     fn create_send_recv() -> io::Result<()> {

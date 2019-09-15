@@ -21,7 +21,7 @@ pub enum Mode {
 ///ExerciseList
 #[derive(Deserialize)]
 pub struct ExerciseList {
-    pub exercises: Vec<Exercise>,
+pub exercises: Vec<Exercise>,
 }
 
 #[derive(Deserialize,Serialize,Debug)]
@@ -38,7 +38,7 @@ pub struct Remote {
 #[derive(Deserialize,Serialize,Debug)]
 pub enum Inject {
     Signal,
-    Interval(u64),
+    Interval(String),
     Planed(),
     Remote(Remote),
 }
@@ -68,6 +68,7 @@ pub struct Config {
 
 #[derive(Deserialize,Serialize,Clone,Debug)]
 pub struct Rule {
+    pub label: String,
     pub path: PathBuf,
 }
 
@@ -117,6 +118,21 @@ pub fn workdir() -> PathBuf {
     super::workdir().join("/rules/")
 }
 
+fn pidfile() -> String {
+    format!("{}", process::id())
+}
+
+pub async fn rules() Result<()>{
+    let path = workdir();
+
+}
+
+pub async fn rule(path: &Path) Result<Rule> {
+
+}
+
+
+
 pub async fn rule(path: PathBuf) -> io::Result<Rule> {
 
 }
@@ -125,16 +141,6 @@ pub async fn read_all( rules: &Rules) -> Result<Vec<Rule>> {
 
 }
 
-
-/// Get streams work directory
-pub fn get_directory() -> Fallible<PathBuf> {
-    let path = crate::local::rootdir()?;
-    let path = path.join("rule");
-    if !path.exists() {
-        fs::create_dir_all(&path)?;
-    }
-    Ok(path)
-}
 
 pub async fn read_all() ->Fallible<Vec<Rule>> {
     let path = get_directory()?;

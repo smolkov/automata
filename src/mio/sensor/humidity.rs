@@ -7,7 +7,7 @@ use async_std::fs;
 use async_std::io;
 use async_std::prelude::*;
 use serde_json::from_slice;
-use lazy_static::lazy_static;
+// use lazy_static::lazy_static;
 
 use std::path::PathBuf;
 

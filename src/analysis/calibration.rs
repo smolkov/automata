@@ -5,7 +5,7 @@ use solution::Solution;
 // use crate::*;
 
 use std::{
-    path::{Path,PathBuf},
+    path::{PathBuf},
 };
 // use automata_settings::ron::Config;
 
