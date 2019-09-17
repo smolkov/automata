@@ -1,13 +1,17 @@
 use super::*;
+use serde::{Deserialize, Serialize};
+use serde_json::{
+    from_str,
+    to_string,
+};
 // use chrono::prelude::*;
 // use walkdir::{WalkDir,DirEntry};
 // use log::info;
 // use analyzer::flow::*;
-use serde::{Deserialize, Serialize};
 
 use async_std::fs;
 use std::path::PathBuf;
-// use super::adjustment::Adjustment;
+use super::adjustment::Adjustment;
 // use crate::error::*;
 // use crate::sensor::Sensor;
 
@@ -33,7 +37,12 @@ pub struct Limit{
 
 
 pub async fn is_channel(path: PathBuf ) -> io::Result<bool> {
-    Ok(true)
+    let channel = path.join("channel");
+    if channel.exists() {
+        Ok(true)
+    }else {
+        Ok(false)
+    }
 }
 
 
@@ -116,11 +125,11 @@ pub async fn channel(path:PathBuf) -> Result<Channel> {
 // }
 
 /// read channel adjustment
-pub async fn adjustment(channel: &Channel) -> io::Result<()> {
+pub async fn adjustment(channel: &Channel) -> io::Result<Adjustment> {
     let path = channel.path.join("adjustment");
     let adj = fs::read_to_string(&path).await?;
-    // let adj : Adjustment = from_slice(adj.as_slice())?;
-    Ok(())
+    let adj : Adjustment = from_str(adj.as_str())?;
+    Ok(adj)
 }
 
 
@@ -133,6 +142,8 @@ pub async fn sensor(channel: &Channel) -> Result<PathBuf> {
 pub async fn calibration(channel: &Channel) -> Result<PathBuf> {
     Ok(channel.path.join("calibration"))
 }
+
+
 
 // pub async fn write_config(channel:&Channel,config:&Config) -> io::Result<()> {
 //     let path = channel.path.join("config");

@@ -1,7 +1,7 @@
 #![allow(unused_variables)]
 use std::error;
 use std::ffi;
-use std::fmt;
+// use std::fmt;
 use std::net;
 use std::num;
 use std::string;
@@ -62,11 +62,17 @@ pub enum Error {
     #[fail(display = "dbus  error - {}",err)]
     DBusError {err: DBusError },
 
+    #[fail(display = "Parcer error - {:}",msg)]
+    ParcerError{msg:String},
+
     #[fail(display = "IO device not found - {:}",msg)]
     IoNotFound{msg:String},
 
-    #[doc(hidden)]
-    Other(Box<dyn error::Error + Send + 'static>),
+    #[fail(display = "Duplicate names found - {:}",msg)]
+    DuplicateNames{msg:String},
+
+     #[fail(display = "other names found - {:}",msg)]
+    Other{msg:String},
 
     // #[fail(display = "io error - {}",serde_json)]
     // BadJson(serde_json::Error),
@@ -83,6 +89,7 @@ pub enum Error {
 //     }
 //   };
 // }
+
 impl From<ConfigError> for Error {
     fn from(kind:ConfigError) -> Error {
         Error::ConfigError{err: kind}
@@ -106,63 +113,63 @@ impl From<serde_yaml::Error> for Error {
   }
 }
 
-impl error::Error for Error {
-    fn source(&self) -> Option<&(dyn error::Error + 'static)> {
-        match self {
-            Error::Other(e) => Some(&**e),
-            _ => None,
-        }
-    }
-}
-impl fmt::Display for Error {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            Error::Other(e) => fmt::Display::fmt(e, f),
-            _ => f.write_str("Unknown error"),
-        }
-    }
-}
+// impl error::Error for Error {
+//     fn source(&self) -> Option<&(dyn error::Error + 'static)> {
+//         match self {
+//             Error::Other(e) => Some(&**e),
+//             _ => None,
+//         }
+//     }
+// }
+// impl fmt::Display for Error {
+//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+//         match self {
+//             Error::Other(e) => fmt::Display::fmt(e, f),
+//             _ => f.write_str("Unknown error"),
+//         }
+//     }
+// }
 
 
 impl From<num::ParseIntError> for Error {
     fn from(e: num::ParseIntError) -> Self {
-        Error::Other(Box::new(e))
+        Error::ParcerError{msg:format!("{}",e)}
     }
 }
 
 impl From<num::ParseFloatError> for Error {
     fn from(e: num::ParseFloatError) -> Self {
-        Error::Other(Box::new(e))
+        Error::ParcerError{msg:format!("{}",e)}
     }
 }
 
 impl From<ffi::NulError> for Error {
     fn from(e: ffi::NulError) -> Self {
-        Error::Other(Box::new(e))
+        Error::ParcerError{msg:format!("{}",e)}
     }
 }
 
 impl From<ffi::IntoStringError> for Error {
     fn from(e: ffi::IntoStringError) -> Self {
-        Error::Other(Box::new(e))
+        Error::ParcerError{msg:format!("{}",e)}
     }
 }
 
 impl From<string::ParseError> for Error {
     fn from(e: string::ParseError) -> Self {
-        Error::Other(Box::new(e))
+        Error::ParcerError{msg:format!("{}",e)}
     }
 }
 
 impl From<string::FromUtf8Error> for Error {
     fn from(e: string::FromUtf8Error) -> Self {
-        Error::Other(Box::new(e))
+        Error::ParcerError{msg:format!("{}",e)}
     }
 }
 
 impl From<net::AddrParseError> for Error {
     fn from(e: net::AddrParseError) -> Self {
-        Error::Other(Box::new(e))
+        Error::ParcerError{msg:format!("{}",e)}
     }
 }
 
@@ -171,9 +178,11 @@ where
     T: error::Error + Send + 'static,
 {
     fn from(e: Box<T>) -> Self {
-        Error::Other(e)
+        Error::Other{msg:format!("{}",e)}
     }
 }
+
+
 
 // #[cfg(unix)]
 // impl From<nix::Error> for Error {

@@ -1,5 +1,4 @@
 #![allow(dead_code, unused_imports)]
-use super::Automata;
 use tera;
 // use tera::compile_templates;
 use tide::{self, Context, EndpointResult, Error};
@@ -14,7 +13,7 @@ lazy_static::lazy_static! {
 /// State to pass with context and will hold
 /// the interface to the tera rendering engine
 // Render some data into the 'tera-hello-world.html template in examples/templates directory
-pub async fn example_index(_ctx: Context<Automata>) -> EndpointResult {
+pub async fn example_index(_ctx: Context<super::Automata>) -> EndpointResult {
     // Create the context for the template
     let mut context = tera::Context::new();
     context.insert("page_title", "Hello from Tera templating!");

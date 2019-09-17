@@ -1,6 +1,6 @@
 #[allow(dead_code)]
 use std::fmt;
-use std::fs;
+// use std::fs;
 // use std::io::{Read};
 use std::str::FromStr;
 use failure::{Fallible};
@@ -18,8 +18,8 @@ struct IdVisitor;
 
 impl MachineId {
     pub fn read() -> Fallible<MachineId> {
-        let mut buf = String::with_capacity(33);
-        let content = fs::read_to_string("/etc/machine-id")?;
+        let buf = String::with_capacity(33);
+        // let content = fs::read_to_string("/etc/machine-id")?;
         let vec: Vec<u8> = FromHex::from_hex(&buf[..32])?;
         let mut ar = [0u8; 16];
         ar.copy_from_slice(&vec);

@@ -2,9 +2,9 @@
 //!
 //!
 //!
-
+pub mod config;
+pub mod gpio;
 pub mod pump;
-pub mod sensor;
 
 use serde::{Deserialize, Serialize};
 use async_std::fs;
@@ -15,6 +15,7 @@ use async_std::prelude::*;
 
 // use log::info;
 use std::path::{PathBuf,Path};
+use crate::error::Result;
 
 #[derive(Serialize,Deserialize, Clone, Debug)]
 pub struct Mio {
@@ -37,7 +38,7 @@ pub fn workdir() -> PathBuf {
 }
 
 pub fn rootdir() -> PathBuf {
-    let path = PathBuf::from("/var/run/automata/mio");
+    let path = PathBuf::from("/var/run/automata");
     path
 }
 
@@ -62,8 +63,8 @@ pub async fn label(path: &Path)-> io::Result<String> {
 }
 
 
-pub async fn state(mio: &Mio) -> io::Result<String> {
-    let path = mio.directory().join("state");
+pub async fn state(path: &Path) -> io::Result<String> {
+    let path = path.join("state");
     let mut file = fs::File::open(path.as_path()).await?;
     let mut contents = Vec::new();
     let _n = file.read(&mut contents).await?;
@@ -86,7 +87,12 @@ pub async fn datagram(mio: &Mio) -> io::Result<UnixDatagram> {
     Ok(socket)
 }
 
-
+pub async fn bautrate(path:&Path) -> Result<u64> {
+    let bautrate = path.join("bautrate");
+    let bautrate = fs::read_to_string(&bautrate).await?;
+    let bautrate = bautrate.parse::<u64>()?;
+    Ok(bautrate)
+}
 
 #[cfg(test)]
 mod tests {

@@ -77,7 +77,7 @@ pub async fn method(path: &Path) -> Result<Method> {
 }
 
 
-pub async fn channels(method: &Method) ->  Result<Vec<Channel>> {
+pub async fn channels(_method: &Method) ->  Result<Vec<Channel>> {
     let channels: Vec<Channel> = Vec::new();
     Ok(channels)
 }

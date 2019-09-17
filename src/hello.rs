@@ -37,5 +37,5 @@ pub fn lar() {
     println!(r#" {:} "#,Paint::blue(r#"   ██║     ██╔══██║██╔══██╗   "#));
     println!(r#" {:} "#,Paint::blue(r#"   ███████╗██║  ██║██║  ██║   "#));
     println!(r#" {:} "#,Paint::blue(r#"   ╚══════╝╚═╝  ╚═╝╚═╝  ╚═╝   "#));
-    println!(r#" {:} "#,Paint::blue("ONLINE WATER QUALITY ANALYShhERS"));
+    println!(r#" {:} "#,Paint::blue("ONLINE WATER QUALITY ANALYSERS"));
 }

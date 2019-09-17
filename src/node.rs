@@ -64,9 +64,9 @@ impl Node {
     }
 }
 
-
 pub async fn label(path: &Path) -> io::Result<String>{
     let label = path.join("label");
     fs::read_to_string(&label).await
 }
+
 

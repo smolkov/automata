@@ -23,7 +23,7 @@ travis-ci = { repository = "smolkov/automata", branch = "master"}
 [dependencies]
 # Terminal cli
 paw = "1.0.0"
-structopt = { version = "0.3.0", features = ["paw"] }
+structopt = { version = "0.3.1", features = ["paw"] }
 ferris-says = "0.1.1"
 ci_info = "0.8.0"
 convey = "0.2.0"
@@ -41,7 +41,7 @@ failure = "0.1.5"
 #Time date
 chrono = "0.4.9"
 # Units
-uom = "0.25.0"
+# uom = "0.25.0"
 # Log
 log = "0.4.8"
 femme = "1.2.0"
@@ -161,11 +161,12 @@ juniper = "0.13.1"
 # diesel = { version = "1.4.2", default-features = false, features = ["r2d2", "sqlite"] }
 # diesel_derives = "1.4.0"
 
+heim = "0.0.7"
 # Metrics
 metrics = "0.11.1"
 metrics-core = "0.5.1"
 metrics-runtime = { version = "0.1.0", default-features = false, features = ["metrics-observer-prometheus"] }
-heim = "0.0.7"
+uom = { version = "0.25.0", default-features = false, features = ["autoconvert", "f32", "f64", "u64", "si", "std"] }
 # prometheus = "0.7.0"
 
 # DBus
@@ -180,6 +181,13 @@ crossbeam = "0.7.2"
 openssl-async = "0.3.0-alpha.4"
 tls-async = "0.3.0-alpha.7"
 scron = "1.0.1"
+nix = "0.15.0"
+gloo = "0.1.0"
+validators = "0.20.13"
+armor = "1.1.0"
+sysfs_gpio = "0.5.4"
+spidev = "0.4.0"
+rppal = "0.11.3"
 
 # wqa = {path="../wqa"}
 # API sync

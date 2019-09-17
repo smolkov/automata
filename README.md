@@ -1,4 +1,4 @@
-#  🐳 `automata`
+# 💥🐧 `automata`
 
  **📦  Linux automatisation tools writed in [🦀 **Rust**](https://github.com/smolkov/automata)**
 
@@ -6,9 +6,7 @@
 🚧 _Work In Progress_ 🚧
 
 * **TODO: Was noch zu tun ist?
-
-
- * �
+* �
 
 [![travis build Status](https://travis-ci.com/lar-rs/edinburgh.svg?branch=master)](https://travis-ci.com/smolkov/automata)
 [![builds.sr.ht status](https://builds.sr.ht/~asmolkov/wqa/.build.yml.svg)](https://builds.sr.ht/~asmolkov/automata/.build.yml?)
@@ -65,14 +63,6 @@
 
     ```
     cargo install automata
-    ```
-
-- **Troubleshooting** `libdbus-sys` errors
-
-    On Ubuntu OS install
-
-    ```
-    $ sudo apt install libdbus-1-dev
     ```
 
 

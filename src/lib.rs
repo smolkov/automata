@@ -1,10 +1,3 @@
-// #![feature(async_closure)]
-
-// #[allow(dead_code)]
-
-#[macro_use]
-extern crate lazy_static;
-
 // use metrics_core::{Builder, Drain, Observe};
 // use metrics_runtime::{observers::PrometheusBuilder, Controller, Receiver};
 // use metrics_runtime::{Controller};
@@ -18,14 +11,15 @@ pub mod templates;
 pub mod error;
 pub mod config;
 pub mod analysis;
-pub mod metrics;
 pub mod emoji;
 // pub mod store;
 pub mod state;
 pub mod machine;
 // pub mod api;
-
+pub mod metric;
 pub mod mio;
+// pub mod sensor;
+pub mod server;
 
 // pub mod collectors;
 // pub use data::*;
@@ -42,10 +36,11 @@ use std::path::{PathBuf,Path};
 use std::env;
 // use std::ffi::OsStr;
 // use path_table::PathTable;
-const README_MD: &'static str = include_str!("../README.md");
+// const README_MD: &'static str = include_str!("../README.md");
 
 
 
+use metrics_runtime::{Controller, Receiver};
 
 use async_std::fs;
 use async_std::os::unix::fs::symlink;
@@ -54,29 +49,7 @@ use async_std::os::unix::fs::symlink;
 // use async_std::task;
 use error::Result;
 
-
-
-pub fn hello()  {
-    use yansi::Paint;
-    println!(r#"  {:}  "#,Paint::blue(r#"              _                        _  "#));
-    println!(r#"  {:}  "#,Paint::blue(r#"             | |                      | |  "#));
-    println!(r#"  {:}  "#,Paint::blue(r#"   __ _ _   _| |_ ___  _ __ ___   __ _| |_ __ _  "#));
-    println!(r#"  {:}  "#,Paint::blue(r#"  / _` | | | | __/ _ \| '_ ` _ \ / _` | __/ _` |  "#));
-    println!(r#"  {:}  "#,Paint::blue(r#" | (_| | |_| | || (_) | | | | | | (_| | || (_| |  "#));
-    println!(r#"  {:}  "#,Paint::blue(r#"  \__,_|\__,_|\__\___/|_| |_| |_|\__,_|\__\__,_|  "#));
-    println!(r#"  {:}  "#,Paint::blue(r#"  "#));
-
-    println!(r#"  {:}  "#,Paint::blue("  "));
-    println!(r#"  {:}  "#,Paint::blue("  █████╗ ██╗   ██╗████████╗ ██████╗ ███╗   ███╗ █████╗ ████████╗ █████╗ "));
-    println!(r#"  {:}  "#,Paint::blue(" ██╔══██╗██║   ██║╚══██╔══╝██╔═══██╗████╗ ████║██╔══██╗╚══██╔══╝██╔══██╗ "));
-    println!(r#"  {:}  "#,Paint::blue(" ███████║██║   ██║   ██║   ██║   ██║██╔████╔██║███████║   ██║   ███████║ "));
-    println!(r#"  {:}  "#,Paint::blue(" ██╔══██║██║   ██║   ██║   ██║   ██║██║╚██╔╝██║██╔══██║   ██║   ██╔══██║ "));
-    println!(r#"  {:}  "#,Paint::blue(" ██║  ██║╚██████╔╝   ██║   ╚██████╔╝██║ ╚═╝ ██║██║  ██║   ██║   ██║  ██║ "));
-    println!(r#"  {:}  "#,Paint::blue(" ╚═╝  ╚═╝ ╚═════╝    ╚═╝    ╚═════╝ ╚═╝     ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═╝  ╚═╝ "));
-    // println!(r#"  {:}  "#,Paint::blue("   AUTOMATISATION SYSTEM"));
-    // println!(r#"  ENVIRONMENTAL MONITORING  "#);
-}
-
+use lazy_static::lazy_static;
 
 
 lazy_static! {
@@ -140,7 +113,8 @@ pub fn cfgdir() -> PathBuf {
         let path = PathBuf::from(home).join("/.automata/");
         path
    }else {
-        PathBuf::from(".automata")
+        let path = PathBuf::from("/.automata/");
+        path
    }
 }
 
@@ -148,11 +122,11 @@ pub async fn setup() -> Result<()>{
     let workdir = workdir();
     let cfgdir = cfgdir();
     if ! cfgdir.exists() {
-        fs::DirBuilder::new().recursive(true).create(cfgdir).await?;
+        fs::DirBuilder::new().recursive(true).create(cfgdir.as_path()).await?;
     }
     if !workdir.exists() {
-        fs::DirBuilder::new().recursive(true).create(workdir).await?;
-        symlink(cfgdir, workdir.join("config")).await?;
+        fs::DirBuilder::new().recursive(true).create(workdir.as_path()).await?;
+        symlink(cfgdir.as_path(),workdir.join("store").as_path()).await?;
     }
     Ok(())
 }
@@ -170,34 +144,36 @@ pub enum Credentials {
 
 
 // Entry point interface for interacting with Github API
-#[derive(Clone, Debug)]
 pub struct Automata {
     pub path: PathBuf,
+    pub template: PathBuf,
+    pub store: PathBuf,
+    pub controller: Controller,
     // pub store:
 }
 
 
+pub async fn automata(path: &Path) -> Result<Automata> {
+    let path = path.to_path_buf();
+    let template = path.join("/template");
+    let store = path.join("/store");
+    let receiver = Receiver::builder().build()?;
+    Ok(Automata{
+            path: path,
+            template: template,
+            store: store,
+            controller: receiver.get_controller(),
+        })
+}
+
 impl Automata {
 
-    pub fn new_from_path(path: &Path) -> Automata{
-        // path
-        let path = path.to_path_buf();
-        // if !path.exists() {
-            // DirBuilder::new().recursive(true).create("/tmp/foo/bar/baz").await?;
-            // fs::DirBuilder::new()create_dir_all(path.join("channel")).unwrap();
-            // fs::create_dir_all(path.join("sensor")).unwrap();
-            // fs::create_dir_all(path.join("stream")).unwrap();
-        // }
-        Automata{
-            path: path,
-        }
+
+    pub fn rootdir(&self) -> &Path{
+        self.path.as_path()
     }
-    pub fn new() -> Automata {
-        let path = WORKDIR.clone();
-        Automata::new_from_path(WORKDIR.as_path())
-    }
-    pub fn root(&self) -> Node{
-        Node::new(self.path.as_path())
+    pub fn rundir(&self) -> PathBuf{
+        self.path.join("/run/")
     }
 
 //     pub fn config(&self) -> GLobalConfig{
@@ -229,10 +205,9 @@ impl Automata {
 pub async fn link_store(store_path :&Path) -> Result<Node> {
     let path = workdir();
     if !path.exists() {
-        fs::DirBuilder::new().recursive(true).create(path).await?;
+        fs::DirBuilder::new().recursive(true).create(path.as_path()).await?;
     }
-    let path = path.join("/store");
-    symlink(store_path,path.as_path()).await?;
+    symlink(store_path,path.join("/store").as_path()).await?;
     Ok(Node::new(path.as_path()))
 }
 
