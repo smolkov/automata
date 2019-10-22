@@ -17,7 +17,7 @@ pub mod state;
 pub mod machine;
 // pub mod api;
 pub mod metric;
-pub mod mio;
+// pub mod mio;
 // pub mod sensor;
 pub mod server;
 
@@ -26,7 +26,7 @@ pub mod server;
 // pub use asset::Asset;
 // pub use config::GLobalConfig;
 // pub use store::Store;
-pub use state::State;
+// pub use state::State;
 use node::Node;
 // pub use mio::Mio;
 // pub use templates::Template;
@@ -93,12 +93,9 @@ lazy_static! {
     pub static ref SOURCE_CACHE_DIR: PathBuf = WORKDIR.join("cache").join("sources");
 }
 
-
 pub fn rootdir() -> PathBuf {
     WORKDIR.clone()
 }
-
-
 
 pub fn workdir() -> PathBuf {
     rootdir()
@@ -172,9 +169,12 @@ impl Automata {
     pub fn rootdir(&self) -> &Path{
         self.path.as_path()
     }
+
     pub fn rundir(&self) -> PathBuf{
         self.path.join("/run/")
     }
+
+    
 
 //     pub fn config(&self) -> GLobalConfig{
 //         GLobalConfig::new(self.clone())

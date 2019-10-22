@@ -1,4 +1,4 @@
-# 💥🐧 `automata`
+# 💥 `automata`
 
  **📦  Linux automatisation tools writed in [🦀 **Rust**](https://github.com/smolkov/automata)**
 

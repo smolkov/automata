@@ -23,9 +23,9 @@ travis-ci = { repository = "smolkov/automata", branch = "master"}
 [dependencies]
 # Terminal cli
 paw = "1.0.0"
-structopt = { version = "0.3.1", features = ["paw"] }
+structopt = { version = "0.3.2", features = ["paw"] }
 ferris-says = "0.1.1"
-ci_info = "0.8.0"
+ci_info = "0.8.1"
 convey = "0.2.0"
 console = "0.9.0"
 indicatif = "0.12.0"
@@ -44,18 +44,18 @@ chrono = "0.4.9"
 # uom = "0.25.0"
 # Log
 log = "0.4.8"
-femme = "1.2.0"
+femme = "1.3.0"
 # Config
 # config = "0.9.3"
 # confy = "0.3.1"
 # Version
 semver = "0.9.0"
 # Serializer file format
-serde_json = "1.0.40"
-serde = { version = "1.0.100", features = ["derive"] }
+serde_json = "1.0.41"
+serde = { version = "1.0.101", features = ["derive"] }
 
-serde_yaml = "0.8.9"
-bincode = "1.1.4"
+serde_yaml = "0.8.11"
+bincode ="1.2.0"
 toml = "0.5.3"
 ron = "0.5.1"
 csv = "1.1.1"
@@ -73,7 +73,7 @@ tempfile = "3.1.0"
 git2 = "0.10.1"
 # lazy
 lazy_static = "1.4.0"
-once_cell = "1.1.0"
+once_cell = "1.2.0"
 # publish = false
 
 # Serializer
@@ -121,8 +121,8 @@ regex = "1.3.1"
 compose = "0.1.0"
 url = "2.1.0"
 reqwest = "0.9.20"
-rand = "0.7.1"
-hex = "0.3.2"
+rand = "0.7.2"
+hex = "0.4.0"
 glob = "0.3.0"
 rust-embed = "5.1.0"
 # plotters = "0.2.2"
@@ -148,20 +148,19 @@ bytecount = "0.6.0"
 path-table = "1.0.0"
 path-tree = "0.1.8"
 # RestAPi Async
-futures-preview = { version = "0.3.0-alpha.18", features = [ "async-await", "nightly" ] }
-async-std = "0.99.5"
+futures-preview = { version = "0.3.0-alpha.19", features = [ "async-await", "nightly" ] }
+async-std = "0.99.8"
 tide = {git = "https://github.com/rustasync/tide.git"}
 http = "0.1.18"
-
 #  Database&KV
 sled = "0.28.0"
 memdb = "1.0.0"
 # graphql_client = "0.8.0"
-juniper = "0.13.1"
+juniper = "0.14.0"
 # diesel = { version = "1.4.2", default-features = false, features = ["r2d2", "sqlite"] }
 # diesel_derives = "1.4.0"
 
-heim = "0.0.7"
+heim = "0.0.8"
 # Metrics
 metrics = "0.11.1"
 metrics-core = "0.5.1"
@@ -176,14 +175,14 @@ dbus = { git = "https://github.com/diwic/dbus-rs.git", optional = true}
 flame = { version = "0.2.2", optional = true }
 flamer = { version = "0.4.0", optional = true }
 include-flate = "0.1.3"
-async-macros = "0.1.0"
+async-macros = "1.0.0"
 crossbeam = "0.7.2"
 openssl-async = "0.3.0-alpha.4"
 tls-async = "0.3.0-alpha.7"
 scron = "1.0.1"
 nix = "0.15.0"
 gloo = "0.1.0"
-validators = "0.20.13"
+validators = "0.20.14"
 armor = "1.1.0"
 sysfs_gpio = "0.5.4"
 spidev = "0.4.0"
